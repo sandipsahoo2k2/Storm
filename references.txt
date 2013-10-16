@@ -1,14 +1,26 @@
 What 
 --------
 node.js - require
-httpnodetuts.com - read
 Sublime text 2 editor - use
+
+Read
+---------
+httpnodetuts.com
+http://courseware.codeschool.com/node_slides.pdf
+http://atendesigngroup.com/blog/using-nodejs-create-real-time-web-applications
+http://vertx.io/ (Java)
+https://github.com/joyent/node/wiki/Node-Hosting
 
 How to host
 -------
+http://www.pogoapp.com/web/pricing
 https://www.nodejitsu.com/pricing/
 http://cloudfoundry.com/use
 
 https://www.dotcloud.com/ cheap
 http://www.gigapros.com/portal/nodejs-hosting 17dollar
 https://www.dotcloud.com/pricing.html very cheap around 10 dollar
+
+Testing Sites
+-------------
+https://cloudno.de/beta?ref=hu5H
