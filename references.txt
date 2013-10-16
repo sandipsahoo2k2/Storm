@@ -1,4 +1,14 @@
-httpnodetuts.com
+What 
+--------
+node.js - require
+httpnodetuts.com - read
+Sublime text 2 editor - use
 
-Need: node.js
-Sublime text 2 editor
+How to host
+-------
+https://www.nodejitsu.com/pricing/
+http://cloudfoundry.com/use
+
+https://www.dotcloud.com/ cheap
+http://www.gigapros.com/portal/nodejs-hosting 17dollar
+https://www.dotcloud.com/pricing.html very cheap around 10 dollar
