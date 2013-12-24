@@ -23,22 +23,105 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
 
 	<script>
+
+
+	function setCookie(cname,cvalue,exdays)
+	{
+		var d = new Date();
+		d.setTime(d.getTime()+(exdays*24*60*60*1000));
+		var expires = "expires="+d.toGMTString();
+		document.cookie = cname+"="+cvalue+"; "+expires;
+	}
+
+	function getCookie(cname)
+	{
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0; i<ca.length; i++)
+		  {
+		  var c = ca[i].trim();
+		  if (c.indexOf(name)==0)
+		  	{
+		  		return c.substring(name.length,c.length);
+		  	}
+		  }
+		return "";
+	}
+
+	function checkCookie()
+	{
+
+
+var user=getCookie("server_pwd");
+if (user!="")
+  {
+  alert("Welcome again " + user);
+  }
+else
+  {
+  user = prompt("Please enter your pwd:","");
+  if (user!="" && user!=null)
+    {
+    setCookie("server_pwd",user,365);
+    }
+  }
+		var var_server_pwd = getCookie("server_pwd");
+		alert(var_server_pwd);
+		if(var_server_pwd == "")
+		{
+			$("#div_password").hide();
+			$("#button_register").text("Let me Play");
+		}
+		else
+		{
+			displayForm();
+		}
+	}
+
+	function displayForm()
+	{
+		$("#div_password").show();
+
+		$("#input_password").val(var_server_pwd);
+		$("#button_register").text("Go..");
+
+		$("#input_password").attr("disabled");
+		$("#input_userid").attr("disabled");
+	}
+
 	$(document).ready(function(){
-	  $("#button_register").click(function(){
-		alert( "welcome" );
+
+		checkCookie();
+
+		$("#button_register").click(function()
+		{
+			var userid = $("#input_userid").val();
+			if(userid != "")
+			{
+				alert("setting cookie");
+				setCookie("server_pwd", "12345",30);
+			}
+			else
+			{
+				alert("text box cant be blank");
+			}
+			checkCookie();
+		});
+
+
 	  });
-	});
+
 	</script>
 	<div class="container">
 		<h1>Cows & Bulls</h1>
 		<form role="form">
 		  <div class="form-group">
 			<label for="exampleInputEmail1">Email address or Mobile Number</label>
-			<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email / Mobile Number">
+			<input type="text" class="form-control" id="input_userid" placeholder="Enter email / Mobile Number">
 		  </div>
-		  <div class="form-group">
+		  <div class="form-group" id="div_password">
 			<label for="exampleInputPassword1">Password</label>
-			<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+			<input type="password" class="form-control" id="input_password" placeholder="Password">
 		  </div>
 		  <button type="submit" class="btn btn-primary" id="button_register">Register</button>
 		</form>
