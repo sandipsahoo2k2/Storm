@@ -29,6 +29,7 @@
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 
+
     <script src="https://code.jquery.com/jquery.js"></script>
 
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -36,6 +37,9 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
 
     <script>
+
+    // http://demos.jquerymobile.com/1.0a4.1/docs/api/events.html#../../docs/about/../../docs/pages/../../
+    //http://demos.jquerymobile.com/1.4.0/
 
         var var_server_pwd;
 
@@ -46,6 +50,7 @@
                 }
                 else {
                     sessionStorage.setItem(aName, "12345");
+                    sessionStorage.setItem("username", aName);
                     var_server_pwd = "12345";
                 }
             }
@@ -79,7 +84,7 @@
             $("#button_register").click(function() {
                 var userid = $("#input_userid").val();
                 if (userid != "") {
-                	getServerPwd();
+                	getServerPwd(userid);
                     displayForm();
                 }
                 else {
