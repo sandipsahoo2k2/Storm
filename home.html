@@ -12,19 +12,32 @@
 <body>
 
 
-<div data-role="page">
+<div data-role="page" id="pageone">
+
+	<div data-role="header">
+		<h1>Just a Game</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">
+        <input type="text" data-clear-btn="true" id="input_userid" placeholder="Enter your email / Mobile Number">
+       	<a href="#pagetwo" data-role="button" id="button_start">Start the Game</a>
+    </div><!-- /content -->
+
+		<div data-role="footer">
+			<h4>Hope You will enjoy</h4>
+		</div><!-- /footer -->
+</div><!-- /page -->
+
+<div data-role="page" id="pagetwo">
 
 	<div data-role="header">
 		<h1>Cows & Bulls</h1>
 	</div><!-- /header -->
 
 	<div data-role="content">
-        <input type="text" data-clear-btn="true" id="input_userid" placeholder="Enter your email / Mobile Number">
-        <div id="div_password">
-        <label for="exampleInputPassword1">Password</label>
+        <input type="text" data-clear-btn="true" id="filled_userid" placeholder="Enter your email / Mobile Number">
         <input type="password" id="input_password" placeholder="Password">
-        </div>
-       	<input type="button" id="button_register" value="Register"/>
+       	<a href="Level_list.html" data-role="button" id="button_register">Go..</a>
     </div><!-- /content -->
 
 		<div data-role="footer">
@@ -37,62 +50,55 @@
     // http://demos.jquerymobile.com/1.0a4.1/docs/api/events.html#../../docs/about/../../docs/pages/../../
     //http://demos.jquerymobile.com/1.4.0/
 
-        var var_server_pwd;
-
         function getServerPwd(aName) {
             if (typeof (Storage) !== "undefined") {
-                if (sessionStorage.server_pwd) {
-                    var_server_pwd = sessionStorage.getItem(aName);
+                if (!sessionStorage.user_name) {
+                    sessionStorage.user_name = aName;
+                    sessionStorage.user_pwd = aName + "12345";
                 }
-                else {
-                    sessionStorage.setItem(aName, "12345");
-                    sessionStorage.setItem("username", aName);
-                    var_server_pwd = "12345";
-                }
+                return sessionStorage.user_pwd;
             }
             else {
                 alert("browser doesnt support session data / Html 5");
             }
+            return "";
         }
 
-        function displayForm() {
-            $("#div_password").show();
+        function updateForm() {
+			$("#input_password").val(sessionStorage.user_pwd);
+			$("#filled_userid").val(sessionStorage.user_name);
 
-            $("#input_password").val(var_server_pwd);
-            $("#button_register").text("Go..");
             $("#input_password").attr("disabled", "disabled");
-			$("#input_userid").attr("disabled", "disabled");
+			$("#filled_userid").attr("disabled", "disabled");
         }
 
-        $(document).ready(function() {
 
-			if(!var_server_pwd)
-			{
-				$("#div_password").hide();
-				$("#button_register").text("Start the Game");
-			}
-			else
-			{
-				displayForm();
-			}
+		$(document).on("pageinit","#pageone",function(){
 
-            $("#button_register").click(function() {
-                var userid = $("#input_userid").val();
-                if (userid != "" && !var_server_pwd) {
-                	//$.mobile.changePage( "./Level_list.html", { transition: "slideup", changeHash: false });
-                }
-                else if (userid != "") {
-                	getServerPwd(userid);
-                    displayForm();
-                    $.Pagecontainer.change( "./Level_list.html", { transition: "slideup", changeHash: false });
-                }
-                else {
-                    alert("text box cant be blank");
-                }
-            });
+		   $("#button_start").click(function()
+		   {
+				var userid = $("#input_userid").val();
+				if (userid != "")
+				{
+					getServerPwd(userid);
+				}
+				else
+				{
+				   alert("text box cant be blank");
+				}
+			});
+		});
 
+		$(document).on("pageshow","#pagetwo",function(){
+			updateForm();
+		});
 
-        });
+		$(document).on("pageinit","#pagetwo",function(){
+			$("#button_register").click(function() {
+				$.mobile.changePage( "level_list.html", { transition: "slideup"});
+			});
+		});
+
 
     </script>
 </body>
