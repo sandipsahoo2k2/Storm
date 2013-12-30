@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Cows & Bulls</title>
+	<title>A game</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css">
@@ -23,10 +23,20 @@
 		<h1>Play Ground</h1>
 	</div><!-- /header -->
 
+<<<<<<< HEAD
 	<div data-role="content">
 	<div id="div_content">
 		<a href="#" data-role="button" data-mini="true" data-inline="true" style="float: right;">Default Button</a>
 	</div>
+=======
+	<div data-role="content" id="page_content">
+		<!--<a href="" data-role="button" data-inline="true">Default Button</a> -->
+		<ul data-role="listview" data-inset="true">
+		<li>List item 1</li>
+		<li>List item 2</li>
+		<li>List item 3</li>
+		</ul>
+>>>>>>> c57c9ff97daf543379188ce7c556d32eba51268e
 	</div><!-- /content -->
 
 	<div data-role="footer" data-theme="e">
@@ -37,12 +47,24 @@
 </div><!-- /page -->
 
 <script>
+<<<<<<< HEAD
 $(document).ready(function(){
   $("#id_ok").click(function(){
   	var buttonNew = "<br><a href=\"#\" data-role=\"button\" data-mini=\"true\" data-inline=\"true\" style=\"float: right;\">A new Button</a>";
     $("#div_content").prepend(buttonNew);
   });
 });
+=======
+
+$(document).on("pageinit",function(){
+	$("#id_ok").click(function()
+	{
+	    $("ul").prepend("<li>Prepended item</li>");
+		//$("#page_content").prepend("</br><input type=\"button\" value=\"New Button\"/>");
+	});
+});
+
+>>>>>>> c57c9ff97daf543379188ce7c556d32eba51268e
 </script>
 
 </body>
