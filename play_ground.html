@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Cows & Bulls</title>
+	<title>A game</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css">
@@ -16,8 +16,13 @@
 		<h1>Cows & Bulls</h1>
 	</div><!-- /header -->
 
-	<div data-role="content">
-
+	<div data-role="content" id="page_content">
+		<!--<a href="" data-role="button" data-inline="true">Default Button</a> -->
+		<ul data-role="listview" data-inset="true">
+		<li>List item 1</li>
+		<li>List item 2</li>
+		<li>List item 3</li>
+		</ul>
 	</div><!-- /content -->
 
 	<div data-role="footer" data-theme="e">
@@ -26,6 +31,18 @@
 	</div><!-- /footer -->
 
 </div><!-- /page -->
+
+<script>
+
+$(document).on("pageinit",function(){
+	$("#id_ok").click(function()
+	{
+	    $("ul").prepend("<li>Prepended item</li>");
+		//$("#page_content").prepend("</br><input type=\"button\" value=\"New Button\"/>");
+	});
+});
+
+</script>
 
 </body>
 </html>
