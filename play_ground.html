@@ -11,6 +11,12 @@
 
 <div data-role="page">
 
+<div data-role="panel" id="mypanel" data-position="right" data-display="push">
+	  <!-- panel content goes here -->
+
+	  	<input type="button" data-inline="true" value="1">
+</div>
+
 	<div data-role="header">
 		<h1>Play Ground</h1>
 	</div><!-- /header -->
@@ -25,10 +31,12 @@
 		</ul>
 	</div><!-- /content -->
 
+
 		<div data-role="footer" id="id_fotter">
 			<fieldset data-role="controlgroup" data-mini="true">
-				<input type="text" id="input_number" data-theme="e"/>
-				<a href="" data-role="button" data-theme="e" id="id_send">Send</a>
+			<input type="button" data-inline="true" value="ok">
+			<input type="button" data-inline="true" value="Reset">
+			<a href="#mypanel" data-role="button" data-theme="e" id="id_send">Send</a>
 			</fieldset>
 	</div><!-- /footer -->
 
