@@ -11,11 +11,11 @@
 
 <div data-role="page">
 
-<div data-role="panel" id="mypanel" data-position="right" data-display="push">
-	  <!-- panel content goes here -->
+	<div data-role="panel" id="mypanel" data-position="right" data-display="push">
+		  <!-- panel content goes here -->
 
-	  	<input type="button" data-inline="true" value="1">
-</div>
+			<input type="button" data-inline="true" value="1">
+	</div>
 
 	<div data-role="header">
 		<h1>Play Ground</h1>
@@ -31,17 +31,42 @@
 		</ul>
 	</div><!-- /content -->
 
-
-		<div data-role="footer" id="id_fotter">
+		<div data-role="footer" id="id_fotter" align="center">
 			<fieldset data-role="controlgroup" data-mini="true">
-			<input type="button" data-inline="true" value="ok">
-			<input type="button" data-inline="true" value="Reset">
-			<a href="#mypanel" data-role="button" data-theme="e" id="id_send">Send</a>
+			<a href="#keyboard" data-rel="popup" data-transition="flip" data-role="button"></a>
+		</div>
+
+
+	<div id="keyboard" data-role="popup" data-arrow="l,t" class="ui-btn-right">
+	<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+		<div class="ui-grid-solo" data-theme="e">
+		    <div class="ui-block-a"><input type="button" value="0"></div>
+		</div>
+		<div class="ui-grid-b">
+			<div class="ui-block-a"><input type="button" value="1"></div>
+			<div class="ui-block-b"><input type="button" value="2"></div>
+			<div class="ui-block-c"><input type="button" value="3"></div>
+		</div><!-- /grid-b -->
+		<div class="ui-grid-b">
+				<div class="ui-block-a"><input type="button" value="4"></div>
+				<div class="ui-block-b"><input type="button" value="5"></div>
+				<div class="ui-block-c"><input type="button" value="6"></div>
+		</div><!-- /grid-b -->
+		<div class="ui-grid-b">
+				<div class="ui-block-a"><input type="button" value="7"></div>
+				<div class="ui-block-b"><input type="button" value="8"></div>
+				<div class="ui-block-c"><input type="button" value="9"></div>
+		</div><!-- /grid-b -->
+		<div class="ui-grid-a">
+						<div class="ui-block-a"><input type="button" value="Clear" ></div>
+						<div class="ui-block-b"><input type="button" value="Ok" id="id_send"></div>
+		</div><!-- /grid-b -->
+	</div>
+
 			</fieldset>
 	</div><!-- /footer -->
 
 </div><!-- /page -->
-
 <script>
 
 $(document).on("pageinit",function(){
@@ -61,7 +86,7 @@ function getRandomNum(number_of_digit)
 		var temp = Math.random();
 		var hundreds = Math.pow(10, number_of_digit);
 		random_number = Math.floor(temp * hundreds + 1);
-		alert("random Number is :" + random_number);
+		//alert("random Number is :" + random_number);
 	}
 	return random_number;
 }
@@ -74,7 +99,7 @@ function getArrayNum(any_num)
     {
     	int_arr[i] = parseInt(string_arr[i], 10);
     }
-    alert("Number is :" + int_arr);
+    //alert("Number is :" + int_arr);
     return int_arr;
 }
 
@@ -105,7 +130,7 @@ function getCowsAndBuuls(input_number, random_number)
 				}
 			}
 		}
-		alert("Bulls : " + bulls_and_cows[0] + " And Cows : " + bulls_and_cows[1]);
+		//alert("Bulls : " + bulls_and_cows[0] + " And Cows : " + bulls_and_cows[1]);
 	}
 	else
 	{
