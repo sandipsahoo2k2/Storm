@@ -28,7 +28,7 @@
 		</div><!-- /footer -->
 </div><!-- /page -->
 
-<div data-role="page" id="pagetwo">
+<div data-role="page" id="pagetwo" data-add-back-btn="true">
 
 	<div data-role="header">
 		<h1>Cows & Bulls</h1>
@@ -37,7 +37,7 @@
 	<div data-role="content">
         <input type="text" data-clear-btn="true" id="filled_userid" placeholder="Enter your email / Mobile Number">
         <input type="password" id="input_password" placeholder="Password">
-       	<a href="Level_list.html" data-role="button" id="button_register">Go..</a>
+       	<a href="level_list.html" data-ajax="false" data-role="button" id="button_register">Go..</a>
     </div><!-- /content -->
 
 		<div data-role="footer">
@@ -95,9 +95,16 @@
 
 		$(document).on("pageinit","#pagetwo",function(){
 			$("#button_register").click(function() {
-				$.mobile.changePage( "level_list.html", { transition: "slideup"});
+				//$.mobile.changePage( "level_list.html", { transition: "slideup"});
 			});
 		});
+
+		$(document).ready(function() {
+		  $('a[href^=#]').bind('click vclick', function (e) {
+		    location.hash = $(this).attr('href');
+		    return false;
+		  });
+});
 
 
     </script>

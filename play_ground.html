@@ -9,15 +9,15 @@
 	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
 </head>
 
-<div data-role="page">
+<div data-role="page" data-add-back-btn="true">
 
 	<div data-role="panel" id="mypanel" data-position="right" data-display="push">
 		  <!-- panel content goes here -->
-
 			<input type="button" data-inline="true" value="1">
 	</div>
 
 	<div data-role="header">
+		<a href="#keyboard" data-rel="popup" data-transition="flip" data-role="button" data-icon="grid" data-iconpos="notext" class="ui-btn-right"></a>
 		<h1>Play Ground</h1>
 	</div><!-- /header -->
 
@@ -33,12 +33,11 @@
 
 		<div data-role="footer" id="id_fotter" align="center">
 			<fieldset data-role="controlgroup" data-mini="true">
-			<a href="#keyboard" data-rel="popup" data-transition="flip" data-role="button"></a>
+			</fieldset>
 		</div>
 
 
 	<div id="keyboard" data-role="popup" data-arrow="l,t" class="ui-btn-right">
-	<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
 		<div class="ui-grid-solo" data-theme="e">
 		    <div class="ui-block-a"><input type="button" value="0"></div>
 		</div>
@@ -76,6 +75,11 @@ $(document).on("pageinit",function(){
 	    $("ul").prepend("<li>Prepended item</li>");
 	    $( "ul" ).listview( "refresh");
 	});
+
+			  $('a[href^=#]').bind('click vclick', function (e) {
+			    location.hash = $(this).attr('href');
+			    return false;
+
 });
 
 function getRandomNum(number_of_digit)
@@ -137,6 +141,13 @@ function getCowsAndBuuls(input_number, random_number)
 		alert("Number of digits of the input should not be more than :" + random_number.length);
 	}
 }
+
+		$(document).ready(function() {
+		  $('a[href^=#]').bind('click vclick', function (e) {
+		    location.hash = $(this).attr('href');
+		    return false;
+		  });
+
 
 </script>
 
