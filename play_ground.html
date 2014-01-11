@@ -17,6 +17,7 @@
 	</div>
 
 	<div data-role="header">
+		<a href="level_list" data-ajax="false" data-rel="back" data-role="button" class="ui-btn-left"></a>
 		<a href="#keyboard" data-rel="popup" data-transition="flip" data-role="button" data-icon="grid" data-iconpos="notext" class="ui-btn-right"></a>
 		<h1>Play Ground</h1>
 	</div><!-- /header -->
@@ -75,11 +76,6 @@ $(document).on("pageinit",function(){
 	    $("ul").prepend("<li>Prepended item</li>");
 	    $( "ul" ).listview( "refresh");
 	});
-
-			  $('a[href^=#]').bind('click vclick', function (e) {
-			    location.hash = $(this).attr('href');
-			    return false;
-
 });
 
 function getRandomNum(number_of_digit)
@@ -141,13 +137,6 @@ function getCowsAndBuuls(input_number, random_number)
 		alert("Number of digits of the input should not be more than :" + random_number.length);
 	}
 }
-
-		$(document).ready(function() {
-		  $('a[href^=#]').bind('click vclick', function (e) {
-		    location.hash = $(this).attr('href');
-		    return false;
-		  });
-
 
 </script>
 
