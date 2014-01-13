@@ -23,7 +23,7 @@
        	<a href="#pagetwo" data-role="button" id="button_start">Start the Game</a>
     </div><!-- /content -->
 
-		<div data-role="footer">
+		<div data-role="footer" data-position="fixed">
 			<h4>Hope You will enjoy</h4>
 		</div><!-- /footer -->
 </div><!-- /page -->
@@ -31,6 +31,7 @@
 <div data-role="page" id="pagetwo" data-add-back-btn="true">
 
 	<div data-role="header">
+		<a data-rel="back" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
 		<h1>Cows & Bulls</h1>
 	</div><!-- /header -->
 
@@ -40,7 +41,7 @@
        	<a href="level_list.html" data-ajax="false" data-role="button" id="button_register">Go..</a>
     </div><!-- /content -->
 
-		<div data-role="footer">
+		<div data-role="footer" data-position="fixed">
 			<h4>Hope You will enjoy</h4>
 		</div><!-- /footer -->
 </div><!-- /page -->
@@ -98,12 +99,6 @@
 				//$.mobile.changePage( "level_list.html", { transition: "slideup"});
 			});
 		});
-
-		$(document).ready(function() {
-		  $('a[href^=#]').bind('click vclick', function (e) {
-		    location.hash = $(this).attr('href');
-		    return false;
-		  });
 });
 
 

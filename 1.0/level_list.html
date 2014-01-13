@@ -15,6 +15,7 @@
 
 	<div data-role="header">
 		<h1>Cows & Bulls</h1>
+		<a data-rel="back" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
 	</div><!-- /header -->
 
 	<div data-role="content">
@@ -25,17 +26,10 @@
 		</ul>
 	</div><!-- /content -->
 
-	<div data-role="footer">
+	<div data-role="footer" data-position="fixed">
 		<h4>Hope You will enjoy</h4>
 	</div><!-- /footer -->
 </div><!-- /page -->
 
- <script>
-		$(document).ready(function() {
-		  $('a[href^=#]').bind('click vclick', function (e) {
-		    location.hash = $(this).attr('href');
-		    return false;
-		  });
- </script>
 </body>
 </html>

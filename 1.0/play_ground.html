@@ -17,8 +17,8 @@
 	</div>
 
 	<div data-role="header">
-		<a href="level_list" data-ajax="false" data-rel="back" data-role="button" class="ui-btn-left"></a>
-		<a href="#keyboard" data-rel="popup" data-transition="flip" data-role="button" data-icon="grid" data-iconpos="notext" class="ui-btn-right"></a>
+		<a data-rel="back" class="ui-btn-left" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
+		<a href="#keyboard" data-rel="popup" data-transition="flip" data-role="button" data-icon="grid" data-iconpos="notext" class="ui-btn-right" data-position-to="window"></a>
 		<h1>Play Ground</h1>
 	</div><!-- /header -->
 
@@ -32,9 +32,8 @@
 		</ul>
 	</div><!-- /content -->
 
-		<div data-role="footer" id="id_fotter" align="center">
-			<fieldset data-role="controlgroup" data-mini="true">
-			</fieldset>
+		<div data-role="footer" id="id_fotter" align="center" data-position="fixed">
+		<h1> Hope you are enjoying </h1>
 		</div>
 
 
@@ -63,13 +62,11 @@
 		</div><!-- /grid-b -->
 	</div>
 
-			</fieldset>
-	</div><!-- /footer -->
-
 </div><!-- /page -->
 <script>
 
 $(document).on("pageinit",function(){
+	var maxHeight = $( window ).height() - 60 + "px";
 	getCowsAndBuuls(123, 213);
 	$("#id_send").click(function()
 	{
