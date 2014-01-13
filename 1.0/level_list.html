@@ -14,7 +14,7 @@
 <div data-role="page" data-add-back-btn="true" >
 
 	<div data-role="header">
-		<h1>Cows & Bulls</h1>
+		<h1 id="header_string">Cows & Bulls</h1>
 		<a data-rel="back" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
 	</div><!-- /header -->
 
@@ -30,6 +30,12 @@
 		<h4>Hope You will enjoy</h4>
 	</div><!-- /footer -->
 </div><!-- /page -->
+<script>
+
+	var element=document.getElementById("header_string");
+	element.innerHTML += " | <span 'color:blue;font-weight:bold'>" + sessionStorage.user_name + "</span>" ;
+
+</script>
 
 </body>
 </html>

@@ -55,14 +55,28 @@
             if (typeof (Storage) !== "undefined") {
                 if (!sessionStorage.user_name) {
                     sessionStorage.user_name = aName;
-                    sessionStorage.user_pwd = aName + "12345";
+                    sessionStorage.user_pwd = getHashPwd(aName);
                 }
                 return sessionStorage.user_pwd;
             }
             else {
-                alert("browser doesnt support session data / Html 5");
+                alert("browser doesnt support session data !");
             }
             return "";
+        }
+
+        function getHashPwd(aName)
+        {
+        	var hash = 0, i, char, l;
+			    if (aName.length == 0) return hash;
+			    for (i = 0, l = aName.length; i < l; i++) {
+			        char  = aName.charCodeAt(i);
+			        hash  = ((hash<<5)-hash)+char;
+			        hash |= 0; // Convert to 32bit integer
+			    }
+    		return hash;
+
+  			//((window.MyNamespace.userNumber + Math.floor(Math.random() * 1e15) + new Date().getMilliseconds()).toString(36)).toUpperCase();
         }
 
         function updateForm() {
@@ -74,7 +88,7 @@
         }
 
 
-		$(document).on("pageinit","#pageone",function(){
+		$(document).on("pageinit","#pageone",function(event){
 
 		   $("#button_start").click(function()
 		   {
@@ -90,16 +104,31 @@
 			});
 		});
 
+		$(document).bind('pagebeforechange', function(e, data) {
+		    var to = data.toPage,
+		        from = data.options.fromPage;
+
+		    if (typeof to === 'string') {
+		        var u = $.mobile.path.parseUrl(to);
+		        to = u.hash || '#' + u.pathname.substring(1);
+		        if (from) from = '#' + from.attr('id');
+
+		        if (from === '#pageone' && to === '#pagetwo') {
+		        var userid = $("#input_userid").val();
+				if (userid == "")
+		            e.preventDefault();
+		            // remove active class on button
+		            // otherwise button would remain highlighted
+		            /*$.mobile.activePage
+		                .find('.ui-btn-active')
+		                .removeClass('ui-btn-active');*/
+		        }
+		    }
+		});
+
 		$(document).on("pageshow","#pagetwo",function(){
 			updateForm();
 		});
-
-		$(document).on("pageinit","#pagetwo",function(){
-			$("#button_register").click(function() {
-				//$.mobile.changePage( "level_list.html", { transition: "slideup"});
-			});
-		});
-});
 
 
     </script>

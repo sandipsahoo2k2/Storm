@@ -17,9 +17,9 @@
 	</div>
 
 	<div data-role="header">
+		<h1 id="header_string">Play Ground</h1>
 		<a data-rel="back" class="ui-btn-left" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
 		<a href="#keyboard" data-rel="popup" data-transition="flip" data-role="button" data-icon="grid" data-iconpos="notext" class="ui-btn-right" data-position-to="window"></a>
-		<h1>Play Ground</h1>
 	</div><!-- /header -->
 
 	<div data-role="content" id="page_content">
@@ -134,6 +134,10 @@ function getCowsAndBuuls(input_number, random_number)
 		alert("Number of digits of the input should not be more than :" + random_number.length);
 	}
 }
+
+	var element=document.getElementById("header_string");
+	element.innerHTML += " | <span 'color:blue;font-weight:bold'>" + sessionStorage.user_name + "</span>" ;
+
 
 </script>
 
