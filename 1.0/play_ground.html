@@ -42,19 +42,19 @@
 		    <div class="ui-block-a"><input type="button" value="0" id="display_button"></div>
 		</div>
 		<div class="ui-grid-b">
-			<div class="ui-block-a"><input type="button" value="1" onclick="update_display_button()"></div>
-			<div class="ui-block-b"><input type="button" value="2" onclick="update_display_button()"></div>
-			<div class="ui-block-c"><input type="button" value="3" onclick="update_display_button()"></div>
+			<div class="ui-block-a"><input type="button" value="1" onclick="update_display_button(event)"></div>
+			<div class="ui-block-b"><input type="button" value="2" onclick="update_display_button(event)"></div>
+			<div class="ui-block-c"><input type="button" value="3" onclick="update_display_button(event)"></div>
 		</div><!-- /grid-b -->
 		<div class="ui-grid-b">
-				<div class="ui-block-a"><input type="button" value="4" onclick="update_display_button()"></div>
-				<div class="ui-block-b"><input type="button" value="5" onclick="update_display_button()"></div>
-				<div class="ui-block-c"><input type="button" value="6" onclick="update_display_button()"></div>
+				<div class="ui-block-a"><input type="button" value="4" onclick="update_display_button(event)"></div>
+				<div class="ui-block-b"><input type="button" value="5" onclick="update_display_button(event)"></div>
+				<div class="ui-block-c"><input type="button" value="6" onclick="update_display_button(event)"></div>
 		</div><!-- /grid-b -->
 		<div class="ui-grid-b">
-				<div class="ui-block-a"><input type="button" value="7" onclick="update_display_button()"></div>
-				<div class="ui-block-b"><input type="button" value="8" onclick="update_display_button()" ></div>
-				<div class="ui-block-c"><input type="button" value="9" onclick="update_display_button()"></div>
+				<div class="ui-block-a"><input type="button" value="7" onclick="update_display_button(event)"></div>
+				<div class="ui-block-b"><input type="button" value="8" onclick="update_display_button(event)" ></div>
+				<div class="ui-block-c"><input type="button" value="9" onclick="update_display_button(event)"></div>
 		</div><!-- /grid-b -->
 		<div class="ui-grid-a">
 				<div class="ui-block-a"><input type="button" value="Clear" id="id_clear"></div>
@@ -64,6 +64,14 @@
 
 </div><!-- /page -->
 <script>
+
+
+$( "#keyboard" ).bind({
+   popupafterclose: function(event, ui) {
+		$("#display_button").val("0");
+		$("#display_button").button('refresh');
+   }
+});
 
 $(document).on("pageinit",function(){
 	var maxHeight = $( window ).height() - 60 + "px";
@@ -77,12 +85,14 @@ $(document).on("pageinit",function(){
 	$("#id_clear").click(function()
 	{
 		$("#display_button").val("0");
+		$("#display_button").button('refresh');
 	});
 });
 
-function update_display_button()
+function update_display_button(event)
 {
-	var input_string = this.value ;
+var element = event.srcElement;
+input_string = element.value;
  var displayString = $("#display_button").val();
  if(displayString == "0")
  {
@@ -93,6 +103,7 @@ function update_display_button()
 	 displayString += input_string;
 	 $("#display_button").val(displayString);
  }
+ 	$("#display_button").button('refresh');
 }
 
 function getRandomNum(number_of_digit)
