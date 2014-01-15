@@ -26,9 +26,6 @@
 
 		<!-- <a href="" data-role="button" data-inline="true">Default Button</a> -->
 		<ul data-role="listview">
-		<li>List item 1<span class="ui-li-count">Cows 2, Bulls 1</span></li>
-		<li>List item 2<span class="ui-li-count">Bulls 2, Cows 2</span></li>
-		<li>List item 3</li>
 		</ul>
 	</div><!-- /content -->
 
@@ -66,27 +63,56 @@
 <script>
 
 
+if(!sessionStorage.user_name)
+{
+	window.location = "home.html";
+}
+else
+{
+	var element=document.getElementById("header_string");
+	element.innerHTML += " | <span 'color:blue;font-weight:bold'>" + sessionStorage.user_name + "</span>" ;	{
+}
+
+
 $( "#keyboard" ).bind({
    popupafterclose: function(event, ui) {
-		$("#display_button").val("0");
-		$("#display_button").button('refresh');
+		clearDisplayButton();
    }
 });
 
+function clearDisplayButton()
+{
+	$("#display_button").val("0");
+	$("#display_button").button('refresh');
+}
+
 $(document).on("pageinit",function(){
 	var maxHeight = $( window ).height() - 60 + "px";
-	getCowsAndBuuls(123, 213);
-	$("#id_send").click(function()
-	{
-	    $("ul").prepend("<li>Prepended item</li>");
-	    $( "ul" ).listview( "refresh");
-	});
 
-	$("#id_clear").click(function()
-	{
-		$("#display_button").val("0");
-		$("#display_button").button('refresh');
-	});
+		var level = 3;
+		var random_no = getRandomNum(level);
+
+		$("#id_send").click(function()
+		{
+			var displayString = $("#display_button").val();
+			var inputNumber = parseInt(displayString);
+			if(displayString != "0" && inputNumber != NaN)
+			{
+				var bulls_and_cows = getCowsAndBulls(inputNumber, random_no);
+				var li_element_to_append = "<li>" + displayString + "<span class='ui-li-count'>Cows " + bulls_and_cows[1] + ", Bulls " + bulls_and_cows[0] + "</span></li>";
+
+				$("ul").prepend(li_element_to_append);
+				$( "ul" ).listview( "refresh");
+
+				clearDisplayButton();
+			}
+		});
+
+		$("#id_clear").click(function()
+		{
+			clearDisplayButton();
+		});
+
 });
 
 function update_display_button(event)
@@ -131,7 +157,7 @@ function getArrayNum(any_num)
     return int_arr;
 }
 
-function getCowsAndBuuls(input_number, random_number)
+function getCowsAndBulls(input_number, random_number)
 {
 	var input_number = getArrayNum(input_number);
 	var random_number = getArrayNum(random_number);
@@ -164,11 +190,8 @@ function getCowsAndBuuls(input_number, random_number)
 	{
 		alert("Number of digits of the input should not be more than :" + random_number.length);
 	}
+	return bulls_and_cows;
 }
-
-	var element=document.getElementById("header_string");
-	element.innerHTML += " | <span 'color:blue;font-weight:bold'>" + sessionStorage.user_name + "</span>" ;
-
 
 </script>
 
