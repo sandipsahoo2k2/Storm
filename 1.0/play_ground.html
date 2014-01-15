@@ -70,7 +70,7 @@ if(!sessionStorage.user_name)
 else
 {
 	var element=document.getElementById("header_string");
-	element.innerHTML += " | <span 'color:blue;font-weight:bold'>" + sessionStorage.user_name + "</span>" ;	{
+	element.innerHTML += " | <span 'color:blue;font-weight:bold'>" + sessionStorage.user_name + "</span>" ;
 }
 
 
@@ -89,22 +89,21 @@ function clearDisplayButton()
 $(document).on("pageinit",function(){
 	var maxHeight = $( window ).height() - 60 + "px";
 
-		var level = 3;
-		var random_no = getRandomNum(level);
+		var random_no = getRandomNum(sessionStorage.game_level);
 
 		$("#id_send").click(function()
 		{
 			var displayString = $("#display_button").val();
 			var inputNumber = parseInt(displayString);
-			if(displayString != "0" && inputNumber != NaN)
+			if(displayString.length == sessionStorage.game_level && displayString != "0" && inputNumber != NaN)
 			{
 				var bulls_and_cows = getCowsAndBulls(inputNumber, random_no);
 				var li_element_to_append = "<li>" + displayString + "<span class='ui-li-count'>Cows " + bulls_and_cows[1] + ", Bulls " + bulls_and_cows[0] + "</span></li>";
 
-				$("ul").prepend(li_element_to_append);
+				$("ul").append(li_element_to_append);
 				$( "ul" ).listview( "refresh");
-
 				clearDisplayButton();
+				$("#keyboard").popup( "close" );
 			}
 		});
 
@@ -129,7 +128,7 @@ input_string = element.value;
 	 displayString += input_string;
 	 $("#display_button").val(displayString);
  }
- 	$("#display_button").button('refresh');
+ $("#display_button").button('refresh');
 }
 
 function getRandomNum(number_of_digit)
