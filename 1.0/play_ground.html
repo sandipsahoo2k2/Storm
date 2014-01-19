@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>A game</title>
+	<title>Cows And Bulls</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css">
@@ -11,25 +11,21 @@
 
 <div data-role="page" data-add-back-btn="true">
 
-	<div data-role="panel" id="mypanel" data-position="right" data-display="push">
-		  <!-- panel content goes here -->
-			<input type="button" data-inline="true" value="1">
-	</div>
-
 	<div data-role="header">
 		<h1 id="header_string">Play Ground</h1>
 		<a data-rel="back" class="ui-btn-left" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
-		<a href="#keyboard" data-rel="popup" data-transition="flip" data-role="button" data-icon="grid" data-iconpos="notext" class="ui-btn-right" data-position-to="window"></a>
+		<a href="#keyboard" data-rel="popup" data-transition="flip" data-role="button" data-icon="grid" data-iconpos="right" class="ui-btn-right" data-position-to="window">keyboard</a>
 	</div><!-- /header -->
 
 	<div data-role="content" id="page_content">
-		<!-- <a href="" data-role="button" data-inline="true">Default Button</a> -->
 		<ul data-role="listview">
 		</ul>
 	</div><!-- /content -->
 
 	<div data-role="footer" id="id_footer" align="center" data-position="fixed">
-		<h1> Hope you are enjoying </h1>
+		<h1 id="footer_string">Hope you are enjoying</h1>
+		<input type = "button" id="total_tries" value= "Tries : 0" class="ui-btn-left"></a>
+		<input type = "button" id="total_time" value= "Time : 00.00" class="ui-btn-right">
 	</div>
 
 
@@ -54,16 +50,14 @@
 		</div><!-- /grid-b -->
 		<div class="ui-grid-b">
 				<div class="ui-block-a"><input type="button" value="0" onclick="update_display_button(event)"></div>
-				<div class="ui-block-b"><input type="button" value="CL" id="id_clear"></div>
-				<div class="ui-block-c"><input type="button" value="Ok" id="id_send"></div>
+				<div class="ui-block-b"><input type="button" value="C" id="id_clear"></div>
+				<div class="ui-block-c"><input type="button" value="K" id="id_send"></div>
 		</div><!-- /grid-b -->
 	</div>
 
 </div><!-- /page -->
 
-
-
-<div data-role="dialog" id="dialogpage">
+<div data-role="dialog" id="dialogpage" data-close-btn="none">
 
 	 <div data-role="header">
 	    <h1>You made it !!!</h1>
@@ -83,14 +77,45 @@
 <script>
 
 
+var guess_total_time_in_second = 0 ;
+
 if(!sessionStorage.user_name)
 {
 	window.location = "home.html";
 }
 else
 {
-	var element=document.getElementById("header_string");
-	element.innerHTML += " | <span 'color:blue;font-weight:bold'>" + sessionStorage.user_name + "</span>" ;
+	sessionStorage.total_tries = 0 ;
+	var guess_total_time = 0 ;
+	var element = document.getElementById("footer_string");
+	element.innerHTML += " <span 'color:blue;font-weight:bold'>" + sessionStorage.user_name + "</span>" ;
+}
+
+function updateTime()
+{
+	guess_total_time_in_second ++;
+	total_minutes = Math.floor(guess_total_time_in_second / 60);
+	total_seconds = Math.floor(guess_total_time_in_second % 60);
+	total_hours = Math.floor(total_minutes / 60);
+
+	if(total_seconds < 10)
+	{
+		total_seconds = "0" + total_seconds;
+	}
+	if(total_minutes < 10)
+	{
+		total_minutes = "0" + total_minutes;
+	}
+
+	if(total_hours > 0)
+	{
+		$("#total_time").val(" Time : " + total_hours + "." + total_minutes + "." + total_seconds + " ");
+	}
+	else
+	{
+		$("#total_time").val(" Time : " + total_minutes + "." + total_seconds + " ");
+	}
+	$("#total_time").button('refresh');
 }
 
 
@@ -106,9 +131,15 @@ function clearDisplayButton()
 	$("#display_button").button('refresh');
 }
 
-$(document).on("pageinit",function(){
-	var maxHeight = $( window ).height() - 60 + "px";
+function updateTries()
+{
+	$("#total_tries").val("Tries : " + sessionStorage.total_tries);
+	$("#total_tries").button('refresh');
+}
 
+$(document).on("pageinit",function(){
+		setInterval('updateTime()',1000);
+	var maxHeight = $( window ).height() - 60 + "px";
 		var random_no = getRandomNum(sessionStorage.game_level);
 
 		$("#id_send").click(function()
@@ -122,7 +153,12 @@ $(document).on("pageinit",function(){
 
 				if(bulls_and_cows[0] == sessionStorage.game_level)
 				{
-					$.mobile.changePage('#dialogpage', 'pop', true, true);
+					$.mobile.changePage('#dialogpage', 'pop', false, true);
+				}
+				else
+				{
+					sessionStorage.total_tries ++;
+					updateTries();
 				}
 
 				$("ul").append(li_element_to_append);

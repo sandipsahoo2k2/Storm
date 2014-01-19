@@ -13,20 +13,20 @@
 
 <div data-role="page" data-add-back-btn="true">
 	<div data-role="header">
-		<h1 id="header_string">Cows & Bulls</h1>
+		<h1 id="header_string">Cows And Bulls</h1>
 		<a data-rel="back" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
 	</div><!-- /header -->
 
 	<div data-role="content">
 		<ul data-role="listview" data-inset="false" data-divider-theme="a" id="level_list">
-			<li><a href="play_ground.html" data-ajax="false">With Five Numbers <span class="ui-li-count">Easy</span> </a></li>
-			<li><a href="play_ground.html" data-ajax="false">With Six Numbers <span class="ui-li-count">Medium</span> </a></li>
-			<li><a href="play_ground.html" data-ajax="false">With Seven Numbers <span class="ui-li-count">Difficult</span> </a></li>
+			<li><a href="play_ground.html" data-ajax="false">With Threee Numbers <span class="ui-li-count">Easy</span> </a></li>
+			<li><a href="play_ground.html" data-ajax="false">With Four Numbers <span class="ui-li-count">Medium</span> </a></li>
+			<li><a href="play_ground.html" data-ajax="false">With Five Numbers <span class="ui-li-count">Difficult</span> </a></li>
 		</ul>
 	</div><!-- /content -->
 
 	<div data-role="footer" data-position="fixed">
-		<h4>Hope You will enjoy</h4>
+		<h1 id="footer_string">Hope You will enjoy </h4>
 	</div><!-- /footer -->
 </div><!-- /page -->
 
@@ -38,8 +38,8 @@
 	}
 	else
 	{
-		var element=document.getElementById("header_string");
-		element.innerHTML += " | <span 'color:blue;font-weight:bold'>" + sessionStorage.user_name + "</span>" ;
+		var element = document.getElementById("footer_string");
+		element.innerHTML += sessionStorage.user_name ;
 	}
 
 	$('li').bind('vclick', function(event){
