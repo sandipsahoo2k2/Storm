@@ -20,25 +20,7 @@
 
 	<div data-role="content">
         <input type="text" data-clear-btn="true" id="input_userid" placeholder="Enter your username">
-       	<a href="#pagetwo" data-role="button" id="button_start">Next</a>
-    </div><!-- /content -->
-
-		<div data-role="footer" data-position="fixed">
-			<h4>Hope You will enjoy</h4>
-		</div><!-- /footer -->
-</div><!-- /page -->
-
-<div data-role="page" id="pagetwo" data-add-back-btn="true">
-
-	<div data-role="header">
-		<a data-rel="back" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
-		<h1>Cows & Bulls</h1>
-	</div><!-- /header -->
-
-	<div data-role="content">
-        <input type="text" id="filled_userid" placeholder="Enter your username">
-        <input type="password" id="input_password" placeholder="Password">
-       	<a href="level_list.html" data-ajax="false" data-role="button" id="button_register">Start..</a>
+       	<a href="level_list.html" data-ajax="false" data-role="button" id="button_start">Next</a>
     </div><!-- /content -->
 
 		<div data-role="footer" data-position="fixed">
@@ -48,16 +30,12 @@
 
     <script>
 
-    // http://demos.jquerymobile.com/1.0a4.1/docs/api/events.html#../../docs/about/../../docs/pages/../../
-    //http://demos.jquerymobile.com/1.4.0/
-
-        function getServerPwd(aName) {
+        function getSetUserID(aName) {
             if (typeof (Storage) !== "undefined") {
                 if (!sessionStorage.user_name) {
                     sessionStorage.user_name = aName;
-                    sessionStorage.user_pwd = getHashPwd(aName);
                 }
-                return sessionStorage.user_pwd;
+                return sessionStorage.user_name;
             }
             else {
                 alert("browser doesnt support session data !");
@@ -65,71 +43,24 @@
             return "";
         }
 
-        function getHashPwd(aName)
-        {
-        	var hash = 0, i, char, l;
-			    if (aName.length == 0) return hash;
-			    for (i = 0, l = aName.length; i < l; i++) {
-			        char  = aName.charCodeAt(i);
-			        hash  = ((hash<<5)-hash)+char;
-			        hash |= 0; // Convert to 32bit integer
-			    }
-    		return hash;
-
-  			//((window.MyNamespace.userNumber + Math.floor(Math.random() * 1e15) + new Date().getMilliseconds()).toString(36)).toUpperCase();
-        }
-
-        function updateForm() {
-			$("#input_password").val(sessionStorage.user_pwd);
-			$("#filled_userid").val(sessionStorage.user_name);
-
-            $("#input_password").attr("disabled", "disabled");
-			$("#filled_userid").attr("disabled", "disabled");
-        }
-
-
 		$(document).on("pageinit","#pageone",function(event){
-
-		   $("#button_start").click(function()
+		   $("#button_start").click(function(event)
 		   {
 				var userid = $("#input_userid").val();
 				if (userid != "")
 				{
-					getServerPwd(userid);
+					getSetUserID(userid);
+					//$.mobile.ajaxEnabled = false;
+					//$.mobile.changePage("level_list.html",{ajax:false});
 				}
 				else
 				{
+					$.mobile.activeBtnClass = 'unused';
+				   event.preventDefault();
 				   alert("text box cant be blank");
 				}
 			});
 		});
-
-		$(document).bind('pagebeforechange', function(e, data) {
-		    var to = data.toPage,
-		        from = data.options.fromPage;
-
-		    if (typeof to === 'string') {
-		        var u = $.mobile.path.parseUrl(to);
-		        to = u.hash || '#' + u.pathname.substring(1);
-		        if (from) from = '#' + from.attr('id');
-
-		        if (from === '#pageone' && to === '#pagetwo') {
-		        var userid = $("#input_userid").val();
-				if (userid == "")
-		            e.preventDefault();
-		            // remove active class on button
-		            // otherwise button would remain highlighted
-		            $.mobile.activePage
-		                .find('.ui-btn-active')
-		                .removeClass('ui-btn-active');
-		        }
-		    }
-		});
-
-		$(document).on("pageshow","#pagetwo",function(){
-			updateForm();
-		});
-
 
     </script>
 </body>
