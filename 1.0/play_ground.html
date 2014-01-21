@@ -13,7 +13,7 @@
 	<div data-role="header" align="center" data-position="fixed">
 		<h1 id="header_string">Play Ground</h1>
 		<a data-rel="back" class="ui-btn-left" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
-		<a href="#keyboard" data-rel="popup" data-transition="flip" data-role="button" data-icon="grid" data-iconpos="right" class="ui-btn-right" data-position-to="window">keyboard</a>
+		<a href="#keyboard" data-rel="popup" id="display_keyboad" data-transition="flip" data-role="button" data-icon="grid" data-iconpos="right" class="ui-btn-right" data-position-to="window">keyboard</a>
 	</div>
 
 	<div data-role="content" id="page_content">
@@ -88,6 +88,7 @@
 
 
 var guess_total_time_in_second = 0 ;
+var timer_initialised = false;
 
 if(!sessionStorage.user_name)
 {
@@ -150,6 +151,7 @@ function updateTries()
 $(document).on("pageinit", "#play_ground", function(event){
 	var maxHeight = $( window ).height() - 60 + "px";
 		var random_no = getRandomNum(sessionStorage.game_level);
+		$.mobile.changePage('result.html', 'pop', false, true);
 
 		$("#id_send").click(function()
 		{
@@ -183,9 +185,13 @@ $(document).on("pageinit", "#play_ground", function(event){
 			clearDisplayButton();
 		});
 
-		$("#keyboard").click(function()
+		$("#display_keyboad").click(function()
 		{
-			setInterval('updateTime()',1000);
+			if(timer_initialised == false)
+			{
+				setInterval('updateTime()',1000);
+				timer_initialised = true;
+			}
 		});
 });
 
@@ -198,7 +204,7 @@ input_string = element.value;
  {
   	$("#display_button").val(input_string);
  }
- else
+ else if(displayString.length < sessionStorage.game_level)
  {
 	 displayString += input_string;
 	 $("#display_button").val(displayString);
