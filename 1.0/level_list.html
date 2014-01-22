@@ -12,6 +12,7 @@
 <body>
 
 <div data-role="page" data-add-back-btn="true">
+
 	<div data-role="header">
 		<h1 id="header_string">Cows And Bulls</h1>
 		<a data-rel="back" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
@@ -23,6 +24,24 @@
 			<li><a href="play_ground.html" data-ajax="false">With Four Numbers <span class="ui-li-count">Medium</span> </a></li>
 			<li><a href="play_ground.html" data-ajax="false">With Five Numbers <span class="ui-li-count">Difficult</span> </a></li>
 		</ul>
+
+	</br>
+
+	<div id="high_scrore" data-inline="true" align="center">
+		<h3 class="ui-bar ui-bar-b ui-corner-all" id="high_scrore_header">Are you looking for High Scores ?</h3>
+	      <div class="ui-body ui-body-b ui-corner-all" id="high_scrore_header">
+	          <p id="high_score_content">It is not available Yet !
+	          </br>You are the first person to play.
+	          </br>Select the Level you want to play.
+	          </br>and witness an attempt.</p>
+	    	    <ul data-role="listview" id="high_score_list">
+	    	    	<li id="high_score_difficult"> User : 1, Total steps taken : , Total time taken : <span style="color:blue">10</span> seconds</li>
+	    	    	<li id="high_score_midium"> User : 1, Total steps taken : , Total time taken : <span style="color:blue">10</span> seconds</li>
+	    	    	<li id="high_score_easy"> User : 1, Total steps taken : , Total time taken : <span style="color:blue">10</span> seconds</li>
+				</ul>
+      	   </div>
+    </div>
+
 	</div><!-- /content -->
 
 	<div data-role="footer" data-position="fixed">
