@@ -29,3 +29,13 @@ http://www.indiabix.com/online-test/java-programming-test/
 
 
 http://ticons.fokkezb.nl/
+
+
+SOme Ideas helpful
+--------------------
+http://msdn.microsoft.com/en-us/magazine/hh975346.aspx
+http://appyet.com/
+http://carlo.zottmann.org/2007/09/17/yahoo-pipes-tutorial-how-to-process-html-pages/
+http://developer.yahoo.com/yql/guide/yql-select-xpath.html
+http://stackoverflow.com/questions/661256/querying-html-using-yahoo-yql
+http://stackoverflow.com/questions/1223458/smart-way-of-parsing-and-using-website-data
