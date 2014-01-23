@@ -12,27 +12,36 @@
 <div data-role="page" id="play_ground">
 	<div data-role="header" align="center" data-position="fixed">
 		<h1 id="header_string">Play Ground</h1>
-		<a data-rel="back" class="ui-btn-left" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
+		<a data-rel="back" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
 		<a href="#keyboard" data-rel="popup" id="display_keyboad" data-transition="flip" data-role="button" data-icon="grid" data-iconpos="right" class="ui-btn-right" data-position-to="window">keyboard</a>
 	</div>
+
+<br><br><br>
 
 	<div data-role="content" id="page_content">
 		<ul data-role="listview">
 		</ul>
+		<div id="are_you_lost" align="center" data-role="popup">
+		          <h3 class="ui-bar ui-bar-b">Are You Lost ?</h3>
+				  	      <div class="ui-body ui-body-b">
+				  	          <p> <h3> There is a keyboard for you at upper right corner !
+		          </br>Click it and start playing.</br></hr>
+      	   </div>
+    </div>
 	</div><!-- /content -->
 
 
 	<div data-role="footer" id="id_footer" data-position="fixed">
-		<div data-role="controlgroup" data-type="horizontal">
-		<input type = "button" id="total_tries" value= "Tries : 0">
-		<input type = "button" id="total_giveup" value= "GiveUp">
+	<div data-role="controlgroup" data-type="horizontal" class="ui-btn-left">
+		<input type = "button" data-icon="delete" id="game_quit" value= "Quit">
+		<input type = "button" id="total_tries" value= "Tries : 0" >
 		</div>
-		<h1 id="footer_string" align="center"></h1>
 		<input type = "button" id="total_time" value= "00.00" class="ui-btn-right">
+		<h4 id="footer_string"></h4>
 	</div>
 
 
-	<div id="keyboard" data-role="popup" data-arrow="l,t" class="ui-btn-right">
+	<div id="keyboard" data-role="popup" data-arrow="l,t">
 		<div class="ui-grid-solo" data-theme="e">
 		    <div class="ui-block-a"><input type="button" value="0" id="display_button"></div>
 		</div>
@@ -69,7 +78,10 @@
 	  <div data-role="content" align="center">
 	    <p id="total_tries_taken">Total number of </p>
 	    <p id="total_time_taken">Total Time Taken </p>
+	    <div data-role="controlgroup" data-type="horizontal">
 	    <a href="level_list.html" data-ajax="false" data-role="button">Play Again</a>
+	    <a href="" data-role="button">Exit</a>
+	    </div>
 	  </div>
 
 	  <div data-role="footer">
@@ -90,8 +102,14 @@
 		});
 
 
+		$("#are_you_lost").on("tap",function(event){
+				  $("#are_you_lost").popup( "close" );
+		});
+
+
 var guess_total_time_in_second = 0 ;
 var timer_initialised = false;
+var are_you_lost_initialised = false;
 
 if(!sessionStorage.user_name)
 {
@@ -139,6 +157,14 @@ $( "#keyboard" ).bind({
    }
 });
 
+$("#play_ground").on("tap",function(event){
+			if(!are_you_lost_initialised)
+			{
+			  $("#are_you_lost").popup( "open" );
+				are_you_lost_initialised = true;
+			  }
+	});
+
 function clearDisplayButton()
 {
 	$("#display_button").val("0");
@@ -154,7 +180,7 @@ function updateTries()
 $(document).on("pageinit", "#play_ground", function(event){
 	var maxHeight = $( window ).height() - 60 + "px";
 		var random_no = getRandomNum(sessionStorage.game_level);
-		$.mobile.changePage('result.html', 'pop', false, true);
+		//$.mobile.changePage('result.html', 'pop', false, true);
 
 		$("#id_send").click(function()
 		{
