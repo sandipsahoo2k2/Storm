@@ -141,8 +141,17 @@ $(document).on("pageinit", "#play_ground", function(event){
 
 				if(bulls_and_cows[0] == sessionStorage.game_level)
 				{
-					//$.mobile.changePage('#dialogpage', 'pop', false, true);
-					window.location = "result.html";
+					var gameInfo = new Object();
+					gameInfo.user_name = sessionStorage.user_name;
+					gameInfo.game_level = sessionStorage.game_level;
+					gameInfo.total_tries = sessionStorage.total_tries;
+					gameInfo.total_time = sessionStorage.total_time;
+					var strGameInfo = JSON.stringify(gameInfo);
+					//Create array of 3
+					localStorage[sessionStorage.game_level - 3] = strGameInfo;
+
+					$.mobile.changePage('result.html', 'pop', false, true);
+					//window.location = "result.html";
 				}
 				else
 				{

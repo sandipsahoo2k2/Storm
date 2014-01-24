@@ -28,16 +28,9 @@
 	</br>
 
 	<div id="high_scrore" data-inline="true" align="center">
-		<h3 class="ui-bar ui-bar-b ui-corner-all" id="high_scrore_header">Are you looking for High Scores ?</h3>
-	      <div class="ui-body ui-body-b ui-corner-all" id="high_scrore_header">
-	          <p id="high_score_content">It is not available Yet !
-	          </br>You are the first person to play.
-	          </br>Select the Level you want to play.
-	          </br>and witness an attempt.</p>
+		<h3 class="ui-bar ui-bar-b ui-corner-all" id="high_scrore_header">Are you looking for Highest Scores ?</h3>
+	      <div class="ui-body ui-body-b ui-corner-all" id="high_scrore_body">
 	    	    <ul data-role="listview" id="high_score_list">
-	    	    	<li id="high_score_difficult"> User : 1, Total steps taken : , Total time taken : <span style="color:blue">10</span> seconds</li>
-	    	    	<li id="high_score_midium"> User : 1, Total steps taken : , Total time taken : <span style="color:blue">10</span> seconds</li>
-	    	    	<li id="high_score_easy"> User : 1, Total steps taken : , Total time taken : <span style="color:blue">10</span> seconds</li>
 				</ul>
       	   </div>
     </div>
@@ -65,8 +58,42 @@
 		var index = 3;
 		index += $( "li" ).index( this );
 		sessionStorage.game_level = index;
-		//sessionStorage.random_no = getRandomNum(index);
+		//sessionStorage.random_no = getRandomNum(index); //not working if we write here
 	});
+
+$(document).on("pageinit", function(event){
+	var list_populated = false;
+	for(i = 2; i >= 0; i--)
+	{
+		var storedData = localStorage[i];
+		if (storedData)
+		{
+			var level_string ;
+			if(i == 5)
+			{
+				level_string = "Level : Difficult "
+			}
+			else if(i == 4)
+			{
+				level_string = "Level : Midium "
+			}
+			else
+			{
+				level_string = "Level : Easy "
+			}
+			var gameInfo = JSON.parse(storedData);
+			var li_element_to_append = "<li>" + level_string + " User : " +  gameInfo.user_name + " Total steps taken : " + gameInfo.total_tries + " Total time taken : " + gameInfo.total_time + "</li>";
+			$("ul").append(li_element_to_append);
+			$( "ul" ).listview( "refresh");
+			list_populated = true;
+		}
+	}
+	if(!list_populated)
+	{
+		var element = document.getElementById("high_scrore_body");
+		element.innerHTML = "<p>It is not available Yet ! </br>You are the first person to play.</br>Select the Level you want to play.</br>and witness an attempt.</p>";
+	}
+});
 
 </script>
 
