@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css">
 	<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+	<script src="js/cowbull_common.js"></script>
 </head>
 
 <div data-role="page" id="play_ground">
@@ -15,31 +16,27 @@
 		<a data-rel="back" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
 		<a href="#keyboard" data-rel="popup" id="display_keyboad" data-transition="flip" data-role="button" data-icon="grid" data-iconpos="right" class="ui-btn-right" data-position-to="window">keyboard</a>
 	</div>
-
-<br><br><br>
-
 	<div data-role="content" id="page_content">
 		<ul data-role="listview">
 		</ul>
-		<div id="are_you_lost" align="center" data-role="popup">
-		          <h3 class="ui-bar ui-bar-b">Are You Lost ?</h3>
-				  	      <div class="ui-body ui-body-b">
-				  	          <p> <h3> There is a keyboard for you at upper right corner !
-		          </br>Click it and start playing.</br></hr>
-      	   </div>
-    </div>
 	</div><!-- /content -->
 
-
 	<div data-role="footer" id="id_footer" data-position="fixed">
-	<div data-role="controlgroup" data-type="horizontal" class="ui-btn-left">
-		<input type = "button" data-icon="delete" id="game_quit" value= "Quit">
-		<input type = "button" id="total_tries" value= "Tries : 0" >
+		<div data-role="controlgroup" data-type="horizontal" class="ui-btn-left">
+			<a href="quit.html" data-icon="delete" data-ajax="false" data-role="button">Quit</a>
+			<input type = "button" id="total_tries" value= "Tries : 0" >
 		</div>
 		<input type = "button" id="total_time" value= "00.00" class="ui-btn-right">
 		<h4 id="footer_string"></h4>
 	</div>
 
+		<div id="are_you_lost" align="center" data-role="popup">
+		          <h3 class="ui-bar ui-bar-b">Are You Lost ?</h3>
+				  	      <div class="ui-body ui-body-b">
+				  	          <p> <h3> There is a keyboard for you at upper right corner !
+		   				       </br>Click it and start playing.</br></hr>
+      	   					</div>
+    	</div>
 
 	<div id="keyboard" data-role="popup" data-arrow="l,t">
 		<div class="ui-grid-solo" data-theme="e">
@@ -69,43 +66,7 @@
 
 </div><!-- /page -->
 
-<div data-role="dialog" id="dialogpage" data-close-btn="none">
-
-	 <div data-role="header">
-	    <h1>You made it !!!</h1>
-	  </div>
-
-	  <div data-role="content" align="center">
-	    <p id="total_tries_taken">Total number of </p>
-	    <p id="total_time_taken">Total Time Taken </p>
-	    <div data-role="controlgroup" data-type="horizontal">
-	    <a href="level_list.html" data-ajax="false" data-role="button">Play Again</a>
-	    <a href="" data-role="button">Exit</a>
-	    </div>
-	  </div>
-
-	  <div data-role="footer">
-	    <h1>Congratulations !</h1>
-  </div>
-</div><!-- /page -->
-
-
 <script>
-
-	$(document).on("pageinit", "#dialogpage", function(event){
-		var element = document.getElementById("total_tries_taken");
-		element.innerHTML += " <span 'color:blue;font-weight:bold'>" + $("#total_tries").val() + "</span>";
-
-		element = document.getElementById("total_time_taken");
-		element.innerHTML += " <span 'color:blue;font-weight:bold'>" + $("#total_time").val() + "</span>" + " Minutes";
-
-		});
-
-
-		$("#are_you_lost").on("tap",function(event){
-				  $("#are_you_lost").popup( "close" );
-		});
-
 
 var guess_total_time_in_second = 0 ;
 var timer_initialised = false;
@@ -126,27 +87,9 @@ else
 function updateTime()
 {
 	guess_total_time_in_second ++;
-	total_minutes = Math.floor(guess_total_time_in_second / 60);
-	total_seconds = Math.floor(guess_total_time_in_second % 60);
-	total_hours = Math.floor(total_minutes / 60);
-
-	if(total_seconds < 10)
-	{
-		total_seconds = "0" + total_seconds;
-	}
-	if(total_minutes < 10)
-	{
-		total_minutes = "0" + total_minutes;
-	}
-
-	if(total_hours > 0)
-	{
-		$("#total_time").val(" " + total_hours + "." + total_minutes + "." + total_seconds + " ");
-	}
-	else
-	{
-		$("#total_time").val(" " + total_minutes + "." + total_seconds + " ");
-	}
+	time_taken = getTotalTimeFromSecond(guess_total_time_in_second);
+	sessionStorage.total_time = guess_total_time_in_second;
+	$("#total_time").val(" " + time_taken.total_minutes + "." + time_taken.total_seconds + " ");
 	$("#total_time").button('refresh');
 }
 
@@ -177,10 +120,15 @@ function updateTries()
 	$("#total_tries").button('refresh');
 }
 
+$("#are_you_lost").on("tap",function(event){
+		  $("#are_you_lost").popup( "close" );
+});
+
+
 $(document).on("pageinit", "#play_ground", function(event){
 	var maxHeight = $( window ).height() - 60 + "px";
-		var random_no = getRandomNum(sessionStorage.game_level);
-		//$.mobile.changePage('result.html', 'pop', false, true);
+		sessionStorage.random_no = getRandomNum(sessionStorage.game_level);
+		//window.location = "result.html";
 
 		$("#id_send").click(function()
 		{
@@ -188,12 +136,13 @@ $(document).on("pageinit", "#play_ground", function(event){
 			var inputNumber = parseInt(displayString);
 			if(displayString.length == sessionStorage.game_level && displayString != "0" && inputNumber != NaN)
 			{
-				var bulls_and_cows = getCowsAndBulls(inputNumber, random_no);
+				var bulls_and_cows = getCowsAndBulls(inputNumber, sessionStorage.random_no);
 				var li_element_to_append = "<li>" + displayString + "<span class='ui-li-count'> Bulls " + bulls_and_cows[0] + " Cows " + bulls_and_cows[1] + "</span></li>";
 
 				if(bulls_and_cows[0] == sessionStorage.game_level)
 				{
-					$.mobile.changePage('#dialogpage', 'pop', false, true);
+					//$.mobile.changePage('#dialogpage', 'pop', false, true);
+					window.location = "result.html";
 				}
 				else
 				{
@@ -239,67 +188,6 @@ input_string = element.value;
 	 $("#display_button").val(displayString);
  }
  $("#display_button").button('refresh');
-}
-
-function getRandomNum(number_of_digit)
-{
-	var random_number = 0;
-	if(number_of_digit > 0)
-	{
-		var temp = Math.random();
-		var hundreds = Math.pow(10, number_of_digit);
-		random_number = Math.floor(temp * hundreds + 1);
-		//alert("random Number is :" + random_number);
-	}
-	return random_number;
-}
-
-function getArrayNum(any_num)
-{
-    var string_arr = any_num.toString().split("");
-    var int_arr = new Array(string_arr.length);
-    for (var i in string_arr)
-    {
-    	int_arr[i] = parseInt(string_arr[i], 10);
-    }
-    //alert("Number is :" + int_arr);
-    return int_arr;
-}
-
-function getCowsAndBulls(input_number, random_number)
-{
-	var input_number = getArrayNum(input_number);
-	var random_number = getArrayNum(random_number);
-
-	var bulls_and_cows = [0,0];
-	var i=0 ;
-	if(random_number.length == input_number.length)
-	{
-		for(; i < random_number.length; i++)
-		{
-			if(input_number[i] == random_number[i])
-			{
-				bulls_and_cows[0]++;
-			}
-		}
-
-		for(i=0 ; i < random_number.length; i++)
-		{
-			if(input_number[i] != random_number[i])
-			{
-				if(random_number.indexOf(input_number[i]) > -1)
-				{
-					bulls_and_cows[1]++;
-				}
-			}
-		}
-		//alert("Bulls : " + bulls_and_cows[0] + " And Cows : " + bulls_and_cows[1]);
-	}
-	else
-	{
-		alert("Number of digits of the input should not be more than :" + random_number.length);
-	}
-	return bulls_and_cows;
 }
 
 </script>

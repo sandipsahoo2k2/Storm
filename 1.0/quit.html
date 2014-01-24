@@ -13,13 +13,11 @@
 <div data-role="dialog" id="dialogpage" data-close-btn="none">
 
 	 <div data-role="header">
-	    <h1>You made it !!!</h1>
+	    <h1>You missed it !!!</h1>
 	  </div>
 
 	  <div data-role="content" align="center">
 	  	<p id="secret_number">Secret number was </p>
-	    <p id="total_tries_taken">Total number of tries taken </p>
-	    <p id="total_time_taken">Total time taken is </p>
 		<div class="ui-grid-a">
 			<div class="ui-block-a"><a href="" data-role="button">Exit</a></div>
 			<div class="ui-block-b"><a href="level_list.html" data-ajax="false" data-role="button">Play Again</a></div>
@@ -27,7 +25,7 @@
 	  </div>
 
 	  <div data-role="footer">
-	    <h1>Congratulations !</h1>
+	    <h1>Better Next Time !</h1>
   </div>
 
 </div><!-- /page -->
@@ -39,14 +37,6 @@
 
 			var element = document.getElementById("secret_number");
 			element.innerHTML += " <span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>";
-
-			var element = document.getElementById("total_tries_taken");
-			element.innerHTML += " <span 'color:blue;font-weight:bold'>" + sessionStorage.total_tries + "</span>";
-
-			time_taken = getTotalTimeFromSecond(sessionStorage.total_time);
-
-			element = document.getElementById("total_time_taken");
-			element.innerHTML += " <span 'color:blue;font-weight:bold'>" + time_taken.total_minutes + " minutes and " + time_taken.total_seconds + "</span>" + " seconds";
 
 		});
 
