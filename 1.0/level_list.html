@@ -15,7 +15,6 @@
 
 	<div data-role="header">
 		<h1 id="header_string">Cows And Bulls</h1>
-		<a data-rel="back" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
 	</div><!-- /header -->
 
 	<div data-role="content">
@@ -52,6 +51,7 @@
 	{
 		var element = document.getElementById("footer_string");
 		element.innerHTML += sessionStorage.user_name ;
+		sessionStorage.game_level = 3;
 	}
 
 	$('li').bind('vclick', function(event){
@@ -62,35 +62,54 @@
 	});
 
 $(document).on("pageinit", function(event){
+
 	var list_populated = false;
+	var list_header = 	"<li data-theme='e'><div class='ui-grid-c' align='center'>" +
+				"<div class='ui-block-a'>Level</div>" +
+				"<div class='ui-block-b'>User</div>" +
+				"<div class='ui-block-c'>Steps</div>" +
+				"<div class='ui-block-d'>Time</div></div></li>";
+
 	for(i = 2; i >= 0; i--)
 	{
 		var storedData = localStorage[i];
 		if (storedData)
 		{
-			var level_string ;
-			if(i == 5)
+			//add the header only once
+			if(!list_populated)
 			{
-				level_string = "Level : Difficult "
+				$("#high_score_list").append(list_header);
 			}
-			else if(i == 4)
+
+			var level_string ;
+			if(i == 2)
 			{
-				level_string = "Level : Midium "
+				level_string = "Difficult "
+			}
+			else if(i == 1)
+			{
+				level_string = "Midium "
 			}
 			else
 			{
-				level_string = "Level : Easy "
+				level_string = "Easy "
 			}
 			var gameInfo = JSON.parse(storedData);
-			var li_element_to_append = "<li>" + level_string + " User : " +  gameInfo.user_name + " Total steps taken : " + gameInfo.total_tries + " Total time taken : " + gameInfo.total_time + "</li>";
-			$("ul").append(li_element_to_append);
-			$( "ul" ).listview( "refresh");
+			var li_element_to_append = "<li data-theme='c'><div class='ui-grid-c' align='center'>" +
+				"<div class='ui-block-a'>" + level_string + "</div>" +
+				"<div class='ui-block-b'>" + gameInfo.user_name + "</div>" +
+				"<div class='ui-block-c'>" + gameInfo.total_tries + "</div>" +
+				"<div class='ui-block-d'>" + gameInfo.total_time + "</div></div></li>";
+
+			$("#high_score_list").append(li_element_to_append);
+			$( "#high_score_list" ).listview( "refresh");
 			list_populated = true;
 		}
 	}
+
+	var element = document.getElementById("high_scrore_body");
 	if(!list_populated)
 	{
-		var element = document.getElementById("high_scrore_body");
 		element.innerHTML = "<p>It is not available Yet ! </br>You are the first person to play.</br>Select the Level you want to play.</br>and witness an attempt.</p>";
 	}
 });

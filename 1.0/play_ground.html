@@ -13,7 +13,7 @@
 <div data-role="page" id="play_ground">
 	<div data-role="header" align="center" data-position="fixed">
 		<h1 id="header_string">Play Ground</h1>
-		<a data-rel="back" data-icon="arrow-l">Back</a> <!-- Here you add the data-rel -->
+		<a href="quit.html" data-icon="delete" data-ajax="false" data-role="button" data-rel="dialog">Quit</a>
 		<a href="#keyboard" data-rel="popup" id="display_keyboad" data-transition="flip" data-role="button" data-icon="grid" data-iconpos="right" class="ui-btn-right" data-position-to="window">keyboard</a>
 	</div>
 	<div data-role="content" id="page_content">
@@ -22,12 +22,13 @@
 		</ul>
 
 		</br>
+		<div id="below_list"/>
 
 		<div id="are_you_lost" data-inline="true" align="center">
 			<h3 class="ui-bar ui-bar-b ui-corner-all" id="high_scrore_header">Are You Lost ?</h3>
 			  <div class="ui-body ui-body-b ui-corner-all">
-						<p> <h3>There is a keyboard for you at upper right corner !
-						   </br>Click it and start playing.</br><h3></p>
+						<p>There is a keyboard for you at upper right corner !
+						   </br>Click it and start playing.</br></p>
 			   </div>
 		</div>
 
@@ -35,10 +36,7 @@
 	</div><!-- /content -->
 
 	<div data-role="footer" id="id_footer" data-position="fixed">
-		<div data-role="controlgroup" data-type="horizontal" class="ui-btn-left">
-			<a href="quit.html" data-icon="delete" data-ajax="false" data-role="button">Quit</a>
-			<input type = "button" id="total_tries" value= "Tries : 0" >
-		</div>
+		<input type = "button" id="total_tries" value= "Tries : 0" class="ui-btn-left">
 		<input type = "button" id="total_time" value= "00.00" class="ui-btn-right">
 		<h4 id="footer_string"></h4>
 	</div>
@@ -84,6 +82,24 @@ else
 {
 	sessionStorage.total_tries = 0 ;
 	var guess_total_time = 0 ;
+	var level_string ;
+
+	if(sessionStorage.game_level == 3)
+	{
+		level_string = "Easy";
+	}
+	if(sessionStorage.game_level == 4)
+	{
+		level_string = "Midium";
+	}
+	if(sessionStorage.game_level == 5)
+	{
+		level_string = "Difficult";
+	}
+
+	var element = document.getElementById("header_string");
+	element.innerHTML = "<span 'color:blue;font-weight:bold'>" + level_string + "</span>" ;
+
 	var element = document.getElementById("footer_string");
 	element.innerHTML += " <span 'color:blue;font-weight:bold'>" + sessionStorage.user_name + "</span>" ;
 }
@@ -118,7 +134,7 @@ function updateTries()
 
 
 $(document).on("pageinit", "#play_ground", function(event){
-	var maxHeight = $( window ).height() - 60 + "px";
+
 		sessionStorage.random_no = getRandomNum(sessionStorage.game_level);
 		//window.location = "result.html";
 
@@ -151,18 +167,18 @@ $(document).on("pageinit", "#play_ground", function(event){
 					updateTries();
 				}
 
-				if(sessionStorage.total_tries == 1)
-				{
-					var element = document.getElementById("are_you_lost");
-					element.parentNode.removeChild(element);
-				}
-
 				$("ul").append(li_element_to_append);
 				$( "ul" ).listview( "refresh");
 				clearDisplayButton();
 				$("#keyboard").popup( "close" );
-			}
 
+				//var offset = $("#page_content").offset();
+				var offset = $("#below_list").offset();
+
+				setTimeout(function(){
+				        $.mobile.silentScroll(offset.top);
+    				},100);
+			}
 		});
 
 		$("#id_clear").click(function()
@@ -174,6 +190,9 @@ $(document).on("pageinit", "#play_ground", function(event){
 		{
 			if(timer_initialised == false)
 			{
+				var element = document.getElementById("are_you_lost");
+				element.parentNode.removeChild(element);
+
 				setInterval('updateTime()',1000);
 				timer_initialised = true;
 			}

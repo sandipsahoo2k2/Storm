@@ -1,4 +1,3 @@
-
 function getRandomNum(number_of_digit)
 {
 	var random_number = 0;
@@ -8,6 +7,11 @@ function getRandomNum(number_of_digit)
 		var hundreds = Math.pow(10, number_of_digit);
 		random_number = Math.floor(temp * hundreds + 1);
 		//alert("random Number is :" + random_number);
+		var stringNumber = getArrayNum(random_number);
+		if(stringNumber.length != number_of_digit)
+		{
+			return getRandomNum(number_of_digit);
+		}
 	}
 	return random_number;
 }
