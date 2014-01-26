@@ -150,6 +150,7 @@ $(document).on("pageinit", "#play_ground", function(event){
 			var inputNumber = parseInt(displayString);
 			if(displayString.length == sessionStorage.game_level && displayString != "0" && inputNumber != NaN)
 			{
+				sessionStorage.total_tries ++;
 				var bulls_and_cows = getCowsAndBulls(inputNumber, sessionStorage.random_no);
 				var li_element_to_append = "<li>" + displayString + "<span class='ui-li-count'> Bulls " + bulls_and_cows[0] + " Cows " + bulls_and_cows[1] + "</span></li>";
 
@@ -169,7 +170,6 @@ $(document).on("pageinit", "#play_ground", function(event){
 				}
 				else
 				{
-					sessionStorage.total_tries ++;
 					updateTries();
 				}
 

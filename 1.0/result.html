@@ -49,7 +49,7 @@
 
 
 	$(document).on("pageinit", function(event){
-			onDeviceReady();
+
 			var element = document.getElementById("secret_number");
 			element.innerHTML += " <span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>";
 
@@ -60,6 +60,8 @@
 
 			element = document.getElementById("total_time_taken");
 			element.innerHTML += " <span 'color:blue;font-weight:bold'>" + time_taken.total_minutes + " minutes and " + time_taken.total_seconds + "</span>" + " seconds";
+
+			onDeviceReady();
 		});
 
 function onClick_button(event)

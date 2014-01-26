@@ -64,7 +64,8 @@ function getCowsAndBulls(input_number, random_number)
 			}
 		}
 
-		for(i = 0; i < random_number.length;i++) //ignore the bulls position
+		// get number of cows
+		/*for(i = 0; i < random_number.length;i++) //ignore the bulls position
 		{
 			if(!bulls_array[i])
 			{
@@ -75,6 +76,36 @@ function getCowsAndBulls(input_number, random_number)
 					{
 						bulls_and_cows[1]++;
 						cows_array[index] = true;
+					}
+				}
+			}
+		}*/
+
+		for(inputIndex = 0; inputIndex < random_number.length; inputIndex++) //ignore the bulls position
+		{
+			if(bulls_array[inputIndex])
+			{
+				//alert('skipping BULLS inputIndex = ' + inputIndex);
+				continue; //skip bulls
+			}
+			for(indexRandom = 0; indexRandom < random_number.length; indexRandom++)
+			{
+				if(bulls_array[indexRandom])
+				{
+					continue; //skip bulls
+				}
+				if(cows_array[indexRandom])
+				{
+					//alert(' skipping COWS indexRandom = ' + indexRandom);
+					continue;
+				}
+				if(input_number[inputIndex] == random_number[indexRandom])
+				{
+					if(!cows_array[indexRandom])
+					{
+						bulls_and_cows[1]++;
+						cows_array[indexRandom] = true;
+						break;
 					}
 				}
 			}
