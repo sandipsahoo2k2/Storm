@@ -1,4 +1,4 @@
-function getRandomNum(number_of_digit)
+function getRandomNum(number_of_digit, repitation_allowed)
 {
 	var random_number = 0;
 	if(number_of_digit > 0)
@@ -11,6 +11,20 @@ function getRandomNum(number_of_digit)
 		if(stringNumber.length != number_of_digit)
 		{
 			return getRandomNum(number_of_digit);
+		}
+		if(!repitation_allowed)
+		{
+			for(i = 0 ; i < stringNumber.length; i++)
+			{
+				for(j = 0 ; j < stringNumber.length; j++)
+				{
+					if( i != j && stringNumber[i] == stringNumber[j])
+					{
+						//try another number
+						return getRandomNum(number_of_digit);
+					}
+				}
+			}
 		}
 	}
 	return random_number;
@@ -34,24 +48,38 @@ function getCowsAndBulls(input_number, random_number)
 	var random_number = getArrayNum(random_number);
 
 	var bulls_and_cows = [0,0];
-	var i=0 ;
+	var bulls_array = new Array();
+	var cows_array = new Array();
+	var i = 0;
 	if(random_number.length == input_number.length)
 	{
-		for(; i < random_number.length; i++)
+		for(i = 0; i < random_number.length; i++)
 		{
+			bulls_array[i] = false;
+			cows_array[i] = false;
 			if(input_number[i] == random_number[i])
 			{
 				bulls_and_cows[0]++;
+				bulls_array[i] = true;
 			}
 		}
 
-		for(i=0 ; i < random_number.length; i++)
+		for(i = 0; i < random_number.length;i++) //ignore the bulls position
 		{
-			if(input_number[i] != random_number[i])
+			if(!bulls_array[i])
 			{
-				if(random_number.indexOf(input_number[i]) > -1)
+				for (j = 0; j < random_number.length; j++)
 				{
-					bulls_and_cows[1]++;
+					if(input_number[i] != random_number[j] && !bulls_array[j] && !cows_array[i]) //ignore the bulls position and cows position
+					{
+						var index = random_number.indexOf(input_number[i]);
+						if(index > -1)
+						{
+							bulls_and_cows[1]++;
+							cows_array[index] = true;
+							break;
+						}
+					}
 				}
 			}
 		}
