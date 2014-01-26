@@ -22,7 +22,7 @@
 	    <p id="total_tries_taken">Total number of tries taken </p>
 	    <p id="total_time_taken">Total time taken is </p>
 		<div class="ui-grid-solo">
-			<div class="ui-block-a"><a href="level_list.html" data-ajax="false" data-role="button">Play Again</a></div>
+			<div class="ui-block-a"><a href="level_list.html" data-ajax="false" data-role="button" onclick="onClick_button(event)">Play Again</a></div>
 		</div><!-- /solo -->
 	  </div>
 
@@ -50,7 +50,6 @@
 
 	$(document).on("pageinit", function(event){
 			onDeviceReady();
-			history.replaceState({page: this.href}, '', "play_ground.html");
 			var element = document.getElementById("secret_number");
 			element.innerHTML += " <span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>";
 
@@ -61,8 +60,14 @@
 
 			element = document.getElementById("total_time_taken");
 			element.innerHTML += " <span 'color:blue;font-weight:bold'>" + time_taken.total_minutes + " minutes and " + time_taken.total_seconds + "</span>" + " seconds";
-
 		});
+
+function onClick_button(event)
+{
+	//var stateObj = { dialog: "settings" };
+	//history.replaceState({page: this.href}, '', "level_list.html");
+	history.replaceState(null, 'Settings',  "level_list.html");
+}
 
 if(!sessionStorage.user_name)
 {

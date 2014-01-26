@@ -18,7 +18,7 @@
 	  <div data-role="content" align="center">
 				<input type="checkbox" name="checkbox-1" id="checkbox-1" class="custom" data-mini="true"/>
 				<label for="checkbox-1">Repetition Allowed</label>
-				<a href="level_list.html" data-ajax="false" data-role="button" data-mini="true">Ok</a>
+				<a href="level_list.html" data-ajax="false" data-role="button" data-mini="true" onclick="onClick_button(event)">Ok</a>
 	  </div>
 
 	  <div data-role="footer">
@@ -31,7 +31,7 @@
 <script>
 
 	$(document).on("pageinit", function(event){
-		history.replaceState({page: this.href}, '', "level_list.html");
+
 		if(sessionStorage.repetition_allowed == "true")
 		{
 			$("input[type='checkbox']").attr("checked",true).checkboxradio("refresh");
@@ -52,7 +52,15 @@
 				}
 
 			});
+
 		});
+
+function onClick_button(event)
+{
+	//var stateObj = { dialog: "settings" };
+	history.replaceState({page: this.href}, '', "level_list.html");
+	//history.replaceState(null, 'Settings',  "level_list.html");
+}
 
 if(!sessionStorage.user_name)
 {
