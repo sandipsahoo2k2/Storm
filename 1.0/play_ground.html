@@ -138,11 +138,11 @@ $(document).on("pageinit", "#play_ground", function(event){
 		{
 			bool_repetition = true;
 		}
-		sessionStorage.random_no = 501 ;//getRandomNum(sessionStorage.game_level, bool_repetition);
+		sessionStorage.random_no = getRandomNum(sessionStorage.game_level, bool_repetition);
 		//window.location = "result.html";
 
-		/*var element = document.getElementById("header_string");
-		element.innerHTML = "<span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>" ;*/
+		var element = document.getElementById("header_string");
+		element.innerHTML = "<span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>" ;
 
 		$("#id_send").click(function()
 		{
