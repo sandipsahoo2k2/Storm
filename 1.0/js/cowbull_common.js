@@ -68,17 +68,13 @@ function getCowsAndBulls(input_number, random_number)
 		{
 			if(!bulls_array[i])
 			{
-				for (j = 0; j < random_number.length; j++)
+				var index = random_number.indexOf(input_number[i]);
+				if(index > -1 && index != i)
 				{
-					if(input_number[i] != random_number[j] && !bulls_array[j] && !cows_array[i]) //ignore the bulls position and cows position
+					if(!bulls_array[index] && !cows_array[index])
 					{
-						var index = random_number.indexOf(input_number[i]);
-						if(index > -1)
-						{
-							bulls_and_cows[1]++;
-							cows_array[index] = true;
-							break;
-						}
+						bulls_and_cows[1]++;
+						cows_array[index] = true;
 					}
 				}
 			}
