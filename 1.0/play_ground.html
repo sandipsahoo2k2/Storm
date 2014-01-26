@@ -135,11 +135,11 @@ function updateTries()
 
 $(document).on("pageinit", "#play_ground", function(event){
 
-		sessionStorage.random_no = getRandomNum(sessionStorage.game_level, false);
+		sessionStorage.random_no = getRandomNum(sessionStorage.game_level, sessionStorage.repetition_allowed);
 		//window.location = "result.html";
 
-var element = document.getElementById("header_string");
-	element.innerHTML = "<span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>" ;
+		/*var element = document.getElementById("header_string");
+		element.innerHTML = "<span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>" ;*/
 
 
 		$("#id_send").click(function()

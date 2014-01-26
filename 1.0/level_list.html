@@ -15,6 +15,7 @@
 
 	<div data-role="header">
 		<h1 id="header_string">Cows And Bulls</h1>
+		<a href="settings.html" data-icon="gear" data-ajax="false" data-role="button" data-rel="dialog" data-iconpos="right" class="ui-btn-right">Settings</a>
 	</div><!-- /header -->
 
 	<div data-role="content">
@@ -52,6 +53,10 @@
 		var element = document.getElementById("footer_string");
 		element.innerHTML += sessionStorage.user_name ;
 		sessionStorage.game_level = 3;
+		if(!sessionStorage.repetition_allowed)
+		{
+			sessionStorage.repetition_allowed = false;
+		}
 	}
 
 	$('li').bind('vclick', function(event){

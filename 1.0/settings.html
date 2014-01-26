@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cows And Bulls</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css">
+	<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+</head>
+
+<div data-role="dialog" id="dialogpage" data-close-btn="none">
+
+	 <div data-role="header">
+	    <h1>Settings</h1>
+	  </div>
+
+	  <div data-role="content" align="center">
+				<input type="checkbox" name="checkbox-1" id="checkbox-1" class="custom" data-mini="true"/>
+				<label for="checkbox-1">Repetition Allowed</label>
+				<a href="level_list.html" data-ajax="false" data-role="button" data-mini="true">Ok</a>
+	  </div>
+
+	  <div data-role="footer">
+	    <h1>Cows and Bulls</h1>
+  </div>
+
+</div><!-- /page -->
+
+
+<script>
+
+	$(document).on("pageinit", function(event){
+		if(sessionStorage.repetition_allowed == "true")
+		{
+			$("input[type='checkbox']").attr("checked",true).checkboxradio("refresh");
+		}
+		else
+		{
+			$("input[type='checkbox']").attr("checked",false).checkboxradio("refresh");
+		}
+
+		$("input[type='checkbox']").bind( "change", function(event, ui) {
+				if($(this).is(':checked'))
+				{
+					sessionStorage.repetition_allowed = true;
+				}
+				else
+				{
+					sessionStorage.repetition_allowed = false;
+				}
+
+			});
+		});
+
+if(!sessionStorage.user_name)
+{
+	window.location = "home.html";
+}
+else
+{
+}
+
+
+</script>
+
+</body>
+</html>
