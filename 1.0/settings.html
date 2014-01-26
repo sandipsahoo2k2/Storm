@@ -31,6 +31,7 @@
 <script>
 
 	$(document).on("pageinit", function(event){
+		history.replaceState({page: this.href}, '', "level_list.html");
 		if(sessionStorage.repetition_allowed == "true")
 		{
 			$("input[type='checkbox']").attr("checked",true).checkboxradio("refresh");

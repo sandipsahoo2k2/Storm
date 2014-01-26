@@ -30,6 +30,10 @@ http://www.indiabix.com/online-test/java-programming-test/
 http://ticons.fokkezb.nl/
 
 
+//Menupulating history
+-----------------
+https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history?redirectlocale=en-US&redirectslug=Web%2FGuide%2FDOM%2FManipulating_the_browser_history
+
 SOme Ideas helpful
 --------------------
 http://msdn.microsoft.com/en-us/magazine/hh975346.aspx

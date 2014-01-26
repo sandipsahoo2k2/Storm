@@ -50,6 +50,7 @@
 
 	$(document).on("pageinit", function(event){
 			onDeviceReady();
+			history.replaceState({page: this.href}, '', "play_ground.html");
 			var element = document.getElementById("secret_number");
 			element.innerHTML += " <span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>";
 
