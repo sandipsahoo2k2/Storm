@@ -138,6 +138,18 @@ $(document).on("pageinit", "#play_ground", function(event){
 			bool_repetition = true;
 		}
 		sessionStorage.random_no = getRandomNum(sessionStorage.game_level, bool_repetition);
+		/*if(sessionStorage.game_level == 3)
+		{
+			sessionStorage.random_no = 254 ;
+		}
+		else if(sessionStorage.game_level == 4)
+		{
+			sessionStorage.random_no = 2546 ;
+		}
+		else
+		{
+			sessionStorage.random_no = 25468 ;
+		}*/
 
 		/*var element = document.getElementById("header_string");
 		element.innerHTML = "<span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>" ;*/
@@ -154,17 +166,7 @@ $(document).on("pageinit", "#play_ground", function(event){
 
 				if(bulls_and_cows[0] == sessionStorage.game_level)
 				{
-					var gameInfo = new Object();
-					gameInfo.random_number = sessionStorage.random_no;
-					gameInfo.user_name = sessionStorage.user_name;
-					gameInfo.game_level = sessionStorage.game_level;
-					gameInfo.total_tries = sessionStorage.total_tries;
-					gameInfo.total_time = sessionStorage.total_time;
-					var strGameInfo = JSON.stringify(gameInfo);
-					//Create array of 3
-					localStorage[sessionStorage.game_level - 3] = strGameInfo;
-					//$.mobile.changePage('result.html', 'pop', false, true);
-					//$.mobile.changePage('result.html', { role:"dialog", transition: "pop", changeHash: false, data : strGameInfo });
+					saveNewScoreToLocalStore()
 				}
 				else
 				{
@@ -186,6 +188,8 @@ $(document).on("pageinit", "#play_ground", function(event){
 				if(bulls_and_cows[0] == sessionStorage.game_level)
 				{
     				window.location.href = "result.html";
+					//$.mobile.changePage('result.html', 'pop', false, true);
+					//$.mobile.changePage('result.html', { role:"dialog", transition: "pop", changeHash: false, data : strGameInfo });
     			}
 			}
 		});
@@ -223,6 +227,40 @@ input_string = element.value;
 	 $("#display_button").val(displayString);
  }
  $("#display_button").button('refresh');
+}
+
+function saveNewScoreToLocalStore()
+{
+	var gameInfo = new Object();
+	gameInfo.random_number = sessionStorage.random_no;
+	gameInfo.user_name = sessionStorage.user_name;
+	gameInfo.game_level = sessionStorage.game_level;
+	gameInfo.total_tries = sessionStorage.total_tries;
+	gameInfo.total_time = sessionStorage.total_time;
+
+	var strGameInfo = JSON.stringify(gameInfo);
+	//Create array of 3
+	var storedData = localStorage[sessionStorage.game_level - 3];
+	if(storedData)
+	{
+		var savedGameInfo = JSON.parse(storedData);
+		//alert("Saved time : " + savedGameInfo.total_time + " New Time : " + gameInfo.total_time);
+		if(parseInt(gameInfo.total_time) < parseInt(savedGameInfo.total_time))
+		{
+			//Over write the latest score
+			savedGameInfo.random_number = gameInfo.random_no;
+			savedGameInfo.user_name = gameInfo.user_name;
+			savedGameInfo.game_level = gameInfo.game_level;
+			savedGameInfo.total_tries = gameInfo.total_tries;
+			savedGameInfo.total_time = gameInfo.total_time;
+			strGameInfo = JSON.stringify(savedGameInfo);
+			localStorage[sessionStorage.game_level - 3] = strGameInfo;
+		}
+	}
+	else
+	{
+		localStorage[sessionStorage.game_level - 3] = strGameInfo;
+	}
 }
 
 </script>
