@@ -131,7 +131,6 @@ function updateTries()
 	$("#total_tries").button('refresh');
 }
 
-
 $(document).on("pageinit", "#play_ground", function(event){
 		var bool_repetition = false;
 		if(sessionStorage.repetition_allowed == "true")
@@ -139,10 +138,9 @@ $(document).on("pageinit", "#play_ground", function(event){
 			bool_repetition = true;
 		}
 		sessionStorage.random_no = getRandomNum(sessionStorage.game_level, bool_repetition);
-		//window.location = "result.html";
 
-		var element = document.getElementById("header_string");
-		element.innerHTML = "<span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>" ;
+		/*var element = document.getElementById("header_string");
+		element.innerHTML = "<span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>" ;*/
 
 		$("#id_send").click(function()
 		{
@@ -157,6 +155,7 @@ $(document).on("pageinit", "#play_ground", function(event){
 				if(bulls_and_cows[0] == sessionStorage.game_level)
 				{
 					var gameInfo = new Object();
+					gameInfo.random_number = sessionStorage.random_no;
 					gameInfo.user_name = sessionStorage.user_name;
 					gameInfo.game_level = sessionStorage.game_level;
 					gameInfo.total_tries = sessionStorage.total_tries;
@@ -164,9 +163,8 @@ $(document).on("pageinit", "#play_ground", function(event){
 					var strGameInfo = JSON.stringify(gameInfo);
 					//Create array of 3
 					localStorage[sessionStorage.game_level - 3] = strGameInfo;
-
-					$.mobile.changePage('result.html', 'pop', false, true);
-					//window.location = "result.html";
+					//$.mobile.changePage('result.html', 'pop', false, true);
+					//$.mobile.changePage('result.html', { role:"dialog", transition: "pop", changeHash: false, data : strGameInfo });
 				}
 				else
 				{
@@ -184,6 +182,11 @@ $(document).on("pageinit", "#play_ground", function(event){
 				setTimeout(function(){
 				        $.mobile.silentScroll(offset.top);
     				},100);
+
+				if(bulls_and_cows[0] == sessionStorage.game_level)
+				{
+    				window.location.href = "result.html";
+    			}
 			}
 		});
 
