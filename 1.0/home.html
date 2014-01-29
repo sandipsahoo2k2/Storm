@@ -2,7 +2,6 @@
 <html>
 <head>
    <title>Cows & Bulls</title>
-
    	<meta name="viewport" content="width=device-width, initial-scale=1">
    	<link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css">
 	<script src="js/jquery-1.8.3.min.js"></script>
@@ -14,7 +13,7 @@
 <div data-role="page" id="pageone">
 
 	<div data-role="header">
-		<h1>Cows And Bulls</h1>
+		<h1>Cows Bulls</h1>
 	</div><!-- /header -->
 
 	<div data-role="content">
@@ -27,7 +26,6 @@
 	      <div class="ui-body ui-body-b ui-corner-all">
 	          <p>This is a mathematical game,
 	          </br>where you need to guess a secret number.</br>
-	          </br>Number can not start with a zero.</br>
 	          </br>Fill your username </br>Select the level you want to play<br>
 	          </br>That's it you are on the play ground.</p>
       	   </div>
@@ -42,17 +40,13 @@
 
     <script>
 
-        function getSetUserID(aName) {
+        function setUserID(aName) {
             if (typeof (Storage) !== "undefined") {
-                if (!sessionStorage.user_name) {
                     sessionStorage.user_name = aName;
                 }
-                return sessionStorage.user_name;
-            }
             else {
-                alert("browser doesnt support session data !");
+                alert("Browser doesn't support session data ! Crome recomended");
             }
-            return "";
         }
 
 		$(document).on("pageinit","#pageone",function(event){
@@ -61,7 +55,7 @@
 				var userid = $("#input_userid").val();
 				if (userid != "")
 				{
-					getSetUserID(userid);
+					setUserID(userid);
 					//$.mobile.ajaxEnabled = false;
 					//$.mobile.changePage("level_list.html",{ajax:false});
 				}

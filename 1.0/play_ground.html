@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Cows And Bulls</title>
+	<title>Cows Bulls</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
    	<link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css">
 	<script src="js/jquery-1.8.3.min.js"></script>
@@ -27,7 +27,12 @@
 			<h3 class="ui-bar ui-bar-b ui-corner-all" id="high_scrore_header">Are You Lost ?</h3>
 			  <div class="ui-body ui-body-b ui-corner-all">
 						<p>There is a keyboard for you at upper right corner !
-						   </br>Click it and start playing.</br></p>
+						   </br>Click it and start playing.</br>
+						   </br>Bull :: Digit and position matches</br>
+						    Cow :: Digit matches but not position</br>
+						 	</br>Number can not start with zero.</br>
+						 	</br>Game ends when number of bulls equals to the
+						   	number of digits for which it is played.</br></p>
 			   </div>
 		</div>
 
@@ -60,9 +65,9 @@
 				<div class="ui-block-c"><input type="button" value="9" onclick="update_display_button(event)"></div>
 		</div><!-- /grid-b -->
 		<div class="ui-grid-b">
-				<div class="ui-block-a"><input type="button" value="0" onclick="update_display_button(event)"></div>
-				<div class="ui-block-b"><input type="button" value="C" id="id_clear"></div>
-				<div class="ui-block-c"><input type="button" value="K" id="id_send"></div>
+				<div class="ui-block-a"><input type="button" value="0" data-mini="true" onclick="update_display_button(event)"></div>
+				<div class="ui-block-b"><input type="button" value="C" data-mini="true" id="id_clear"></div>
+				<div class="ui-block-c"><input type="button" value="OK" data-mini="true" data-theme="e" id="id_send"></div>
 		</div><!-- /grid-b -->
 	</div>
 
@@ -144,11 +149,11 @@ $(document).on("pageinit", "#play_ground", function(event){
 		}
 		else if(sessionStorage.game_level == 4)
 		{
-			sessionStorage.random_no = 2546 ;
+			sessionStorage.random_no = 2346 ;
 		}
 		else
 		{
-			sessionStorage.random_no = 25468 ;
+			sessionStorage.random_no = 27468 ;
 		}*/
 
 		/*var element = document.getElementById("header_string");

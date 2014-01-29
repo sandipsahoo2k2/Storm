@@ -14,7 +14,7 @@
 <div data-role="page" data-add-back-btn="true">
 
 	<div data-role="header">
-		<h1 id="header_string">Cows And Bulls</h1>
+		<h1 id="header_string">Cows Bulls</h1>
 		<a href="settings.html" data-icon="gear" data-ajax="false" data-role="button" data-rel="dialog" data-iconpos="right" class="ui-btn-right">Settings</a>
 	</div><!-- /header -->
 
@@ -89,15 +89,15 @@ $(document).on("pageinit", function(event){
 			var level_string ;
 			if(i == 2)
 			{
-				level_string = "Difficult "
+				level_string = "Difficult";
 			}
 			else if(i == 1)
 			{
-				level_string = "Medium "
+				level_string = "Medium";
 			}
 			else
 			{
-				level_string = "Easy "
+				level_string = "Easy";
 			}
 
 			var gameInfo = JSON.parse(storedData);
@@ -119,7 +119,7 @@ $(document).on("pageinit", function(event){
 	var element = document.getElementById("high_scrore_body");
 	if(!list_populated)
 	{
-		element.innerHTML = "<p>It is not available Yet ! </br>You are the first person to play.</br>Select the Level you want to play.</br>and witness an attempt.</p>";
+		element.innerHTML = "<p>It is not available Yet ! </br>You are the first person to play.</br></br>Select the level you want to play</br>and witness an attempt.</p>";
 	}
 });
 
