@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cows Bulls</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+   	<link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css">
+	<script src="js/jquery-1.8.3.min.js"></script>
+	<script src="js/jquery.mobile-1.3.2.min.js"></script>
+	<script src="js/cowbull_common.js"></script>
+</head>
+
+<div data-role="page" id="play_ground">
+	<div data-role="header" align="center" data-position="fixed">
+		<h1 id="header_string">Play Ground</h1>
+		<a href="quit.html" data-icon="delete" data-ajax="false" data-role="button" data-rel="dialog">Quit</a>
+		<a href="#keyboard" data-rel="popup" id="display_keyboad" data-transition="flip" data-role="button" data-icon="grid" data-iconpos="right" class="ui-btn-right" data-position-to="window">keyboard</a>
+	</div>
+	<div data-role="content" id="page_content">
+
+		<ul data-role="listview">
+		</ul>
+
+		</br>
+		<div id="below_list"/>
+
+		<div id="are_you_lost" data-inline="true" align="center">
+			<h3 class="ui-bar ui-bar-b ui-corner-all" id="high_scrore_header">Are You Lost ?</h3>
+			  <div class="ui-body ui-body-b ui-corner-all">
+						<p>There is a keyboard for you at upper right corner !
+						   </br>Click it and start playing.</br>
+						   </br>Bull :: Digit and position matches</br>
+						    Cow :: Digit matches but not position</br>
+						 	</br>Number can not start with zero.</br>
+						 	</br>Game ends when number of bulls equals to the
+						   	number of digits for which it is played.</br></p>
+			   </div>
+		</div>
+
+
+	</div><!-- /content -->
+
+	<div data-role="footer" id="id_footer" data-position="fixed">
+		<input type = "button" id="total_tries" value= "Tries : 0" class="ui-btn-left">
+		<input type = "button" id="total_time" value= "00.00" class="ui-btn-right">
+		<h4 id="footer_string"></h4>
+	</div>
+
+	<div id="keyboard" data-role="popup" data-arrow="l,t">
+		<div class="ui-grid-solo" data-theme="e">
+		    <div class="ui-block-a"><input type="button" value="0" id="display_button"></div>
+		</div>
+		<div class="ui-grid-b">
+			<div class="ui-block-a"><input type="button" value="1" onclick="update_display_button(event)"></div>
+			<div class="ui-block-b"><input type="button" value="2" onclick="update_display_button(event)"></div>
+			<div class="ui-block-c"><input type="button" value="3" onclick="update_display_button(event)"></div>
+		</div><!-- /grid-b -->
+		<div class="ui-grid-b">
+				<div class="ui-block-a"><input type="button" value="4" onclick="update_display_button(event)"></div>
+				<div class="ui-block-b"><input type="button" value="5" onclick="update_display_button(event)"></div>
+				<div class="ui-block-c"><input type="button" value="6" onclick="update_display_button(event)"></div>
+		</div><!-- /grid-b -->
+		<div class="ui-grid-b">
+				<div class="ui-block-a"><input type="button" value="7" onclick="update_display_button(event)"></div>
+				<div class="ui-block-b"><input type="button" value="8" onclick="update_display_button(event)" ></div>
+				<div class="ui-block-c"><input type="button" value="9" onclick="update_display_button(event)"></div>
+		</div><!-- /grid-b -->
+		<div class="ui-grid-b">
+				<div class="ui-block-a"><input type="button" value="0" data-mini="true" onclick="update_display_button(event)"></div>
+				<div class="ui-block-b"><input type="button" value="C" data-mini="true" id="id_clear"></div>
+				<div class="ui-block-c"><input type="button" value="OK" data-mini="true" data-theme="e" id="id_send"></div>
+		</div><!-- /grid-b -->
+	</div>
+
+</div><!-- /page -->
+
+<script>
+
+var guess_total_time_in_second = 0 ;
+var timer_initialised = false;
+
+if(!sessionStorage.user_name)
+{
+	window.location = "home.html";
+}
+else
+{
+	sessionStorage.total_tries = 0 ;
+	var guess_total_time = 0 ;
+	var level_string ;
+
+	if(sessionStorage.game_level == 3)
+	{
+		level_string = "Easy";
+	}
+	if(sessionStorage.game_level == 4)
+	{
+		level_string = "Medium";
+	}
+	if(sessionStorage.game_level == 5)
+	{
+		level_string = "Difficult";
+	}
+
+	var element = document.getElementById("header_string");
+	element.innerHTML = "<span 'color:blue;font-weight:bold'>" + level_string + "</span>" ;
+
+	var element = document.getElementById("footer_string");
+	element.innerHTML += " <span 'color:blue;font-weight:bold'>" + sessionStorage.user_name + "</span>" ;
+}
+
+function updateTime()
+{
+	guess_total_time_in_second ++;
+	time_taken = getTotalTimeFromSecond(guess_total_time_in_second);
+	sessionStorage.total_time = guess_total_time_in_second;
+	$("#total_time").val(" " + time_taken.total_minutes + "." + time_taken.total_seconds + " ");
+	$("#total_time").button('refresh');
+}
+
+
+$( "#keyboard" ).bind({
+   popupafterclose: function(event, ui) {
+		clearDisplayButton();
+   }
+});
+
+function clearDisplayButton()
+{
+	$("#display_button").val("0");
+	$("#display_button").button('refresh');
+}
+
+function updateTries()
+{
+	$("#total_tries").val("Tries : " + sessionStorage.total_tries);
+	$("#total_tries").button('refresh');
+}
+
+$(document).on("pageinit", "#play_ground", function(event){
+		var bool_repetition = false;
+		if(sessionStorage.repetition_allowed == "true")
+		{
+			bool_repetition = true;
+		}
+		sessionStorage.random_no = getRandomNum(sessionStorage.game_level, bool_repetition);
+		/*if(sessionStorage.game_level == 3)
+		{
+			sessionStorage.random_no = 254 ;
+		}
+		else if(sessionStorage.game_level == 4)
+		{
+			sessionStorage.random_no = 2346 ;
+		}
+		else
+		{
+			sessionStorage.random_no = 27468 ;
+		}*/
+
+		/*var element = document.getElementById("header_string");
+		element.innerHTML = "<span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>" ;*/
+
+		$("#id_send").click(function()
+		{
+			var displayString = $("#display_button").val();
+			var inputNumber = parseInt(displayString);
+			if(displayString.length == sessionStorage.game_level && displayString != "0" && inputNumber != NaN)
+			{
+				sessionStorage.total_tries ++;
+				var bulls_and_cows = getCowsAndBulls(inputNumber, sessionStorage.random_no);
+				var li_element_to_append = "<li>" + displayString + "<span class='ui-li-count'> Bulls " + bulls_and_cows[0] + " Cows " + bulls_and_cows[1] + "</span></li>";
+
+				if(bulls_and_cows[0] == sessionStorage.game_level)
+				{
+					saveNewScoreToLocalStore()
+				}
+				else
+				{
+					updateTries();
+				}
+
+				$("ul").append(li_element_to_append);
+				$( "ul" ).listview( "refresh");
+				clearDisplayButton();
+				$("#keyboard").popup( "close" );
+
+				//var offset = $("#page_content").offset();
+				var offset = $("#below_list").offset();
+
+				setTimeout(function(){
+				        $.mobile.silentScroll(offset.top);
+    				},100);
+
+				if(bulls_and_cows[0] == sessionStorage.game_level)
+				{
+    				window.location.href = "result.html";
+					//$.mobile.changePage('result.html', 'pop', false, true);
+					//$.mobile.changePage('result.html', { role:"dialog", transition: "pop", changeHash: false, data : strGameInfo });
+    			}
+			}
+		});
+
+		$("#id_clear").click(function()
+		{
+			clearDisplayButton();
+		});
+
+		$("#display_keyboad").click(function()
+		{
+			if(timer_initialised == false)
+			{
+				var element = document.getElementById("are_you_lost");
+				element.parentNode.removeChild(element);
+
+				setInterval('updateTime()',1000);
+				timer_initialised = true;
+			}
+		});
+});
+
+function update_display_button(event)
+{
+var element = event.srcElement;
+input_string = element.value;
+ var displayString = $("#display_button").val();
+ if(displayString == "0")
+ {
+  	$("#display_button").val(input_string);
+ }
+ else if(displayString.length < sessionStorage.game_level)
+ {
+	 displayString += input_string;
+	 $("#display_button").val(displayString);
+ }
+ $("#display_button").button('refresh');
+}
+
+function saveNewScoreToLocalStore()
+{
+	var gameInfo = new Object();
+	gameInfo.random_number = sessionStorage.random_no;
+	gameInfo.user_name = sessionStorage.user_name;
+	gameInfo.game_level = sessionStorage.game_level;
+	gameInfo.total_tries = sessionStorage.total_tries;
+	gameInfo.total_time = sessionStorage.total_time;
+
+	var strGameInfo = JSON.stringify(gameInfo);
+	//Create array of 3
+	var storedData = localStorage[sessionStorage.game_level - 3];
+	if(storedData)
+	{
+		var savedGameInfo = JSON.parse(storedData);
+		//alert("Saved time : " + savedGameInfo.total_time + " New Time : " + gameInfo.total_time);
+		if(parseInt(gameInfo.total_time) < parseInt(savedGameInfo.total_time))
+		{
+			//Over write the latest score
+			savedGameInfo.random_number = gameInfo.random_no;
+			savedGameInfo.user_name = gameInfo.user_name;
+			savedGameInfo.game_level = gameInfo.game_level;
+			savedGameInfo.total_tries = gameInfo.total_tries;
+			savedGameInfo.total_time = gameInfo.total_time;
+			strGameInfo = JSON.stringify(savedGameInfo);
+			localStorage[sessionStorage.game_level - 3] = strGameInfo;
+		}
+	}
+	else
+	{
+		localStorage[sessionStorage.game_level - 3] = strGameInfo;
+	}
+}
+
+</script>
+
+</body>
+</html>

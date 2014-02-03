@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cows Bulls</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+   	<link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css">
+	<script src="js/jquery-1.8.3.min.js"></script>
+	<script src="js/jquery.mobile-1.3.2.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script src="js/cowbull_common.js"></script>
+</head>
+
+<div data-role="dialog" id="dialogpage" data-close-btn="none">
+
+	 <div data-role="header">
+	    <h1>You made it !!!</h1>
+	  </div>
+
+	  <div data-role="content" align="center">
+	  	<p id="secret_number">Secret number was </p>
+	    <p id="total_tries_taken">Total number of tries taken </p>
+	    <p id="total_time_taken">Total time taken is </p>
+		<div class="ui-grid-solo">
+			<div class="ui-block-a"><a href="level_list.html" data-ajax="false" data-role="button" onclick="onClick_button(event)">Play Again</a></div>
+		</div><!-- /solo -->
+	  </div>
+
+	  <div data-role="footer">
+	    <h1>Congratulations !</h1>
+  </div>
+
+</div><!-- /page -->
+
+
+<script>
+
+
+	function onDeviceReady() {
+		document.addEventListener("backbutton", onBackKeyDown, false);
+	}
+
+	function onBackKeyDown(event)
+	{
+		navigator.app.exitApp();
+		//event.preventDefault();
+	}
+
+
+
+	$(document).on("pageshow", function(event){
+
+			var element = document.getElementById("secret_number");
+			element.innerHTML += " <span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>";
+
+			var element = document.getElementById("total_tries_taken");
+			element.innerHTML += " <span 'color:blue;font-weight:bold'>" + sessionStorage.total_tries + "</span>";
+
+			time_taken = getTotalTimeFromSecond(sessionStorage.total_time);
+
+			element = document.getElementById("total_time_taken");
+			element.innerHTML += " <span 'color:blue;font-weight:bold'>" + time_taken.total_minutes + " minutes and " + time_taken.total_seconds + " seconds </span>";
+
+			onDeviceReady();
+		});
+
+	function onClick_button(event)
+	{
+		//var stateObj = { dialog: "settings" };
+		//history.replaceState({page: this.href}, '', "level_list.html");
+		history.replaceState(null, 'Settings',  "level_list.html");
+	}
+
+if(!sessionStorage.user_name)
+{
+	window.location.href = "home.html";
+}
+else
+{
+}
+
+</script>
+
+</body>
+</html>

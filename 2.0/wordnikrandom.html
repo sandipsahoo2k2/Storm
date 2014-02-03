@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Wordizy</title>
+   	<meta name="viewport" content="width=device-width, initial-scale=1">
+   	<link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css">
+		<script src="js/jquery-1.8.3.min.js"></script>
+		<script src="js/jquery.mobile-1.3.2.min.js"></script>
+	<script src="js/wordizy_common.js"></script>
+   </head>
+<body>
+
+
+<div data-role="page" id="pageone">
+
+	<div data-role="header">
+		<h1>Random Word Test</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<div class="ui-corner-all custom-corners" data-inline="true" align="center">
+		  <div class="ui-bar ui-bar-d">
+		    <h3><a href="" data-theme="e" data-ajax="false" data-role="button" id="play_game" onclick="display_random_word()">Random Word</a></h3>
+		  </div>
+		  <div class="ui-body ui-body-b">
+		    <p id="randomword">Content</p>
+		    <p id="wordmeaning">Meaning</p>
+		  </div>
+		</div>
+    </div><!-- /content -->
+
+	<div data-role="footer" data-position="fixed" align="center">
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+<script>
+
+var one_digit_number = 0;
+var random_word;
+function display_random_word()
+{
+	while (one_digit_number < 3)
+	{
+		one_digit_number = getRandomNum(1, true);
+	}
+	getRandomWord(one_digit_number,one_digit_number);
+	one_digit_number = 0;
+}
+function getWordDefinition(inputWord)
+{
+	var queryString = inputWord + "/definitions?limit=5&includeRelated=false&sourceDictionaries=all&useCanonical=false&includeTags=false";
+	var requestURLString = BASE_API_URL + "word.json/" + queryString + API_KEY;
+
+	$.getJSON(requestURLString,
+				function(data){
+					var wordDefinition = formatWordMeaning(data);
+					wordDefinition.toHTML("wordmeaning") ;
+				});
+}
+
+function getRandomWord(minLength, maxLength)
+{
+	var minMaxString = "&minLength=" + minLength + "&maxLength=" + maxLength;
+	var queryString = "randomWord?hasDictionaryDef=true&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1" + minMaxString;
+	var requestURLString = BASE_API_URL + "words.json/" + queryString + API_KEY;
+
+	$.getJSON(requestURLString,
+				function(data){
+				  var element = document.getElementById("randomword");
+					if(element)
+					{
+						var htmlInfo = formatRandomWord(data);
+						element.innerHTML = htmlInfo ;
+						random_word = htmlInfo;
+						getWordDefinition(random_word);
+					}
+	});
+}
+
+</script>
+</body>
+</html>
