@@ -39,6 +39,10 @@
 </div><!-- /page -->
 
     <script>
+		var entrydate = new Date(2018,12,15);
+		var reentrydate = new Date(2013,11,30);
+		//alert(reentrydate - entrydate);
+		alert(DateAdd("d", 308,entrydate));
 
         function setUserID(aName) {
             if (typeof (Storage) !== "undefined") {
