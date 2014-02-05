@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Cows & Bulls</title>
+   	<meta name="viewport" content="width=device-width, initial-scale=1">
+   	<link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css">
+	<script src="js/jquery-1.8.3.min.js"></script>
+	<script src="js/jquery.mobile-1.3.2.min.js"></script>
+   </head>
+<body>
+
+
+<div data-role="page" id="pageone">
+
+	<div data-role="panel" id="hint_panel" data-position="left" data-display="overlay">
+        <div id="are_you_lost" data-inline="true" align="center">
+			<h3 class="ui-bar ui-bar-b ui-corner-all" id="hint_header">Are You Lost ?</h3>
+			  <div class="ui-body ui-body-b ui-corner-all">
+			  <div id="info" style="overflow: auto;height:200px">
+						<p>There is a keyboard for you at upper right corner !
+						   </br>Click it and start playing.</br>
+						   </br>Bull :: Digit and position matches</br>
+							Cow :: Digit matches but not position</br>
+							</br>Number can not start with zero.</br>
+							</br>Game ends when number of bulls equals to the
+							number of digits for which it is played.</br></p>
+
+<p>There is a keyboard for you at upper right corner !
+						   </br>Click it and start playing.</br>
+						   </br>Bull :: Digit and position matches</br>
+							Cow :: Digit matches but not position</br>
+							</br>Number can not start with zero.</br>
+							</br>Game ends when number of bulls equals to the
+							number of digits for which it is played.</br></p>
+
+<p>There is a keyboard for you at upper right corner !
+						   </br>Click it and start playing.</br>
+						   </br>Bull :: Digit and position matches</br>
+							Cow :: Digit matches but not position</br>
+							</br>Number can not start with zero.</br>
+							</br>Game ends when number of bulls equals to the
+							number of digits for which it is played.</br></p>
+
+<p>There is a keyboard for you at upper right corner !
+						   </br>Click it and start playing.</br>
+						   </br>Bull :: Digit and position matches</br>
+							Cow :: Digit matches but not position</br>
+							</br>Number can not start with zero.</br>
+							</br>Game ends when number of bulls equals to the
+							number of digits for which it is played.</br></p>
+					</div>
+
+			  </div>
+		</div>
+    </div><!-- /panel -->
+
+	<div data-role="header" data-position="fixed">
+		<h1>Wordizy</h1>
+	</div><!-- /header -->
+
+	<div data-role="content" id="content_id">
+			<div class="ui-corner-all custom-corners" data-inline="true" align="center">
+			  <div class="ui-bar ui-bar-d">
+			    <h3><a href="" data-theme="b" data-ajax="false" data-role="button" id="play_game" onclick="display_random_word()">Random Word</a></h3>
+			  </div>
+			  <div class="ui-body ui-body-b">
+			    <p id="randomword">Content</p>
+			    <p id="wordmeaning">Meaning</p>
+			  </div>
+			</div>
+			 <div id="display_panel"data-role="controlgroup" data-type="horizontal">
+			  <input type = "button" id="all_clear" data-mini="true" data-theme="b" value= "X">
+			  <input type = "button" id="all_clear" data-mini="true" value= "A">
+			  <input type = "button" id="all_clear" data-mini="true" value= "B">
+			  <input type = "button" id="all_clear" data-mini="true" value= "C">
+			  <input type = "button" id="all_clear" data-mini="true" value= "D">
+			  <input type = "button" id="all_clear" data-mini="true" value= "E">
+			  <input type = "button" id="all_clear" data-mini="true" value= "F">
+			  <input type = "button" id="all_clear" data-mini="true" value= "G">
+			  <input type = "button" id="all_clear" data-mini="true" value= "H">
+			  <input type = "button" id="all_clear" data-mini="true" value= "I">
+			  <input type = "button" id="all_clear" data-mini="true" value= "J">
+			  <input type = "button" id="clear_last" data-mini="true" data-theme="b" value= "<">
+	  		</div>
+
+	  		<div id="key_board1" data-role="controlgroup" data-type="horizontal">
+					  <input type = "button" id="all_clear" data-mini="true" value= "A">
+					  <input type = "button" id="all_clear" data-mini="true" value= "B">
+					  <input type = "button" id="all_clear" data-mini="true" value= "C">
+					  <input type = "button" id="all_clear" data-mini="true" value= "D">
+					  <input type = "button" id="all_clear" data-mini="true" value= "E">
+					  <input type = "button" id="reveal_chracters" data-mini="true" value= "Show">
+			</div>
+			<div id="key_board2" data-role="controlgroup" data-type="horizontal">
+					  <input type = "button" id="all_clear" data-mini="true" value= "F">
+					  <input type = "button" id="all_clear" data-mini="true" value= "G">
+					  <input type = "button" id="all_clear" data-mini="true" value= "H">
+					  <input type = "button" id="all_clear" data-mini="true" value= "I">
+					  <input type = "button" id="all_clear" data-mini="true" value= "J">
+					  <input type = "button" id="display_hint" data-mini="true" value= "Hint">
+	  		</div>
+
+    </div><!-- /content -->
+
+		<div data-role="footer" data-position="fixed">
+			<h4>Wordizy</h4>
+		</div><!-- /footer -->
+</div><!-- /page -->
+
+    <script>
+
+        function setRandomWord(aWord) {
+            if (typeof (Storage) !== "undefined") {
+                    sessionStorage.random_word = aWord;
+                }
+            else {
+                alert("Browser doesn't support session data ! Crome recomended");
+            }
+        }
+
+		$(document).on("pageinit","#pageone",function(event){
+		   $("#display_hint").click(function(event)
+		   {
+		   	$( "#hint_panel" ).panel("open");
+			});
+
+			var heightOfWindow = $(window).height();
+			var totalHeightOfContents = $(document).height();
+				if(heightOfWindow <= totalHeightOfContents){
+					var contentIDHeight = $('#content_id').height();
+					var infoDivIDHeight = $('#info').height();
+					var heightExcludingInfo = contentIDHeight - infoDivIDHeight;
+					var availableHeightForInfo = heightOfWindow - heightExcludingInfo;
+					var test = availableHeightForInfo - 420;
+					$('#info').height(test);
+				}
+		});
+
+		/*$(window).on('load resize',function(){
+			var heightOfWindow = $(window).height();
+			var totalHeightOfContents = $(document).height();
+				if(heightOfWindow <= totalHeightOfContents){
+					var contentIDHeight = $('#content_id').height();
+					var infoDivIDHeight = $('#info').height();
+					var heightExcludingInfo = contentIDHeight - infoDivIDHeight;
+					var availableHeightForInfo = heightOfWindow - heightExcludingInfo;
+					$('#info').height(availableHeightForInfo);
+				}
+				else{
+					$('#info').css({height:'auto'});
+				}
+			});*/
+
+    </script>
+</body>
+</html>
