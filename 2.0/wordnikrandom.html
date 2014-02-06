@@ -74,7 +74,7 @@ function display_random_word()
 	{
 		one_digit_number = getRandomNum(1, true);
 	}
-	getRandomWord(one_digit_number,one_digit_number);
+	getRandomWordWithMeaning(one_digit_number,one_digit_number);
 	one_digit_number = 0;
 }
 function getWordDefinition(inputWord)
@@ -89,7 +89,7 @@ function getWordDefinition(inputWord)
 				});
 }
 
-function getRandomWord(minLength, maxLength)
+function getRandomWordWithMeaning(minLength, maxLength)
 {
 	var minMaxString = "&minLength=" + minLength + "&maxLength=" + maxLength;
 	var queryString = "randomWord?hasDictionaryDef=true&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1" + minMaxString;

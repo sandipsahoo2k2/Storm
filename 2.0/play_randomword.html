@@ -13,45 +13,12 @@
 <div data-role="page" id="pageone">
 
 	<div data-role="panel" id="hint_panel" data-position="left" data-display="overlay">
-        <div id="are_you_lost" data-inline="true" align="center">
-			<h3 class="ui-bar ui-bar-b ui-corner-all" id="hint_header">Are You Lost ?</h3>
-			  <div class="ui-body ui-body-b ui-corner-all">
-			  <div id="info" style="overflow: auto;height:200px">
-						<p>There is a keyboard for you at upper right corner !
-						   </br>Click it and start playing.</br>
-						   </br>Bull :: Digit and position matches</br>
-							Cow :: Digit matches but not position</br>
-							</br>Number can not start with zero.</br>
-							</br>Game ends when number of bulls equals to the
-							number of digits for which it is played.</br></p>
-
-<p>There is a keyboard for you at upper right corner !
-						   </br>Click it and start playing.</br>
-						   </br>Bull :: Digit and position matches</br>
-							Cow :: Digit matches but not position</br>
-							</br>Number can not start with zero.</br>
-							</br>Game ends when number of bulls equals to the
-							number of digits for which it is played.</br></p>
-
-<p>There is a keyboard for you at upper right corner !
-						   </br>Click it and start playing.</br>
-						   </br>Bull :: Digit and position matches</br>
-							Cow :: Digit matches but not position</br>
-							</br>Number can not start with zero.</br>
-							</br>Game ends when number of bulls equals to the
-							number of digits for which it is played.</br></p>
-
-<p>There is a keyboard for you at upper right corner !
-						   </br>Click it and start playing.</br>
-						   </br>Bull :: Digit and position matches</br>
-							Cow :: Digit matches but not position</br>
-							</br>Number can not start with zero.</br>
-							</br>Game ends when number of bulls equals to the
-							number of digits for which it is played.</br></p>
-					</div>
-
-			  </div>
-		</div>
+        <div class="ui-corner-all custom-corners" data-inline="true" align="center">
+						  <div class="ui-body ui-body-b">
+						    <p id="randomword">Content</p>
+						    <p id="wordmeaning">Meaning</p>
+						  </div>
+			</div>
     </div><!-- /panel -->
 
 	<div data-role="header" data-position="fixed">
@@ -109,6 +76,8 @@
 
     <script>
 
+		var random_word_object = new Object();
+
         function setRandomWord(aWord) {
             if (typeof (Storage) !== "undefined") {
                     sessionStorage.random_word = aWord;
@@ -136,20 +105,31 @@
 				}
 		});
 
-		/*$(window).on('load resize',function(){
-			var heightOfWindow = $(window).height();
-			var totalHeightOfContents = $(document).height();
-				if(heightOfWindow <= totalHeightOfContents){
-					var contentIDHeight = $('#content_id').height();
-					var infoDivIDHeight = $('#info').height();
-					var heightExcludingInfo = contentIDHeight - infoDivIDHeight;
-					var availableHeightForInfo = heightOfWindow - heightExcludingInfo;
-					$('#info').height(availableHeightForInfo);
-				}
-				else{
-					$('#info').css({height:'auto'});
-				}
-			});*/
+		function getRandomWordRawData(minLength, maxLength)
+		{
+			var minMaxString = "&minLength=" + minLength + "&maxLength=" + maxLength;
+			var queryString = "randomWord?hasDictionaryDef=true&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1" + minMaxString;
+			var requestURLString = BASE_API_URL + "words.json/" + queryString + API_KEY;
+
+			$.getJSON(requestURLString,
+						function(data){
+							var random_word = formatRandomWord(data);
+							random_word_object.random_word = random_word;
+							getWordDefinition(random_word);
+			});
+
+			function getWordDefinition(inputWord)
+			{
+				var queryString = inputWord + "/definitions?limit=5&includeRelated=false&sourceDictionaries=all&useCanonical=false&includeTags=false";
+				var requestURLString = BASE_API_URL + "word.json/" + queryString + API_KEY;
+
+				$.getJSON(requestURLString,
+							function(data){
+								var wordDefinition = formatWordMeaning(data);
+								random_word_object.word_definitions = wordDefinition.array;
+							});
+			}
+
 
     </script>
 </body>
