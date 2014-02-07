@@ -1,7 +1,6 @@
 var API_KEY = "&api_key=bcb8b593e7bac3753900607d5b502a2f3d3c95f2ebd58ec8a";
 var BASE_API_URL = "http://api.wordnik.com:80/v4/";
 
-
 function formatWordOfTheDay(jsonData)
 {
 	var wordOfTheDay = new Object();
@@ -15,31 +14,31 @@ function formatWordOfTheDay(jsonData)
 	wordOfTheDay.example = jsonData.examples[0];
 	wordOfTheDay.exampleUsage = wordOfTheDay.example.text;
 	wordOfTheDay.toHTML = function (divID)
+		{
+			var element = document.getElementById(divID);
+			if(element)
 			{
-				var element = document.getElementById(divID);
-				if(element)
-				{
-					var htmlStr = "<table data-role='table' id='wordoftheday-table' data-mode='reflow' class='ui-responsive table-stroke'>"
-								+ "<thead><tr><th></th><th></th></tr></thead>"
-								+ "<tbody>" ;
-						for(i = 0; i < this.definitions.length; i++)
-						{
-							var meaning = this.definitions[i];
-							htmlStr += "<tr><th>" + meaning.partOfSpeech + "</th>"
-									+ "<td>" + meaning.text + "</td></tr>" ;
-						}
+				var htmlStr = "<table data-role='table' id='wordoftheday-table' data-mode='reflow' class='ui-responsive table-stroke'>"
+							+ "<thead><tr><th></th><th></th></tr></thead>"
+							+ "<tbody>" ;
+					for(i = 0; i < this.definitions.length; i++)
+					{
+						var meaning = this.definitions[i];
+						htmlStr += "<tr><th>" + meaning.partOfSpeech + "</th>"
+								+ "<td>" + meaning.text + "</td></tr>" ;
+					}
 
-					htmlStr += "<tr><th>Origin</th>"
-							+ "<td>" + this.parentWord + "</td></tr>" ;
+				htmlStr += "<tr><th>Origin</th>"
+						+ "<td>" + this.parentWord + "</td></tr>" ;
 
-					htmlStr += "<tr><th>Example</th>"
-							+ "<td>" + this.exampleUsage + "</td></tr>" ;
+				htmlStr += "<tr><th>Example</th>"
+						+ "<td>" + this.exampleUsage + "</td></tr>" ;
 
-					htmlStr += "</tbody></table>";
+				htmlStr += "</tbody></table>";
 
-					element.innerHTML = htmlStr;
-				}
-			};
+				element.innerHTML = htmlStr;
+			}
+		};
 	return wordOfTheDay;
 }
 
@@ -47,9 +46,7 @@ function formatRandomWord(jsonData)
 {
 	var wordnik_id = jsonData.id;
 	var word = jsonData.word;
-
 	//getWordDefinition(word);
-
 	return "" + word;
 }
 
@@ -60,9 +57,20 @@ function formatWordMeaning(jsonData)
 	wordDefinition.array = jsonData;
 	//var word = wordData.word; //actual word
 	//var meaning = wordData.text ; //meaning
-	//var type_of_word = wordData.partOfSpeech ; //type
+	//var type_of_word = wordData.partOfSpeech ; //
+	wordDefinition.zip_array = [];
+	var map = {};
+	for(i = 0, j = 0; i < jsonData.length ; j ++, i++)
+	{
+		var meaning = jsonData[i];
+		if(meaning.partOfSpeech && !map[meaning.partOfSpeech])
+		{
+			map[meaning.partOfSpeech] = meaning.text;
+			wordDefinition.zip_array[j] = meaning;
+		}
+	}
 
-	wordDefinition.toHTML = function (divID)
+	wordDefinition.allToHTML = function(divID)
 			{
 				var element = document.getElementById(divID);
 				if(element)
@@ -81,6 +89,64 @@ function formatWordMeaning(jsonData)
 					element.innerHTML = htmlStr;
 				}
 			};
+
+	wordDefinition.byIndexToHtml = function(index, divID)
+			{
+				var element = document.getElementById(divID);
+				if(element)
+				{
+					var htmlStr ;
+					if(index < this.zip_array.length)
+					{
+						var meaning = this.zip_array[index];
+						htmlStr = "<div class='ui-corner-all custom-corners' data-inline='true' align='center'>"
+							+ "<div class='ui-bar ui-bar-d'><h3>" + meaning.partOfSpeech + "</h3>"
+							+ "</div><div class='ui-body ui-body-b'>"
+							+ "<p id='randomword'>" + meaning.text +"</p></div></div>" ;
+
+					}
+					else
+					{
+						htmlStr = "No information available";
+					}
+					element.innerHTML = htmlStr;
+				}
+			};
+
+	wordDefinition.toHTML = function(divID)
+			{
+				var element = document.getElementById(divID);
+				if(element)
+				{
+					var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
+								+ "<thead><tr><th></th><th></th></tr></thead>"
+								+ "<tbody>" ;
+					for(i = 0; i < this.zip_array.length; i++)
+					{
+						var meaning = this.zip_array[i];
+						htmlStr += "<tr><th>" + meaning.partOfSpeech + "</th>"
+								+ "<td>" + meaning.text + "</td></tr>" ;
+					}
+					htmlStr += "</tbody></table>";
+					element.innerHTML = htmlStr;
+				}
+			};
+
+		wordDefinition.getContainerHTML = function(divID)
+			{
+				var element = document.getElementById(divID);
+				if(element)
+				{
+					var htmlStr = "<input type = 'button' id='all_clear' data-mini='true' data-theme='b' value= 'X'>";
+					for(i = 0; i < this.word.length ; i ++)
+					{
+						htmlStr += "<input type = 'button' id='all_clear' data-mini='true' value= '" + this.word.charAt(i) + "'>";
+					}
+					htmlStr += "<input type = 'button' id='clear_last' data-mini='true' data-theme='b' value= '<'>";
+					element.innerHTML = htmlStr;
+				}
+			}
+
 		return wordDefinition;
 }
 
