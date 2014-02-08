@@ -10,64 +10,39 @@
 </head>
 <body>
 
-
 <div data-role="page" id="pageone">
-
-	<div data-role="panel" id="hint_panel" data-position="left" data-display="overlay">
-        <div class="ui-corner-all custom-corners" data-inline="true" align="center">
-			  <div class="ui-body ui-body-b">
-				<p id="randomword">Content</p>
-				<p id="wordmeaning">Meaning</p>
-			  </div>
-		</div>
-    </div><!-- /panel -->
 
 	<div data-role="header" data-position="fixed">
 		<h1>Wordizy</h1>
 	</div><!-- /header -->
 
-	<div data-role="content" id="content_id">
-			<div class="ui-corner-all custom-corners" data-inline="true" align="center">
-			  <div class="ui-bar ui-bar-d">
-			    <h3><a href="" data-theme="b" data-ajax="false" data-role="button" id="play_game" onclick="display_random_word()">Random Word</a></h3>
-			  </div>
-			  <div class="ui-body ui-body-b">
-			    <p id="randomword">Content</p>
-			    <p id="wordmeaning">Meaning</p>
-			  </div>
+	<div data-role="content" id="content_id" align="center">
+			<div data-role="controlgroup" data-type="horizontal">
+				<input type = "button" id="delete_characters" data-mini="true" value= "Del">
+				<input type = "button" id="display_hint" data-mini="true" value= "Hint">
+				<input type = "button" id="reveal_chracters" data-mini="true" value= "Show">
+				<input type = "button" id="back_chracters" data-mini="true" value= "Back">
 			</div>
-			 <div id="display_panel"data-role="controlgroup" data-type="horizontal">
-			  <input type = "button" id="all_clear" data-mini="true" data-theme="b" value= "X">
-			  <input type = "button" id="all_clear" data-mini="true" value= "A">
-			  <input type = "button" id="all_clear" data-mini="true" value= "B">
-			  <input type = "button" id="all_clear" data-mini="true" value= "C">
-			  <input type = "button" id="all_clear" data-mini="true" value= "D">
-			  <input type = "button" id="all_clear" data-mini="true" value= "E">
-			  <input type = "button" id="all_clear" data-mini="true" value= "F">
-			  <input type = "button" id="all_clear" data-mini="true" value= "G">
-			  <input type = "button" id="all_clear" data-mini="true" value= "H">
-			  <input type = "button" id="all_clear" data-mini="true" value= "I">
-			  <input type = "button" id="all_clear" data-mini="true" value= "J">
-			  <input type = "button" id="clear_last" data-mini="true" data-theme="b" value= "<">
-	  		</div>
-
-	  		<div id="key_board1" data-role="controlgroup" data-type="horizontal">
-					  <input type = "button" id="all_clear" data-mini="true" value= "A">
-					  <input type = "button" id="all_clear" data-mini="true" value= "B">
-					  <input type = "button" id="all_clear" data-mini="true" value= "C">
-					  <input type = "button" id="all_clear" data-mini="true" value= "D">
-					  <input type = "button" id="all_clear" data-mini="true" value= "E">
-					  <input type = "button" id="reveal_chracters" data-mini="true" value= "Show">
+			<div id="hint_content_div" align="center" style='overflow:auto;height:100px'>
 			</div>
-			<div id="key_board2" data-role="controlgroup" data-type="horizontal">
-					  <input type = "button" id="all_clear" data-mini="true" value= "F">
-					  <input type = "button" id="all_clear" data-mini="true" value= "G">
-					  <input type = "button" id="all_clear" data-mini="true" value= "H">
-					  <input type = "button" id="all_clear" data-mini="true" value= "I">
-					  <input type = "button" id="all_clear" data-mini="true" value= "J">
-					  <input type = "button" id="display_hint" data-mini="true" value= "Hint">
-	  		</div>
+			<div id="button_groups">
+				<div id="randomword_placeholder" data-role="controlgroup" data-type="horizontal"></div>
 
+				<div id="key_board1" data-role="controlgroup" data-type="horizontal">
+						  <input type = "button" id="all_clear" data-mini="true" value= "A">
+						  <input type = "button" id="all_clear" data-mini="true" value= "B">
+						  <input type = "button" id="all_clear" data-mini="true" value= "C">
+						  <input type = "button" id="all_clear" data-mini="true" value= "D">
+						  <input type = "button" id="all_clear" data-mini="true" value= "E">
+				</div>
+				<div id="key_board2" data-role="controlgroup" data-type="horizontal">
+						  <input type = "button" id="all_clear" data-mini="true" value= "F">
+						  <input type = "button" id="all_clear" data-mini="true" value= "G">
+						  <input type = "button" id="all_clear" data-mini="true" value= "H">
+						  <input type = "button" id="all_clear" data-mini="true" value= "I">
+						  <input type = "button" id="all_clear" data-mini="true" value= "J">
+				</div>
+	  		</div>
     </div><!-- /content -->
 
 		<div data-role="footer" data-position="fixed">
@@ -78,7 +53,8 @@
     <script>
 
 		var random_word_object = new Object();
-		getRandomWordRawData(4,4);
+		getContainerHTML(5, "randomword_placeholder");
+		getRandomWordRawData(5,5);
 
         function setRandomWord(aWord) {
             if (typeof (Storage) !== "undefined") {
@@ -89,7 +65,13 @@
             }
         }
 
-		$(document).on("pageinit","#pageone",function(event){
+		$(document).on("pageshow","#pageone",function(event){
+
+			var heightOfWindow = $(window).height();
+			var totalHeightOfButtons = $("#button_groups").height();
+			var leftForHint = heightOfWindow - totalHeightOfButtons;
+			$('#hint_content_div').height(leftForHint / 2);
+
 		   $("#display_hint").click(function(event) {
 
 				/*var element = document.getElementById("randomword");
@@ -97,21 +79,11 @@
 				{
 					element.innerHTML = random_word_object.word;
 				}*/
-				random_word_object.meaning.getContainerHTML("randomword");
-		   		$( "#hint_panel" ).panel("open");
+				random_word_object.meaning.toHTML("hint_content_div");
 
-			});
-
-			var heightOfWindow = $(window).height();
-			var totalHeightOfContents = $(document).height();
-				if(heightOfWindow <= totalHeightOfContents){
-					var contentIDHeight = $('#content_id').height();
-					var infoDivIDHeight = $('#info').height();
-					var heightExcludingInfo = contentIDHeight - infoDivIDHeight;
-					var availableHeightForInfo = heightOfWindow - heightExcludingInfo;
-					var test = availableHeightForInfo - 420;
-					$('#info').height(test);
-				}
+				//$( "#level_list" ).refresh();
+		   		//$( "#hint_panel" ).panel("open");
+		   	});
 		});
 
 		function getRandomWordRawData(minLength, maxLength)

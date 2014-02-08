@@ -50,10 +50,26 @@ function formatRandomWord(jsonData)
 	return "" + word;
 }
 
+function getContainerHTML(size, divID)
+	{
+		var element = document.getElementById(divID);
+		if(element)
+		{
+			var htmlStr = "<input type = 'button' id='all_clear' data-mini='true' data-theme='b' value= 'X'>";
+			for(i = 0; i < 5 ; i ++)
+			{
+				htmlStr += "<input type = 'button' id='all_clear' data-theme='a' data-mini='true' value= '*'>";
+			}
+			htmlStr += "<input type = 'button' id='clear_last' data-mini='true' data-theme='b' value= '<'>";
+			element.innerHTML = htmlStr;
+		}
+	}
+
+
 function formatWordMeaning(jsonData)
 {
 	var wordDefinition = new Object();
-	wordDefinition.word = jsonData.word;
+	//wordDefinition.word = jsonData.word;
 	wordDefinition.array = jsonData;
 	//var word = wordData.word; //actual word
 	//var meaning = wordData.text ; //meaning
@@ -116,36 +132,20 @@ function formatWordMeaning(jsonData)
 	wordDefinition.toHTML = function(divID)
 			{
 				var element = document.getElementById(divID);
-				if(element)
-				{
-					var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
-								+ "<thead><tr><th></th><th></th></tr></thead>"
-								+ "<tbody>" ;
-					for(i = 0; i < this.zip_array.length; i++)
+					if(element)
 					{
-						var meaning = this.zip_array[i];
-						htmlStr += "<tr><th>" + meaning.partOfSpeech + "</th>"
-								+ "<td>" + meaning.text + "</td></tr>" ;
+						var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
+									+ "<thead><tr><th></th></tr></thead>"
+									+ "<tbody>" ;
+						for(i = 0; i < this.zip_array.length; i++)
+						{
+							var meaning = this.zip_array[i];
+							htmlStr += "<tr><td><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup>"+ meaning.text + "</td></tr>" ;
+						}
+						htmlStr += "</tbody></table>";
+						element.innerHTML = htmlStr;
 					}
-					htmlStr += "</tbody></table>";
-					element.innerHTML = htmlStr;
-				}
 			};
-
-		wordDefinition.getContainerHTML = function(divID)
-			{
-				var element = document.getElementById(divID);
-				if(element)
-				{
-					var htmlStr = "<input type = 'button' id='all_clear' data-mini='true' data-theme='b' value= 'X'>";
-					for(i = 0; i < this.word.length ; i ++)
-					{
-						htmlStr += "<input type = 'button' id='all_clear' data-mini='true' value= '" + this.word.charAt(i) + "'>";
-					}
-					htmlStr += "<input type = 'button' id='clear_last' data-mini='true' data-theme='b' value= '<'>";
-					element.innerHTML = htmlStr;
-				}
-			}
 
 		return wordDefinition;
 }
