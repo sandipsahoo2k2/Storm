@@ -1,6 +1,8 @@
 var API_KEY = "&api_key=bcb8b593e7bac3753900607d5b502a2f3d3c95f2ebd58ec8a";
 var BASE_API_URL = "http://api.wordnik.com:80/v4/";
 
+var ENGLISH_LETTER = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y', 'Z'];
+
 function formatWordOfTheDay(jsonData)
 {
 	var wordOfTheDay = new Object();
@@ -55,12 +57,11 @@ function getContainerHTML(size, divID)
 		var element = document.getElementById(divID);
 		if(element)
 		{
-			var htmlStr = "<input type = 'button' id='all_clear' data-mini='true' data-theme='b' value= 'X'>";
-			for(i = 0; i < 5 ; i ++)
+			var htmlStr = "";
+			for(i = 0; i < size ; i ++)
 			{
 				htmlStr += "<input type = 'button' id='all_clear' data-theme='a' data-mini='true' value= '*'>";
 			}
-			htmlStr += "<input type = 'button' id='clear_last' data-mini='true' data-theme='b' value= '<'>";
 			element.innerHTML = htmlStr;
 		}
 	}
@@ -195,6 +196,27 @@ function getArrayNum(any_num)
     return int_arr;
 }
 
+function wordMatched(input_word, random_word)
+{
+	var matched = true;
+	if(random_word.length == input_word.length)
+	{
+		for(i = 0; i < random_word.length; i++)
+		{
+			if(random_word[i] != input_word[i])
+			{
+				matched = false;
+				break;
+			}
+		}
+	}
+	else
+	{
+		matched = false;
+	}
+	return matched;
+}
+
 function getCowsAndBulls(input_number, random_number)
 {
 	var input_number = getArrayNum(input_number);
@@ -302,7 +324,7 @@ function postSignIn(userName, passWord)
 	var requestURLString = BASE_API_URL + "word.json/"+ queryString;
 
 	$.post(requestURLString,
-			{"password":"sAn2k099"},
+			{"password":"hurrrr"},
 				function(data)
 				{
 				  var element = document.getElementById("wordoftheday");
