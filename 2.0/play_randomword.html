@@ -30,20 +30,20 @@
 				</div>
 
 				<div id="key_board1" data-role="controlgroup" data-type="horizontal">
-						  <input type = "button" id="key_1" data-mini="true" value= "#">
-						  <input type = "button" id="key_2" data-mini="true" value= "#">
-						  <input type = "button" id="key_3" data-mini="true" value= "#">
-						  <input type = "button" id="key_4" data-mini="true" value= "#">
-						  <input type = "button" id="key_5" data-mini="true" value= "#">
-						  <input type = "button" id="key_6" data-mini="true" value= "#">
+						  <input type = "button" id="key_0" data-mini="true" value= "#" onclick="on_key_clicked(event)">
+						  <input type = "button" id="key_1" data-mini="true" value= "#" onclick="on_key_clicked(event)">
+						  <input type = "button" id="key_2" data-mini="true" value= "#" onclick="on_key_clicked(event)">
+						  <input type = "button" id="key_3" data-mini="true" value= "#" onclick="on_key_clicked(event)">
+						  <input type = "button" id="key_4" data-mini="true" value= "#" onclick="on_key_clicked(event)">
+						  <input type = "button" id="key_5" data-mini="true" value= "#" onclick="on_key_clicked(event)">
 				</div>
 				<div id="key_board2" data-role="controlgroup" data-type="horizontal">
-						  <input type = "button" id="key_7" data-mini="true" value= "#">
-						  <input type = "button" id="key_8" data-mini="true" value= "#">
-						  <input type = "button" id="key_9" data-mini="true" value= "#">
-						  <input type = "button" id="key_10" data-mini="true" value= "#">
-						  <input type = "button" id="key_11" data-mini="true" value= "#">
-						  <input type = "button" id="key_12" data-mini="true" value= "#">
+						  <input type = "button" id="key_6" data-mini="true" value= "#" onclick="on_key_clicked(event)">
+						  <input type = "button" id="key_7" data-mini="true" value= "#" onclick="on_key_clicked(event)">
+						  <input type = "button" id="key_8" data-mini="true" value= "#" onclick="on_key_clicked(event)">
+						  <input type = "button" id="key_9" data-mini="true" value= "#" onclick="on_key_clicked(event)">
+						  <input type = "button" id="key_10" data-mini="true" value= "#" onclick="on_key_clicked(event)">
+						  <input type = "button" id="key_11" data-mini="true" value= "#" onclick="on_key_clicked(event)">
 				</div>
 	  		</div>
     </div><!-- /content -->
@@ -54,6 +54,7 @@
 </div><!-- /page -->
 
     <script>
+    	var to_key_from_key_map = {};
 		var random_number = getRandomNum(1, true);
 		while(random_number < 3)
 		{
@@ -61,7 +62,97 @@
 		}
 		var random_word_object = new Object();
 		getRandomWordRawData(random_number,random_number);
-		getContainerHTML(random_number, "randomword_placeholder");
+		var user_input_array = getContainerHTML(random_number, "randomword_placeholder");
+
+		function fillKeyBoard()
+		{
+			var temp_key_map = {};
+			for(i = 0; i < 12;)
+			{
+				var rand_number_lessthan26 = Math.floor(Math.random() * 26 + 1);
+				if(!temp_key_map[rand_number_lessthan26] && rand_number_lessthan26 < 26)
+				{
+					var keyid = "#key_" + i;
+					temp_key_map[rand_number_lessthan26] = keyid;
+					var rand_number_lessthan26_text = "" + ENGLISH_LETTER[rand_number_lessthan26];;
+					$(keyid).val(rand_number_lessthan26_text);
+					$(keyid).button('refresh');
+					i++;
+				}
+			}
+		}
+
+		function fillKeyBoardWithWord()
+		{
+			var tempWord = random_word_object.word;
+			var temp_key_map = {};
+			for(i = 0; i < tempWord.length;)
+			{
+				var rand_number_lessthan12 = Math.floor(Math.random() * 12 + 1);
+				if(!temp_key_map[rand_number_lessthan12] && rand_number_lessthan12 < 12)
+				{
+					var keyid = "#key_" + rand_number_lessthan12;
+					temp_key_map[rand_number_lessthan12] = keyid;
+					var rand_number_lessthan12_text = "" + tempWord.charAt(i);
+					$(keyid).val(rand_number_lessthan12_text);
+					$(keyid).button('refresh');
+					i++;
+				}
+			}
+		}
+
+		function on_key_clicked(event)
+		{
+			var element = event.srcElement;
+			input_char = element.value;
+			can_update = false;
+			for(index_to_update = 0, i = 0; i < user_input_array.length; i++)
+			{
+				if(!user_input_array[i])
+				{
+					index_to_update = i;
+					can_update = true;
+					break;
+				}
+			}
+			if(can_update && index_to_update <= random_word_object.word.length)
+			{
+				user_input_array[index_to_update] = true;
+				button_id = "#container_key_" + index_to_update;
+				from_id = "#" + element.id;
+				swap_char(from_id, button_id);
+				to_key_from_key_map[button_id] = from_id;
+			}
+		}
+
+		function on_container_key_clicked(event)
+		{
+			var element = event.srcElement;
+			var source_id = "#"+ element.id;
+			delete_char = element.value;
+			to_key_id = to_key_from_key_map[source_id];
+			if(to_key_id)
+			{
+				swap_char(source_id, to_key_id);
+				to_key_from_key_map[source_id] = null;
+
+				indexDeleted = source_id.replace("#container_key_","");
+				indexDeleted = parseInt(indexDeleted);
+				user_input_array[indexDeleted] = false;
+			}
+		}
+
+		function swap_char(fromID, toID)
+		{
+			valTo = $(toID).val();
+			valFrom = $(fromID).val();
+			$(fromID).val(valTo);
+			$(toID).val(valFrom);
+			//$(fromID).button('enable');
+			//$(toID).button('disable');
+			$(fromID).button('refresh');
+			$(toID).button('refresh');
+		}
 
         function setRandomWord(aWord) {
             if (typeof (Storage) !== "undefined") {
@@ -73,21 +164,18 @@
         }
 
 		$(document).on("pageshow","#pageone",function(event){
-
 			var heightOfWindow = $(window).height();
 			var totalHeightOfButtons = $("#button_groups").height();
 			var leftForHint = heightOfWindow - totalHeightOfButtons;
 			$('#hint_content_div').height(leftForHint / 2);
 
 		   $("#display_hint").click(function(event) {
-
 				/*var element = document.getElementById("randomword");
 				if(element)
 				{
 					element.innerHTML = random_word_object.word;
 				}*/
 				random_word_object.meaning.toHTML("hint_content_div");
-
 				//$( "#level_list" ).refresh();
 		   		//$( "#hint_panel" ).panel("open");
 		   	});
@@ -102,7 +190,7 @@
 			$.getJSON(requestURLString,
 						function(data){
 							var random_word = formatRandomWord(data);
-							random_word_object.word = random_word;
+							random_word_object.word = random_word.toUpperCase();
 							random_word_object.word_size = random_word.length;
 							getWordDefinition(random_word);
 			});
@@ -117,6 +205,10 @@
 						function(data){
 					var wordDefinition = formatWordMeaning(data);
 					random_word_object.meaning = wordDefinition;
+
+					fillKeyBoard();
+					fillKeyBoardWithWord();
+
 				});
 		}
 

@@ -2,6 +2,7 @@ var API_KEY = "&api_key=bcb8b593e7bac3753900607d5b502a2f3d3c95f2ebd58ec8a";
 var BASE_API_URL = "http://api.wordnik.com:80/v4/";
 
 var ENGLISH_LETTER = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y', 'Z'];
+var KEY_BOARD = ["key_1","key_2","key_3","key_4","key_5","key_6","key_7","key_8","key_9","key_10","key_11","key_12"];
 
 function formatWordOfTheDay(jsonData)
 {
@@ -54,16 +55,19 @@ function formatRandomWord(jsonData)
 
 function getContainerHTML(size, divID)
 	{
+		var tempArray = new Array();
 		var element = document.getElementById(divID);
 		if(element)
 		{
 			var htmlStr = "";
 			for(i = 0; i < size ; i ++)
 			{
-				htmlStr += "<input type = 'button' id='all_clear' data-theme='a' data-mini='true' value= '*'>";
+				htmlStr += "<input type = 'button' id='container_key_" + i + "' data-theme='a' data-mini='true' value= '*' onclick='on_container_key_clicked(event)'>";
+				tempArray[i] = false;
 			}
 			element.innerHTML = htmlStr;
 		}
+		return tempArray;
 	}
 
 
