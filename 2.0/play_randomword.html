@@ -23,10 +23,9 @@
 				<div id="randomword_placeholder" data-role="controlgroup" data-type="horizontal"></div>
 
 				<div data-role="controlgroup" data-type="horizontal" data-mini="true">
-					<input type = "button" id="delete_characters" data-icon="delete" data-iconpos="notext">
-					<input type = "button" id="display_hint" data-icon="info" data-iconpos="notext">
-					<input type = "button" id="reveal_chracters" data-icon="star" data-iconpos="notext">
-					<input type = "button" id="back_chracters" data-icon="back" data-iconpos="notext">
+					<input type = "button" id="delete_characters" data-icon="delete" data-iconpos="notext" onclick="on_delete_clicked(event)">
+					<input type = "button" id="display_hint" data-icon="info" data-iconpos="notext" onclick="on_hint_clicked(event)">
+					<input type = "button" id="reveal_chracters" data-icon="star" data-iconpos="notext" onclick="on_star_clicked(event)">
 				</div>
 
 				<div id="key_board1" data-role="controlgroup" data-type="horizontal">
@@ -117,11 +116,11 @@
 			}
 			if(can_update && index_to_update <= random_word_object.word.length)
 			{
-				user_input_array[index_to_update] = true;
 				button_id = "#container_key_" + index_to_update;
 				from_id = "#" + element.id;
 				swap_char(from_id, button_id);
 				to_key_from_key_map[button_id] = from_id;
+				user_input_array[index_to_update] = true;
 			}
 		}
 
@@ -135,10 +134,71 @@
 			{
 				swap_char(source_id, to_key_id);
 				to_key_from_key_map[source_id] = null;
-
 				indexDeleted = source_id.replace("#container_key_","");
 				indexDeleted = parseInt(indexDeleted);
 				user_input_array[indexDeleted] = false;
+			}
+		}
+
+	   function on_hint_clicked(event) {
+			/*var element = document.getElementById("randomword");
+			if(element)
+			{
+				element.innerHTML = random_word_object.word;
+			}*/
+			random_word_object.meaning.toHTML("hint_content_div");
+			//$( "#level_list" ).refresh();
+			//$( "#hint_panel" ).panel("open");
+		}
+
+		function fill_a_container_key(fromKeyID)
+		{
+			input_char = $(fromKeyID).val();
+			can_update = false;
+			for(index_to_update = 0, i = 0; i < user_input_array.length; i++)
+			{
+				if(!user_input_array[i])
+				{
+					index_to_update = i;
+					can_update = true;
+					break;
+				}
+			}
+			if(can_update && index_to_update <= random_word_object.word.length)
+			{
+				button_id = "#container_key_" + index_to_update;
+				from_id = fromKeyID;
+				swap_char(from_id, button_id);
+				to_key_from_key_map[button_id] = from_id;
+				user_input_array[index_to_update] = true;
+			}
+		}
+
+		function on_star_clicked(event) {
+			var index_to_update = Math.floor(Math.random() * 12 + 1);
+			while(index_to_update > 12)
+			{
+				index_to_update = Math.floor(Math.random() * 12 + 1);
+			}
+			var source_id = "#key_" + index_to_update;
+			fill_a_container_key(source_id);
+		}
+
+		function on_delete_clicked(event)
+		{
+			var tempWord = random_word_object.word;
+			for(i = 0; i < tempWord.length; i++)
+			{
+				var source_id = "#container_key_" + i;
+				to_key_id = to_key_from_key_map[source_id];
+				if(to_key_id)
+				{
+					swap_char(source_id, to_key_id);
+					to_key_from_key_map[source_id] = null;
+					indexDeleted = source_id.replace("#container_key_","");
+					indexDeleted = parseInt(indexDeleted);
+					user_input_array[indexDeleted] = false;
+				}
 			}
 		}
 
@@ -168,17 +228,6 @@
 			var totalHeightOfButtons = $("#button_groups").height();
 			var leftForHint = heightOfWindow - totalHeightOfButtons;
 			$('#hint_content_div').height(leftForHint / 2);
-
-		   $("#display_hint").click(function(event) {
-				/*var element = document.getElementById("randomword");
-				if(element)
-				{
-					element.innerHTML = random_word_object.word;
-				}*/
-				random_word_object.meaning.toHTML("hint_content_div");
-				//$( "#level_list" ).refresh();
-		   		//$( "#hint_panel" ).panel("open");
-		   	});
 		});
 
 		function getRandomWordRawData(minLength, maxLength)
