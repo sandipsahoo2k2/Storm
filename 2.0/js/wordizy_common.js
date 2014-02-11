@@ -2,7 +2,6 @@ var API_KEY = "&api_key=bcb8b593e7bac3753900607d5b502a2f3d3c95f2ebd58ec8a";
 var BASE_API_URL = "http://api.wordnik.com:80/v4/";
 
 var ENGLISH_LETTER = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y', 'Z'];
-var KEY_BOARD = ["key_1","key_2","key_3","key_4","key_5","key_6","key_7","key_8","key_9","key_10","key_11","key_12"];
 
 function formatWordOfTheDay(jsonData)
 {
@@ -22,20 +21,15 @@ function formatWordOfTheDay(jsonData)
 			if(element)
 			{
 				var htmlStr = "<table data-role='table' id='wordoftheday-table' data-mode='reflow' class='ui-responsive table-stroke'>"
-							+ "<thead><tr><th></th><th></th></tr></thead>"
+							+ "<thead><tr><th></th></tr></thead>"
 							+ "<tbody>" ;
 					for(i = 0; i < this.definitions.length; i++)
 					{
 						var meaning = this.definitions[i];
-						htmlStr += "<tr><th>" + meaning.partOfSpeech + "</th>"
-								+ "<td>" + meaning.text + "</td></tr>" ;
+						htmlStr += "<tr><td><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup>"+ meaning.text + "</td></tr>" ;
 					}
-
-				htmlStr += "<tr><th>Origin</th>"
-						+ "<td>" + this.parentWord + "</td></tr>" ;
-
-				htmlStr += "<tr><th>Example</th>"
-						+ "<td>" + this.exampleUsage + "</td></tr>" ;
+				htmlStr += "<tr><td><sup><em><span style='color:purple'>Origin</span></em></sup>"+ this.parentWord + "</td></tr>" ;
+				htmlStr += "<tr><td><sup><em><span style='color:purple'>Example</span></em></sup>"+ this.exampleUsage + "</td></tr>" ;
 
 				htmlStr += "</tbody></table>";
 
@@ -116,20 +110,18 @@ function formatWordMeaning(jsonData)
 				var element = document.getElementById(divID);
 				if(element)
 				{
-					var htmlStr ;
+					var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
+							+ "<thead><tr><th></th></tr></thead><tbody>" ;
 					if(index < this.zip_array.length)
 					{
 						var meaning = this.zip_array[index];
-						htmlStr = "<div class='ui-corner-all custom-corners' data-inline='true' align='center'>"
-							+ "<div class='ui-bar ui-bar-d'><h3>" + meaning.partOfSpeech + "</h3>"
-							+ "</div><div class='ui-body ui-body-b'>"
-							+ "<p id='randomword'>" + meaning.text +"</p></div></div>" ;
-
+						htmlStr += "<tr><td><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup>"+ meaning.text + "</td></tr>" ;
 					}
 					else
 					{
-						htmlStr = "No information available";
+						htmlStr = "<tr><td><sup><em><span style='color:purple'>No information available</span></em></sup></td></tr>";
 					}
+					htmlStr += "</tbody></table>";
 					element.innerHTML = htmlStr;
 				}
 			};
@@ -137,19 +129,19 @@ function formatWordMeaning(jsonData)
 	wordDefinition.toHTML = function(divID)
 			{
 				var element = document.getElementById(divID);
-					if(element)
+				if(element)
+				{
+					var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
+								+ "<thead><tr><th></th></tr></thead>"
+								+ "<tbody>" ;
+					for(i = 0; i < this.zip_array.length; i++)
 					{
-						var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
-									+ "<thead><tr><th></th></tr></thead>"
-									+ "<tbody>" ;
-						for(i = 0; i < this.zip_array.length; i++)
-						{
-							var meaning = this.zip_array[i];
-							htmlStr += "<tr><td><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup>"+ meaning.text + "</td></tr>" ;
-						}
-						htmlStr += "</tbody></table>";
-						element.innerHTML = htmlStr;
+						var meaning = this.zip_array[i];
+						htmlStr += "<tr><td><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup>"+ meaning.text + "</td></tr>" ;
 					}
+					htmlStr += "</tbody></table>";
+					element.innerHTML = htmlStr;
+				}
 			};
 
 		return wordDefinition;

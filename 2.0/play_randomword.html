@@ -13,7 +13,9 @@
 <div data-role="page" id="pageone">
 
 	<div data-role="header" data-position="fixed">
+		<input type = "button" id="words_played" value= "Played: 0" class="ui-btn-left">
 		<h1>Wordizy</h1>
+		<input type = "button" id="total_points" value= "Coins: 200" class="ui-btn-right">
 	</div><!-- /header -->
 
 	<div data-role="content" id="content_id" align="center">
@@ -23,9 +25,9 @@
 				<div id="randomword_placeholder" data-role="controlgroup" data-type="horizontal"></div>
 
 				<div data-role="controlgroup" data-type="horizontal" data-mini="true">
-					<input type = "button" id="delete_characters" data-icon="delete" data-iconpos="notext" onclick="on_delete_clicked(event)">
-					<input type = "button" id="display_hint" data-icon="info" data-iconpos="notext" onclick="on_hint_clicked(event)">
-					<input type = "button" id="reveal_chracters" data-icon="star" data-iconpos="notext" onclick="on_star_clicked(event)">
+					<input type="button" id="delete_characters" data-icon="delete" data-iconpos="notext" onclick="on_delete_clicked(event)">
+					<input type="button" id="display_hint" data-icon="info" data-iconpos="notext" onclick="on_hint_clicked(event)">
+					<input type="button" id="reveal_chracters" data-icon="star" data-iconpos="notext" onclick="on_star_clicked(event)">
 				</div>
 
 				<div id="key_board1" data-role="controlgroup" data-type="horizontal">
@@ -49,6 +51,7 @@
 
 		<div data-role="footer" data-position="fixed">
 			<h4>Wordizy</h4>
+			<a href="google.com" data-icon="check" data-role="button" class="ui-btn-right" data-iconpos="right">Like</a>
 		</div><!-- /footer -->
 </div><!-- /page -->
 
