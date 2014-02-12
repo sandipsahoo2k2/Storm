@@ -69,7 +69,7 @@
 		function fillKeyBoard()
 		{
 			var temp_key_map = {};
-			for(i = 0; i < 12;)
+			for(i = 0; i <= MAX_INPUT_INDEX;)
 			{
 				var rand_number_lessthan26 = Math.floor(Math.random() * 26 + 1);
 				if(!temp_key_map[rand_number_lessthan26] && rand_number_lessthan26 < 26)
@@ -90,13 +90,14 @@
 			var temp_key_map = {};
 			for(i = 0; i < tempWord.length;)
 			{
-				var rand_number_lessthan12 = Math.floor(Math.random() * 12 + 1);
-				if(!temp_key_map[rand_number_lessthan12] && rand_number_lessthan12 < 12)
+				var rand_number_lessthan12 = Math.floor(Math.random() * MAX_INPUT_INDEX + 1);
+				if(!temp_key_map[rand_number_lessthan12] && rand_number_lessthan12 <= MAX_INPUT_INDEX)
 				{
+					var character = "" + tempWord.charAt(i);
+					random_word_index_in_keyboard[i] = rand_number_lessthan12;
 					var keyid = "#key_" + rand_number_lessthan12;
 					temp_key_map[rand_number_lessthan12] = keyid;
-					var rand_number_lessthan12_text = "" + tempWord.charAt(i);
-					$(keyid).val(rand_number_lessthan12_text);
+					$(keyid).val(character);
 					$(keyid).button('refresh');
 					i++;
 				}
@@ -177,14 +178,16 @@
 			}
 		}
 
-		function on_star_clicked(event) {
-			var index_to_update = Math.floor(Math.random() * 12 + 1);
-			while(index_to_update > 12)
+		function on_star_clicked(event)
+		{
+			var tempWord = random_word_object.word;
+			for(i = 0; i < tempWord.length; i++)
 			{
-				index_to_update = Math.floor(Math.random() * 12 + 1);
+				rand_number_lessthan12 = random_word_index_in_keyboard[i];
+				rand_number_lessthan12 = parseInt(rand_number_lessthan12);
+				var source_id = "#key_" + rand_number_lessthan12;
+				fill_a_container_key(source_id);
 			}
-			var source_id = "#key_" + index_to_update;
-			fill_a_container_key(source_id);
 		}
 
 		function on_delete_clicked(event)

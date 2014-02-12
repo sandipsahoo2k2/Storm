@@ -2,6 +2,8 @@ var API_KEY = "&api_key=bcb8b593e7bac3753900607d5b502a2f3d3c95f2ebd58ec8a";
 var BASE_API_URL = "http://api.wordnik.com:80/v4/";
 
 var ENGLISH_LETTER = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y', 'Z'];
+var MAX_INPUT_INDEX = 11;
+var random_word_index_in_keyboard = {};
 
 function formatWordOfTheDay(jsonData)
 {
@@ -16,26 +18,26 @@ function formatWordOfTheDay(jsonData)
 	wordOfTheDay.example = jsonData.examples[0];
 	wordOfTheDay.exampleUsage = wordOfTheDay.example.text;
 	wordOfTheDay.toHTML = function (divID)
+	{
+		var element = document.getElementById(divID);
+		if(element)
 		{
-			var element = document.getElementById(divID);
-			if(element)
-			{
-				var htmlStr = "<table data-role='table' id='wordoftheday-table' data-mode='reflow' class='ui-responsive table-stroke'>"
-							+ "<thead><tr><th></th></tr></thead>"
-							+ "<tbody>" ;
-					for(i = 0; i < this.definitions.length; i++)
-					{
-						var meaning = this.definitions[i];
-						htmlStr += "<tr><td><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup>"+ meaning.text + "</td></tr>" ;
-					}
-				htmlStr += "<tr><td><sup><em><span style='color:purple'>Origin</span></em></sup>"+ this.parentWord + "</td></tr>" ;
-				htmlStr += "<tr><td><sup><em><span style='color:purple'>Example</span></em></sup>"+ this.exampleUsage + "</td></tr>" ;
+			var htmlStr = "<table data-role='table' id='wordoftheday-table' data-mode='reflow' class='ui-responsive table-stroke'>"
+						+ "<thead><tr><th></th></tr></thead>"
+						+ "<tbody>" ;
+				for(i = 0; i < this.definitions.length; i++)
+				{
+					var meaning = this.definitions[i];
+					htmlStr += "<tr><td><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup>"+ meaning.text + "</td></tr>" ;
+				}
+			htmlStr += "<tr><td><sup><em><span style='color:purple'>Origin</span></em></sup>"+ this.parentWord + "</td></tr>" ;
+			htmlStr += "<tr><td><sup><em><span style='color:purple'>Example</span></em></sup>"+ this.exampleUsage + "</td></tr>" ;
 
-				htmlStr += "</tbody></table>";
+			htmlStr += "</tbody></table>";
 
-				element.innerHTML = htmlStr;
-			}
-		};
+			element.innerHTML = htmlStr;
+		}
+	};
 	return wordOfTheDay;
 }
 
