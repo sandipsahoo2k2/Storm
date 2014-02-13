@@ -13,9 +13,9 @@
 <div data-role="page" id="pageone">
 
 	<div data-role="header" data-position="fixed">
-		<input type = "button" id="words_played" value= "Played: 0" class="ui-btn-left">
+		<a href="quit.html" data-ajax="false" data-transition="flip" data-role="button" class="ui-btn-left">Quit: 0</a>
+		<input type = "button" id="words_played" value= "Played: 0" class="ui-btn-right">
 		<h1>Wordizy</h1>
-		<input type = "button" id="total_points" value= "Coins: 200" class="ui-btn-right">
 	</div><!-- /header -->
 
 	<div data-role="content" id="content_id" align="center">
@@ -25,9 +25,9 @@
 				<div id="randomword_placeholder" data-role="controlgroup" data-type="horizontal"></div>
 
 				<div data-role="controlgroup" data-type="horizontal" data-mini="true">
-					<input type="button" id="delete_characters" data-icon="delete" data-iconpos="notext" onclick="on_delete_clicked(event)">
+					<input type="button" id="delete_characters" data-icon="refresh" data-iconpos="notext" onclick="on_delete_clicked(event)">
 					<input type="button" id="display_hint" data-icon="info" data-iconpos="notext" onclick="on_hint_clicked(event)">
-					<input type="button" id="reveal_chracters" data-icon="star" data-iconpos="notext" onclick="on_star_clicked(event)">
+					<input type="button" id="reveal_star" data-icon="star" data-iconpos="notext" onclick="on_star_clicked(event)">
 				</div>
 
 				<div id="key_board1" data-role="controlgroup" data-type="horizontal">
@@ -49,16 +49,23 @@
 	  		</div>
     </div><!-- /content -->
 
-		<div data-role="footer" data-position="fixed">
-			<h4>Wordizy</h4>
-			<a href="google.com" data-icon="check" data-role="button" class="ui-btn-right" data-iconpos="right">Like</a>
-		</div><!-- /footer -->
-</div><!-- /page -->
+	<div data-role="footer" data-position="fixed" align="center">
+		<input type = "button" id="total_points" value= "Coins: 200" class="ui-btn-left">
+		<h4>Wordizy</h4>
+		<a href="google.com" data-icon="check" data-iconpos="right" data-theme="d" data-role="button" class="ui-btn-right">Like</a>
+	</div><!-- /footer -->
 
+</div><!-- /page -->
+<style>
+	#test_button {
+		background-image: url("js/images/wordnik.jpg");
+		background-size:100%;
+	}
+</style>
     <script>
     	var to_key_from_key_map = {};
 		var random_number = getRandomNum(1, true);
-		while(random_number < 3)
+		while(random_number < MIN_WORD_SIZE)
 		{
 			random_number = getRandomNum(1, true);
 		}
@@ -145,14 +152,15 @@
 		}
 
 	   function on_hint_clicked(event) {
-			/*var element = document.getElementById("randomword");
-			if(element)
+			if(MAX_HINT_ALLOWED > 0)
 			{
-				element.innerHTML = random_word_object.word;
-			}*/
-			random_word_object.meaning.toHTML("hint_content_div");
-			//$( "#level_list" ).refresh();
-			//$( "#hint_panel" ).panel("open");
+				random_word_object.meaning.byIndexToHtml(MAX_HINT_ALLOWED, "hint_content_div");
+				MAX_HINT_ALLOWED --;
+				if(MAX_HINT_ALLOWED == 0)
+				{
+					$("#display_hint").button('disable');
+				}
+			}
 		}
 
 		function fill_a_container_key(fromKeyID)
@@ -180,13 +188,21 @@
 
 		function on_star_clicked(event)
 		{
-			var tempWord = random_word_object.word;
-			for(i = 0; i < tempWord.length; i++)
+			if(MAX_REVEAL_ALLOWED > 0)
 			{
-				rand_number_lessthan12 = random_word_index_in_keyboard[i];
-				rand_number_lessthan12 = parseInt(rand_number_lessthan12);
-				var source_id = "#key_" + rand_number_lessthan12;
-				fill_a_container_key(source_id);
+				var tempWord = random_word_object.word;
+				for(i = 0; i < tempWord.length; i++)
+				{
+					rand_number_lessthan12 = random_word_index_in_keyboard[i];
+					rand_number_lessthan12 = parseInt(rand_number_lessthan12);
+					var source_id = "#key_" + rand_number_lessthan12;
+					fill_a_container_key(source_id);
+					MAX_REVEAL_ALLOWED --;
+					if(MAX_REVEAL_ALLOWED == 0)
+					{
+						$("#reveal_star").button('disable');
+					}
+				}
 			}
 		}
 
@@ -263,7 +279,12 @@
 
 					fillKeyBoard();
 					fillKeyBoardWithWord();
-
+					if(random_word_object.word.length > 2)
+					{
+						var max_reveal = random_word_object.word.length / 2 ;
+						MAX_REVEAL_ALLOWED = parseInt(max_reveal);
+						MAX_HINT_ALLOWED = random_word_object.meaning.zip_array.length;
+					}
 				});
 		}
 

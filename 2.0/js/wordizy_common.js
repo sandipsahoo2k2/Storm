@@ -3,6 +3,13 @@ var BASE_API_URL = "http://api.wordnik.com:80/v4/";
 
 var ENGLISH_LETTER = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y', 'Z'];
 var MAX_INPUT_INDEX = 11;
+var MIN_WORD_SIZE = 3;
+var MAX_WORD_SIZE = 9;
+var MAX_HINT_ALLOWED = 0;
+var MAX_REVEAL_ALLOWED = 0;
+var LOOSE_HINT_POINTS = 40;
+var LOOSE_REVEAL_POINTS = 20;
+
 var random_word_index_in_keyboard = {};
 
 function formatWordOfTheDay(jsonData)
@@ -28,10 +35,10 @@ function formatWordOfTheDay(jsonData)
 				for(i = 0; i < this.definitions.length; i++)
 				{
 					var meaning = this.definitions[i];
-					htmlStr += "<tr><td><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup>"+ meaning.text + "</td></tr>" ;
+					htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text + "</td></tr>" ;
 				}
-			htmlStr += "<tr><td><sup><em><span style='color:purple'>Origin</span></em></sup>"+ this.parentWord + "</td></tr>" ;
-			htmlStr += "<tr><td><sup><em><span style='color:purple'>Example</span></em></sup>"+ this.exampleUsage + "</td></tr>" ;
+			htmlStr += "<tr><td><b><sup><em><span style='color:purple'>Origin</span></em></sup></b> "+ this.parentWord + "</td></tr>" ;
+			htmlStr += "<tr><td><b><sup><em><span style='color:purple'>Example</span></em></sup></b> "+ this.exampleUsage + "</td></tr>" ;
 
 			htmlStr += "</tbody></table>";
 
@@ -98,8 +105,7 @@ function formatWordMeaning(jsonData)
 						for(i = 0; i < this.array.length; i++)
 						{
 							var meaning = this.array[i];
-							htmlStr += "<tr><th>" + meaning.partOfSpeech + "</th>"
-									+ "<td>" + meaning.text + "</td></tr>" ;
+							htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text + "</td></tr>" ;
 						}
 					htmlStr += "</tbody></table>";
 
@@ -114,10 +120,10 @@ function formatWordMeaning(jsonData)
 				{
 					var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
 							+ "<thead><tr><th></th></tr></thead><tbody>" ;
-					if(index < this.zip_array.length)
+					if(index <= this.zip_array.length)
 					{
-						var meaning = this.zip_array[index];
-						htmlStr += "<tr><td><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup>"+ meaning.text + "</td></tr>" ;
+						var meaning = this.zip_array[index - 1];
+						htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text + "</td></tr>" ;
 					}
 					else
 					{
@@ -139,7 +145,7 @@ function formatWordMeaning(jsonData)
 					for(i = 0; i < this.zip_array.length; i++)
 					{
 						var meaning = this.zip_array[i];
-						htmlStr += "<tr><td><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup>"+ meaning.text + "</td></tr>" ;
+						htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text + "</td></tr>" ;
 					}
 					htmlStr += "</tbody></table>";
 					element.innerHTML = htmlStr;
