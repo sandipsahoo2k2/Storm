@@ -2,13 +2,15 @@ var API_KEY = "&api_key=bcb8b593e7bac3753900607d5b502a2f3d3c95f2ebd58ec8a";
 var BASE_API_URL = "http://api.wordnik.com:80/v4/";
 
 var ENGLISH_LETTER = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y', 'Z'];
-var MAX_INPUT_INDEX = 11;
+var MAX_KEY_BOARD_INDEX = 11;
 var MIN_WORD_SIZE = 3;
 var MAX_WORD_SIZE = 9;
 var MAX_HINT_ALLOWED = 0;
 var MAX_REVEAL_ALLOWED = 0;
 var LOOSE_HINT_POINTS = 40;
 var LOOSE_REVEAL_POINTS = 20;
+var TOTAL_POINTS = 200;
+var user_word = "";
 
 var random_word_index_in_keyboard = {};
 

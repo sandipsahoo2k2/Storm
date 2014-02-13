@@ -56,12 +56,6 @@
 	</div><!-- /footer -->
 
 </div><!-- /page -->
-<style>
-	#test_button {
-		background-image: url("js/images/wordnik.jpg");
-		background-size:100%;
-	}
-</style>
     <script>
     	var to_key_from_key_map = {};
 		var random_number = getRandomNum(1, true);
@@ -70,13 +64,13 @@
 			random_number = getRandomNum(1, true);
 		}
 		var random_word_object = new Object();
-		getRandomWordRawData(random_number,random_number);
+		getRandomWordRawData(random_number, random_number);
 		var user_input_array = getContainerHTML(random_number, "randomword_placeholder");
 
 		function fillKeyBoard()
 		{
 			var temp_key_map = {};
-			for(i = 0; i <= MAX_INPUT_INDEX;)
+			for(i = 0; i <= MAX_KEY_BOARD_INDEX;)
 			{
 				var rand_number_lessthan26 = Math.floor(Math.random() * 26 + 1);
 				if(!temp_key_map[rand_number_lessthan26] && rand_number_lessthan26 < 26)
@@ -97,8 +91,8 @@
 			var temp_key_map = {};
 			for(i = 0; i < tempWord.length;)
 			{
-				var rand_number_lessthan12 = Math.floor(Math.random() * MAX_INPUT_INDEX + 1);
-				if(!temp_key_map[rand_number_lessthan12] && rand_number_lessthan12 <= MAX_INPUT_INDEX)
+				var rand_number_lessthan12 = Math.floor(Math.random() * MAX_KEY_BOARD_INDEX + 1);
+				if(!temp_key_map[rand_number_lessthan12] && rand_number_lessthan12 <= MAX_KEY_BOARD_INDEX)
 				{
 					var character = "" + tempWord.charAt(i);
 					random_word_index_in_keyboard[i] = rand_number_lessthan12;
@@ -156,6 +150,7 @@
 			{
 				random_word_object.meaning.byIndexToHtml(MAX_HINT_ALLOWED, "hint_content_div");
 				MAX_HINT_ALLOWED --;
+				TOTAL_POINTS -= LOOSE_HINT_POINTS;
 				if(MAX_HINT_ALLOWED == 0)
 				{
 					$("#display_hint").button('disable');
@@ -193,11 +188,13 @@
 				var tempWord = random_word_object.word;
 				for(i = 0; i < tempWord.length; i++)
 				{
-					rand_number_lessthan12 = random_word_index_in_keyboard[i];
-					rand_number_lessthan12 = parseInt(rand_number_lessthan12);
-					var source_id = "#key_" + rand_number_lessthan12;
+					//var i = Math.floor(Math.random() * tempWord.length + 1);
+					rand_index_lessthan12 = random_word_index_in_keyboard[i];
+					rand_index_lessthan12 = parseInt(rand_index_lessthan12);
+					var source_id = "#key_" + rand_index_lessthan12;
 					fill_a_container_key(source_id);
 					MAX_REVEAL_ALLOWED --;
+					TOTAL_POINTS -= LOOSE_REVEAL_POINTS;
 					if(MAX_REVEAL_ALLOWED == 0)
 					{
 						$("#reveal_star").button('disable');
@@ -228,12 +225,25 @@
 		{
 			valTo = $(toID).val();
 			valFrom = $(fromID).val();
+
 			$(fromID).val(valTo);
 			$(toID).val(valFrom);
 			//$(fromID).button('enable');
 			//$(toID).button('disable');
 			$(fromID).button('refresh');
 			$(toID).button('refresh');
+			if(valTo != "*")
+			{
+				user_word += valTo;
+			}
+			else if(valFrom != "*")
+			{
+				user_word += valFrom;
+			}
+			if(user_word == random_word_object.word)
+			{
+				alert("Word Successfully Cracked !");
+			}
 		}
 
         function setRandomWord(aWord) {
@@ -283,7 +293,15 @@
 					{
 						var max_reveal = random_word_object.word.length / 2 ;
 						MAX_REVEAL_ALLOWED = parseInt(max_reveal);
+						if(MAX_REVEAL_ALLOWED == 0)
+						{
+							$("#reveal_star").button('disable');
+						}
 						MAX_HINT_ALLOWED = random_word_object.meaning.zip_array.length;
+						if(MAX_HINT_ALLOWED == 0)
+						{
+							$("#display_hint").button('disable');
+						}
 					}
 				});
 		}
