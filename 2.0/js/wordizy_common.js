@@ -167,6 +167,49 @@ function formatWordMeaning(jsonData)
 		return wordDefinition;
 }
 
+function formatWordSynonym(inputData)
+{
+	var synonyms = new Array();
+	if(inputData.length > 0)
+	{
+		var synonym = inputData[0];
+		if (synonym.relationshipType == "synonym")
+		{
+			synonyms  = synonym.words;
+		}
+	}
+	
+	synonyms.toHTML = function(divID)
+		{
+			if(synonyms.length > 0)
+			{
+				var element = document.getElementById(divID);
+				if(element)
+				{
+					var allsynonym = "" ;
+					var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
+								+ "<thead><tr><th></th></tr></thead>"
+								+ "<tbody>" ;
+					for(i = 0; i < this.length; i++)
+					{
+						if(i == 0)
+						{
+							allsynonym = "<b><sup><em><span style='color:purple'>Synonym</span></em></sup></b> ";
+							allsynonym += this[i] ;
+						}
+						else
+						{
+							allsynonym += ", " + this[i] ;
+						}
+					}
+					htmlStr += "<tr><td>" + allsynonym + "</td></tr>" ;
+					htmlStr += "</tbody></table>";
+					element.innerHTML = htmlStr;
+				}
+			}
+		};	
+	return synonyms;
+}
 
 function getRandomNum(number_of_digit, repitation_allowed)
 {

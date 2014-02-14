@@ -21,6 +21,9 @@
 		<div class="ui-corner-all custom-corners" data-inline="true" align="center">
 		  <div class="ui-bar ui-bar-d">
 		    <h3 id = "header_string">Word Of the Day</h3>
+				<audio id="word_audio" src="" controls>
+					Your browser does not support the audio element.
+				</audio>
 		  </div>
 		  <div class="ui-body ui-body-b">
 		    <p id="wordoftheday">Content</p>
@@ -49,31 +52,48 @@
 <script>
 	getWordOfTheDay();
 
-function getWordOfTheDay()
-{
-	var today = new Date();
-	var date = today.getDate();
-	if(date < 10)
+	function getWordOfTheDay()
 	{
-		date = "0" + date;
-	}
-	var month = today.getMonth();
-	if(month < 10)
-	{
-		month = "0" + month;
-	}
-	var dateString = today.getFullYear() + "-" + month + "-" + date;
-	var queryString = "wordOfTheDay?date=" + dateString;
-	var requestURLString = BASE_API_URL + "words.json/" + queryString + API_KEY;
+		var today = new Date();
+		var date = today.getDate();
+		if(date < 10)
+		{
+			date = "0" + date;
+		}
+		var month = today.getMonth();
+		if(month < 10)
+		{
+			month = "0" + month;
+		}
+		var dateString = today.getFullYear() + "-" + month + "-" + date;
+		var queryString = "wordOfTheDay?date=" + dateString;
+		var requestURLString = BASE_API_URL + "words.json/" + queryString + API_KEY;
 
-	$.getJSON(requestURLString,
-		function(data){
-			var element = document.getElementById("header_string");
-			element.innerHTML = data.word;
-			wordOfTheDay = formatWordOfTheDay(data);
-			wordOfTheDay.toHTML("wordoftheday") ; //JSON.stringify(data);
-		});
-}
+		$.getJSON(requestURLString,
+			function(data){
+				var element = document.getElementById("header_string");
+				element.innerHTML = data.word;
+				wordOfTheDay = formatWordOfTheDay(data);
+				wordOfTheDay.toHTML("wordoftheday") ; //JSON.stringify(data);
+				getAudioForWord(data.word);
+			});
+	}
+
+	function getAudioForWord(inputWord)
+	{
+		var queryString = inputWord + "/audio?useCanonical=false&limit=2";
+		var requestURLString = BASE_API_URL + "word.json/" + queryString + API_KEY;
+
+		$.getJSON(requestURLString,
+			function(data){
+				if(data.length > 0)
+				{
+					var audioobj = data[0];
+					$("#word_audio").attr('src', audioobj.fileUrl);
+				}
+			});
+	}
+
 
         function setUserID(aName) {
             if (typeof (Storage) !== "undefined") {
