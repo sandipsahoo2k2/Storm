@@ -13,8 +13,11 @@
 <div data-role="page" id="pageone">
 
 	<div data-role="header" data-position="fixed">
-		<a href="quit.html" data-ajax="false" data-transition="flip" data-role="button" class="ui-btn-left">Quit: 0</a>
-		<input type = "button" id="words_played" value= "Played: 0" class="ui-btn-right">
+		<div data-role="controlgroup" data-type="horizontal" data-mini="true" class="ui-btn-left">
+			<input type = "button" id="words_quited" data-icon="delete" data-iconpos="left" value= "0">
+			<input type = "button" id="words_played" data-icon="check" data-iconpos="left" value= "0">
+		</div>
+		<input type = "button" id="total_points" value= "Points: " class="ui-btn-right">
 		<h1>Wordizy</h1>
 	</div><!-- /header -->
 
@@ -27,7 +30,7 @@
 				<div data-role="controlgroup" data-type="horizontal" data-mini="true">
 					<input type="button" id="delete_characters" data-icon="refresh" data-iconpos="notext" onclick="on_delete_clicked(event)">
 					<input type="button" id="display_hint" data-icon="info" data-iconpos="notext" onclick="on_hint_clicked(event)">
-					<input type="button" id="reveal_star" data-icon="star" data-iconpos="notext" onclick="on_star_clicked(event)">
+					<input type="button" id="reveal_star" data-icon="search" data-iconpos="notext" onclick="on_star_clicked(event)">
 				</div>
 
 				<div id="key_board1" data-role="controlgroup" data-type="horizontal">
@@ -50,22 +53,43 @@
     </div><!-- /content -->
 
 	<div data-role="footer" data-position="fixed" align="center">
-		<input type = "button" id="total_points" value= "Coins: 200" class="ui-btn-left">
+		<a href="quit.html" id="giveup_word" data-ajax="false" data-transition="flip" data-theme="d"  data-role="button" class="ui-btn-left">Give Up!</a>
 		<h4>Wordizy</h4>
-		<a href="google.com" data-icon="check" data-iconpos="right" data-theme="d" data-role="button" class="ui-btn-right">Like</a>
+		<a href="google.com" data-icon="star" data-iconpos="right" data-theme="d" data-role="button" class="ui-btn-right">Like</a>
 	</div><!-- /footer -->
 
 </div><!-- /page -->
     <script>
-    	var to_key_from_key_map = {};
-		var random_number = getRandomNum(1, true);
-		while(random_number < MIN_WORD_SIZE)
+
+		reveal_clicked = 0;
+		hint_clicked = 0;
+
+	var storedData = localStorage["wordizy"];
+		if(storedData)
 		{
-			random_number = getRandomNum(1, true);
+			var savedGameInfo = JSON.parse(storedData);
+
+			MAX_HINT_ALLOWED = savedGameInfo.max_hint_allowed ;
+			MAX_REVEAL_ALLOWED = savedGameInfo.max_reveal_allowed;
+			TOTAL_POINTS = savedGameInfo.total_points ;
+			PLAYED_COUNT = savedGameInfo.played_count ;
+			QUIT_COUNT = savedGameInfo.quit_count ;
+			user_word = gasavedGameInfomeInfo.last_user_word ;
+			to_key_from_key_map = savedGameInfo.to_key_from_key_map ;
+			random_word_object = savedGameInfo.last_word_object ;
+			user_input_array = savedGameInfo.user_input_array;
 		}
-		var random_word_object = new Object();
-		getRandomWordRawData(random_number, random_number);
-		var user_input_array = getContainerHTML(random_number, "randomword_placeholder");
+		else
+		{
+			var random_number = getRandomNum(1, true);
+			while(random_number < MIN_WORD_SIZE)
+			{
+				random_number = getRandomNum(1, true);
+			}
+			getRandomWordRawData(random_number, random_number);
+			user_input_array = getContainerHTML(random_number, "randomword_placeholder");
+		}
+
 
 		function fillKeyBoard()
 		{
@@ -148,13 +172,16 @@
 	   function on_hint_clicked(event) {
 			if(MAX_HINT_ALLOWED > 0)
 			{
-				random_word_object.meaning.byIndexToHtml(MAX_HINT_ALLOWED, "hint_content_div");
+				random_word_object.meaning.byIndexToHtml(hint_clicked, "hint_content_div");
+				hint_clicked ++ ;
 				MAX_HINT_ALLOWED --;
 				TOTAL_POINTS -= LOOSE_HINT_POINTS;
 				if(MAX_HINT_ALLOWED == 0)
 				{
 					$("#display_hint").button('disable');
 				}
+				$("#total_points").val(TOTAL_POINTS);
+				$("#total_points").button('refresh');
 			}
 		}
 
@@ -186,19 +213,22 @@
 			if(MAX_REVEAL_ALLOWED > 0)
 			{
 				var tempWord = random_word_object.word;
-				for(i = 0; i < tempWord.length; i++)
+				//for(i = 0; i < tempWord.length; i++)
 				{
 					//var i = Math.floor(Math.random() * tempWord.length + 1);
-					rand_index_lessthan12 = random_word_index_in_keyboard[i];
+					rand_index_lessthan12 = random_word_index_in_keyboard[reveal_clicked];
 					rand_index_lessthan12 = parseInt(rand_index_lessthan12);
 					var source_id = "#key_" + rand_index_lessthan12;
 					fill_a_container_key(source_id);
 					MAX_REVEAL_ALLOWED --;
+					reveal_clicked ++;
 					TOTAL_POINTS -= LOOSE_REVEAL_POINTS;
 					if(MAX_REVEAL_ALLOWED == 0)
 					{
 						$("#reveal_star").button('disable');
 					}
+					$("#total_points").val(TOTAL_POINTS);
+					$("#total_points").button('refresh');
 				}
 			}
 		}
@@ -242,6 +272,9 @@
 			}
 			if(user_word == random_word_object.word)
 			{
+				PLAYED_COUNT++;
+				$("#words_played").val(PLAYED_COUNT);
+				$("#words_played").button('refresh');
 				alert("Word Successfully Cracked !");
 			}
 		}
@@ -260,6 +293,15 @@
 			var totalHeightOfButtons = $("#button_groups").height();
 			var leftForHint = heightOfWindow - totalHeightOfButtons;
 			$('#hint_content_div').height(leftForHint / 2);
+		});
+
+		$(document).on("pageinit","#pageone",function(event){
+				$("#total_points").val(TOTAL_POINTS);
+				$("#total_points").button('refresh');
+				$("#words_played").val(PLAYED_COUNT);
+				$("#words_played").button('refresh');
+				$("#words_quited").val(QUIT_COUNT);
+				$("#words_quited").button('refresh');
 		});
 
 		function getRandomWordRawData(minLength, maxLength)
@@ -305,7 +347,6 @@
 					}
 				});
 		}
-
     </script>
 </body>
 </html>

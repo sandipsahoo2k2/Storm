@@ -5,12 +5,19 @@ var ENGLISH_LETTER = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O
 var MAX_KEY_BOARD_INDEX = 11;
 var MIN_WORD_SIZE = 3;
 var MAX_WORD_SIZE = 9;
-var MAX_HINT_ALLOWED = 0;
-var MAX_REVEAL_ALLOWED = 0;
 var LOOSE_HINT_POINTS = 40;
 var LOOSE_REVEAL_POINTS = 20;
+
+//Save to persistent storage
+var MAX_HINT_ALLOWED = 0;
+var MAX_REVEAL_ALLOWED = 0;
 var TOTAL_POINTS = 200;
+var PLAYED_COUNT = 0;
+var QUIT_COUNT = 0;
 var user_word = "";
+var to_key_from_key_map = {};
+var random_word_object = new Object();
+var user_input_array = new Array();
 
 var random_word_index_in_keyboard = {};
 
@@ -122,10 +129,13 @@ function formatWordMeaning(jsonData)
 				{
 					var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
 							+ "<thead><tr><th></th></tr></thead><tbody>" ;
-					if(index <= this.zip_array.length)
+					if(index < this.zip_array.length)
 					{
-						var meaning = this.zip_array[index - 1];
-						htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text + "</td></tr>" ;
+						for(i = 0 ; i <= index ; i++)
+						{
+							var meaning = this.zip_array[i];
+							htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text + "</td></tr>" ;
+						}
 					}
 					else
 					{
@@ -340,4 +350,42 @@ function postSignIn(userName, passWord)
 					}
 				}
 		);
+}
+
+function saveGameDataToLocalStore()
+{
+	var gameInfo = new Object();
+	gameInfo.max_hint_allowed = MAX_HINT_ALLOWED;
+	gameInfo.max_reveal_allowed = MAX_REVEAL_ALLOWED;
+	gameInfo.total_points = TOTAL_POINTS ;
+	gameInfo.played_count = PLAYED_COUNT;
+	gameInfo.quit_count = QUIT_COUNT;
+	gameInfo.last_user_word = user_word;
+	gameInfo.to_key_from_key_map = to_key_from_key_map;
+	gameInfo.last_word_object = random_word_object;
+	gameInfo.user_input_array = user_input_array;
+
+	var strGameInfo = JSON.stringify(gameInfo);
+	//Create a localstorage
+	var storedData = localStorage["wordizy"];
+	if(storedData)
+	{
+		var savedGameInfo = JSON.parse(storedData);
+		//Over write the latest score
+		savedGameInfo.max_hint_allowed = gameInfo.max_hint_allowed;
+		savedGameInfo.max_reveal_allowed = gameInfo.max_reveal_allowed;
+		savedGameInfo.total_points = gameInfo.total_points;
+		savedGameInfo.played_count = gameInfo.played_count;
+		savedGameInfo.quit_count = gameInfo.quit_count;
+		savedGameInfo.last_user_word = gameInfo.last_user_word;
+		savedGameInfo.to_key_from_key_map = gameInfo.to_key_from_key_map;
+		savedGameInfo.last_word_object = gameInfo.last_word_object;
+
+		strGameInfo = JSON.stringify(savedGameInfo);
+		localStorage["wordizy"] = strGameInfo;
+	}
+	else
+	{
+		localStorage["wordizy"] = strGameInfo;
+	}
 }
