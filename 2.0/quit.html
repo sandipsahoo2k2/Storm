@@ -1,73 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Cows Bulls</title>
-
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Wordizy</title>
+   	<meta name="viewport" content="width=device-width, initial-scale=1">
    	<link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css">
-	<script src="js/jquery-1.8.3.min.js"></script>
-	<script src="js/jquery.mobile-1.3.2.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-</head>
+		<script src="js/jquery-1.8.3.min.js"></script>
+		<script src="js/jquery.mobile-1.3.2.min.js"></script>
+	<script src="js/wordizy_common.js"></script>
+   </head>
+<body>
 
-<div data-role="dialog" id="dialogpage" data-close-btn="none">
 
-	 <div data-role="header">
-	    <h1>You missed it !!!</h1>
-	  </div>
+<div data-role="page" id="pageone">
 
-	  <div data-role="content" align="center">
-	  	<p id="secret_number">Secret number was </p>
-		<div class="ui-grid-solo">
-			<div class="ui-block-a"><a href="level_list.html" data-ajax="false" data-role="button" onclick="onClick_button(event)">Play Again</a></div>
-		</div><!-- /solo -->
-	  </div>
+	<div data-role="header">
+		<h1>It was worth trying !</h1>
+	</div><!-- /header -->
 
-	  <div data-role="footer">
-	    <h1>Better Next Time !</h1>
-  </div>
+	<div data-role="content">
+		<div class="ui-corner-all custom-corners" data-inline="true" align="center">
+		  <div class="ui-bar ui-bar-d">
+		    <h3 id = "header_string">Wordizy Random Word</h3>
+		  </div>
+		  <div class="ui-body ui-body-b">
+		    <p id="random_word">Content</p>
+		  </div>
+		</div>
+    </div><!-- /content -->
 
+	<div data-role="footer" data-position="fixed">
+		<h1>Wordizy</h1>
+		<a href="cowsbulls.html" data-ajax="false" data-transition="slide" data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn-right">Want to try a number game</a>
+	</div><!-- /footer -->
 </div><!-- /page -->
 
+<style>
+</style>
 
 <script>
-
-	function onDeviceReady() {
-		document.addEventListener("backbutton", onBackKeyDown, false);
-	}
-
-	function onBackKeyDown(event)
+	if(sessionStorage.randomWordObject)
 	{
-		navigator.app.exitApp();
-		//event.preventDefault();
+		random_word_object = JSON.parse(sessionStorage.randomWordObject);
+
+		var element = document.getElementById("header_string");
+		element.innerHTML = random_word_object.word;
+
+		var element = document.getElementById("random_word");
+		if(element)
+		{
+			var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
+						+ "<thead><tr><th></th><th></th></tr></thead>"
+						+ "<tbody>" ;
+			for(i = 0; i < random_word_object.meaning.array.length; i++)
+			{
+				var meaning = random_word_object.meaning.array[i];
+				htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text + "</td></tr>" ;
+			}
+			htmlStr += "</tbody></table>";
+			element.innerHTML = htmlStr;
+		}
 	}
-
-	$(document).on("pageinit", function(event){
-			onDeviceReady();
-			var element = document.getElementById("secret_number");
-			element.innerHTML += " <span 'color:blue;font-weight:bold'>" + sessionStorage.random_no + "</span>";
-
-		});
-
-function onClick_button(event)
-{
-	//var stateObj = { dialog: "settings" };
-	//history.replaceState({page: this.href}, '', "level_list.html");
-	history.replaceState(null, 'Settings',  "level_list.html");
-}
-
-
-if(!sessionStorage.user_name)
-{
-	window.location = "home.html";
-}
-else
-{
-}
-
-//navigator.app.exitApp();
-
 </script>
-
 </body>
 </html>

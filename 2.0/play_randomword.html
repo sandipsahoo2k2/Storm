@@ -57,7 +57,7 @@
 	<div data-role="footer" data-position="fixed" align="center">
 		<a href="quit.html" id="giveup_word" data-ajax="false" data-transition="flip" data-theme="d"  data-role="button" class="ui-btn-left">Give Up!</a>
 		<h4>Wordizy</h4>
-		<a href="google.com" data-icon="star" data-iconpos="right" data-theme="d" data-role="button" class="ui-btn-right">Like</a>
+		<a href="google.com" data-icon="star" data-iconpos="right" data-theme="d" class="ui-btn-right" data-role="button">Like</a>
 	</div><!-- /footer -->
 
 </div><!-- /page -->
@@ -375,6 +375,7 @@
 							$("#display_hint").button('disable');
 						}
 					}
+					sessionStorage.randomWordObject = JSON.stringify(random_word_object);
 				});
 		}
 
