@@ -1,48 +1,98 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <title>Cows & Bulls</title>
+   <title>Wordizy</title>
    	<meta name="viewport" content="width=device-width, initial-scale=1">
    	<link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css">
-	<script src="js/jquery-1.8.3.min.js"></script>
-	<script src="js/jquery.mobile-1.3.2.min.js"></script>
+   	<script src="js/jquery-1.8.3.min.js"></script>
+   	<script src="js/jquery.mobile-1.3.2.min.js"></script>
+	<script src="js/wordizy_common.js"></script>
    </head>
 <body>
-
 
 <div data-role="page" id="pageone">
 
 	<div data-role="header">
-		<h1>Cows Bulls</h1>
+		<h1>Word Of The Day</h1>
 	</div><!-- /header -->
 
 	<div data-role="content">
-        <input type="text" data-clear-btn="true" id="input_userid" placeholder="Enter your username">
-       	<a href="level_list.html" data-ajax="false" data-role="button" id="button_start">Next</a>
-
-
-	<div id="instructions" data-inline="true" align="center">
-			<h3 class="ui-bar ui-bar-b ui-corner-all">About the Game</h3>
-	      <div class="ui-body ui-body-b ui-corner-all">
-	          <p>This is a mathematical game,
-	          </br>where you need to guess a secret number.</br>
-	          </br>Fill your username </br>Select the level you want to play<br>
-	          </br>That's it you are on the play ground.</p>
-      	   </div>
-    </div>
-
+		<div class="ui-corner-all custom-corners" data-inline="true" align="center">
+		  <div class="ui-bar ui-bar-d">
+		    <h3 id = "header_string">Word Of the Day</h3>
+				<audio id="word_audio" src="" controls>
+					Your browser does not support the audio element.
+				</audio>
+		  </div>
+		  <div class="ui-body ui-body-b">
+		    <p id="wordoftheday">Content</p>
+		  </div>
+		</div>
     </div><!-- /content -->
 
-		<div data-role="footer" data-position="fixed">
-			<h4>Hope You will enjoy</h4>
-		</div><!-- /footer -->
+	<div data-role="footer" data-position="fixed">
+		<a href="" id="wordnik_button" data-role="button">_______</a>
+		<a href="play_randomword.html" data-theme="d" data-ajax="false" data-icon="arrow-r" data-iconpos="right" data-transition="slide" data-role="button" class="ui-btn-right">Play</a>
+	</div><!-- /footer -->
 </div><!-- /page -->
 
-    <script>
-		var entrydate = new Date(2018,12,15);
-		var reentrydate = new Date(2013,11,30);
-		//alert(reentrydate - entrydate);
-		alert(DateAdd("d", 308,entrydate));
+<style>
+	#wordnik_button {
+		background-image: url("js/images/wordnik.jpg");
+		background-size:100%;
+	}
+
+.ui-icon-wordnik-logo {
+	background-image: url("js/images/wordnik.jpg");
+	width:40px;
+}
+</style>
+
+<script>
+	getWordOfTheDay();
+
+	function getWordOfTheDay()
+	{
+		var today = new Date();
+		var date = today.getDate();
+		if(date < 10)
+		{
+			date = "0" + date;
+		}
+		var month = today.getMonth();
+		if(month < 10)
+		{
+			month = "0" + month;
+		}
+		var dateString = today.getFullYear() + "-" + month + "-" + date;
+		var queryString = "wordOfTheDay?date=" + dateString;
+		var requestURLString = BASE_API_URL + "words.json/" + queryString + API_KEY;
+
+		$.getJSON(requestURLString,
+			function(data){
+				var element = document.getElementById("header_string");
+				element.innerHTML = data.word;
+				wordOfTheDay = formatWordOfTheDay(data);
+				wordOfTheDay.toHTML("wordoftheday") ; //JSON.stringify(data);
+				getAudioForWord(data.word);
+			});
+	}
+
+	function getAudioForWord(inputWord)
+	{
+		var queryString = inputWord + "/audio?useCanonical=false&limit=2";
+		var requestURLString = BASE_API_URL + "word.json/" + queryString + API_KEY;
+
+		$.getJSON(requestURLString,
+			function(data){
+				if(data.length > 0)
+				{
+					var audioobj = data[0];
+					$("#word_audio").attr('src', audioobj.fileUrl);
+				}
+			});
+	}
+
 
         function setUserID(aName) {
             if (typeof (Storage) !== "undefined") {
@@ -53,25 +103,6 @@
             }
         }
 
-		$(document).on("pageinit","#pageone",function(event){
-		   $("#button_start").click(function(event)
-		   {
-				var userid = $("#input_userid").val();
-				if (userid != "")
-				{
-					setUserID(userid);
-					//$.mobile.ajaxEnabled = false;
-					//$.mobile.changePage("level_list.html",{ajax:false});
-				}
-				else
-				{
-					$.mobile.activeBtnClass = 'unused';
-				   event.preventDefault();
-				   alert("text box cant be blank");
-				}
-			});
-		});
-
-    </script>
+</script>
 </body>
 </html>

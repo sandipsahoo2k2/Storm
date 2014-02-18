@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<div data-role="page" id="pageone">
+<div data-role="page" id="playground">
 
 	<div data-role="header" data-position="fixed">
 		<div data-role="controlgroup" data-type="horizontal" data-mini="true" class="ui-btn-left">
@@ -52,52 +52,97 @@
 						  <input type = "button" id="key_11" data-mini="true" value= "#" onclick="on_key_clicked(event)">
 				</div>
 	  		</div>
+
+		<div id="success_dialog" align="center" data-position-to="window" data-role="popup" data-history="false" data-transition="fade">
+			  <h3 class="ui-bar">Wow</h3>
+			  			  <div class="ui-body-e">
+			  						<p>You Made it !
+			  						   </br></br></p>
+			   </div>
+		</div>
     </div><!-- /content -->
 
 	<div data-role="footer" data-position="fixed" align="center">
-		<a href="quit.html" id="giveup_word" data-ajax="false" data-transition="flip" data-theme="d"  data-role="button" class="ui-btn-left">Give Up!</a>
+		<input type = "button" id="giveup_word" data-ajax="false" data-transition="flip" data-theme="d" class="ui-btn-left" value= "Give Up!" onclick="on_giveup_clicked(event)"/>
 		<h4>Wordizy</h4>
-		<a href="google.com" data-icon="star" data-iconpos="right" data-theme="d" class="ui-btn-right" data-role="button">Like</a>
+		<a href="https://play.google.com/store/apps/details?id=com.zoogaru.Wordizy" data-icon="star" data-iconpos="right" data-theme="d" class="ui-btn-right" data-role="button">Like</a>
 	</div><!-- /footer -->
 
 </div><!-- /page -->
 	<style>
+
 		.highlight {
 			color: red;
-			background: green;
+			background: red;
 		  }
+
 	</style>
     <script>
+		var user_word = "";
+		var	reveal_clicked = 0;
+		var	hint_clicked = 0;
+		var random_word_size = 0;
 
-		reveal_clicked = 0;
-		hint_clicked = 0;
-
-	var storedData = localStorage["wordizy"];
+		var storedData = localStorage["wordizy"];
 		if(storedData)
 		{
 			var savedGameInfo = JSON.parse(storedData);
 
-			MAX_HINT_ALLOWED = savedGameInfo.max_hint_allowed ;
-			MAX_REVEAL_ALLOWED = savedGameInfo.max_reveal_allowed;
 			TOTAL_POINTS = savedGameInfo.total_points ;
 			PLAYED_COUNT = savedGameInfo.played_count ;
 			QUIT_COUNT = savedGameInfo.quit_count ;
-			user_word = gasavedGameInfomeInfo.last_user_word ;
-			to_key_from_key_map = savedGameInfo.to_key_from_key_map ;
-			random_word_object = savedGameInfo.last_word_object ;
-			user_input_array = savedGameInfo.user_input_array;
-		}
-		else
-		{
-			var random_number = getRandomNum(1, true);
-			while(random_number < MIN_WORD_SIZE)
+			if(savedGameInfo.saved_last_state)
 			{
-				random_number = getRandomNum(1, true);
+				MAX_HINT_ALLOWED = savedGameInfo.max_hint_allowed ;
+				MAX_REVEAL_ALLOWED = savedGameInfo.max_reveal_allowed;
+				user_word = savedGameInfo.last_user_word ;
+				to_key_from_key_map = savedGameInfo.to_key_from_key_map ;
+				random_word_object = savedGameInfo.last_word_object ;
+				user_input_array = savedGameInfo.user_input_array;
+				random_word_size = random_word_object.word.length;
+				getContainerHTML(random_word_size, "randomword_placeholder");
+				setTimeout('drawUI_fromlastSession()',1000);
 			}
-			getRandomWordRawData(random_number, random_number);
-			user_input_array = getContainerHTML(random_number, "randomword_placeholder");
 		}
 
+		if(random_word_size == 0)
+		{
+			random_word_size = getRandomNum(1, true);
+			while(random_word_size < MIN_WORD_SIZE)
+			{
+				random_word_size = getRandomNum(1, true);
+			}
+			getRandomWordRawData(random_word_size, random_word_size);
+			user_input_array = getContainerHTML(random_word_size, "randomword_placeholder");
+		}
+
+		function drawUI_fromlastSession()
+		{
+			updateUIControls();
+			if(random_word_object.synonyms.length == 0)
+			{
+				$("#display_synonym").button('disable');
+			}
+		}
+
+		function close_success_dialog()
+		{
+			$("#success_dialog").popup('close');
+		}
+
+		function on_giveup_clicked(event)
+		{
+			QUIT_COUNT ++;
+			SAVE_SESSION_STATE = false;
+			saveGameDataToLocalStore();
+			window.location.href = "quit.html";
+		}
+
+		function on_backbuttonp_clicked(event)
+		{
+			saveGameDataToLocalStore();
+			window.location.href = "wordnikhome.html";
+		}
 
 		function fillKeyBoard()
 		{
@@ -137,33 +182,6 @@
 			}
 		}
 
-		function on_key_clicked(event)
-		{
-			var element = event.srcElement;
-			input_char = element.value;
-			if(input_char != '*')
-			{
-				can_update = false;
-				for(index_to_update = 0, i = 0; i < user_input_array.length; i++)
-				{
-					if(!user_input_array[i])
-					{
-						index_to_update = i;
-						can_update = true;
-						break;
-					}
-				}
-				if(can_update && index_to_update <= random_word_object.word.length)
-				{
-					button_id = "#container_key_" + index_to_update;
-					from_id = "#" + element.id;
-					swap_char(from_id, button_id);
-					to_key_from_key_map[button_id] = from_id;
-					user_input_array[index_to_update] = true;
-				}
-			}
-		}
-
 		function on_container_key_clicked(event)
 		{
 			var element = event.srcElement;
@@ -199,26 +217,17 @@
 			}
 		}
 
-		function fill_a_container_key(fromKeyID)
+		function on_synonym_clicked(event)
 		{
-			input_char = $(fromKeyID).val();
-			can_update = false;
-			for(index_to_update = 0, i = 0; i < user_input_array.length; i++)
+			LOOSE_SYNONYM_POINTS --;
+			TOTAL_POINTS -= LOOSE_SYNONYM_POINTS;
+
+			var tempWord = random_word_object.word;
+			random_word_object.synonyms.toHTML("synonym_content_div");
+			random_word_object.synonyms.length = 0;
+			if(random_word_object.synonyms.length == 0)
 			{
-				if(!user_input_array[i])
-				{
-					index_to_update = i;
-					can_update = true;
-					break;
-				}
-			}
-			if(can_update && index_to_update <= random_word_object.word.length)
-			{
-				button_id = "#container_key_" + index_to_update;
-				from_id = fromKeyID;
-				swap_char(from_id, button_id);
-				to_key_from_key_map[button_id] = from_id;
-				user_input_array[index_to_update] = true;
+				$("#display_synonym").button('disable');
 			}
 		}
 
@@ -247,32 +256,107 @@
 			}
 		}
 
-		function on_delete_clicked(event)
-			{
-					var tempWord = random_word_object.word;
-					for(i = 0; i < tempWord.length; i++)
+		function on_key_clicked(event)
+				{
+					var element = event.srcElement;
+					input_char = element.value;
+					if(input_char != '*')
 					{
-						var source_id = "#container_key_" + i;
-						to_key_id = to_key_from_key_map[source_id];
-						if(to_key_id)
-						{
-							swap_char(source_id, to_key_id);
-							to_key_from_key_map[source_id] = null;
-							indexDeleted = source_id.replace("#container_key_","");
-							indexDeleted = parseInt(indexDeleted);
-							user_input_array[indexDeleted] = false;
-						}
+						from_id = "#" + element.id;
+						fill_a_container_key(from_id);
 					}
+				}
+
+		function fill_a_container_key(fromKeyID)
+		{
+			input_char = $(fromKeyID).val();
+			can_update = false;
+			for(index_to_update = 0, i = 0; i < user_input_array.length; i++)
+			{
+				if(!user_input_array[i])
+				{
+					index_to_update = i;
+					can_update = true;
+					break;
+				}
+			}
+			if(can_update && index_to_update <= random_word_object.word.length)
+			{
+				button_id = "#container_key_" + index_to_update;
+				from_id = fromKeyID;
+				swap_char(from_id, button_id);
+				to_key_from_key_map[button_id] = from_id;
+				//user_input_array[index_to_update] = true;
+				user_input_array[index_to_update] = input_char;
+
+				isMatched(user_input_array, random_word_object.word);
+			}
+			return index_to_update;
 		}
 
-		function on_synonym_clicked(event)
+
+		function isMatched(aUserInput, randomWord)
+		{
+			var status = false;
+			var userWord = "";
+			for(i = 0 ; i < aUserInput.length; i++)
+			{
+				if(user_input_array[i] == false)
+				{
+					break;
+				}
+				else
+				{
+					userWord += user_input_array[i];
+				}
+			}
+
+			if(userWord == randomWord)
+			{
+				var total = userWord.length * 15;
+				SAVE_SESSION_STATE = false;
+				PLAYED_COUNT++;
+				TOTAL_POINTS += total;
+				$("#words_played").val(PLAYED_COUNT);
+				$("#words_played").button('refresh');
+				//alert("Word Successfully Cracked !");
+				//$("#success_dialog").popup('open');
+				//setInterval('close_success_dialog()',3000);
+				status = true;
+				saveGameDataToLocalStore();
+				window.location.href = "result.html";
+			}
+			else if(user_word.length == random_word_object.word.length)
+			{
+				//$(toID).toggleClass("highlight");
+			}
+			return status;
+		}
+
+		function refreshPage()
+		{
+			jQuery.mobile.changePage(window.location.href, {
+				allowSamePageTransition: true,
+				transition: 'fade',
+				reloadPage: true
+			});
+		}
+
+		function on_delete_clicked(event)
 		{
 			var tempWord = random_word_object.word;
-			random_word_object.synonyms.toHTML("synonym_content_div");
-			random_word_object.synonyms.length = 0;
-			if(random_word_object.synonyms.length == 0)
+			for(i = 0; i < tempWord.length; i++)
 			{
-				$("#display_synonym").button('disable');
+				var source_id = "#container_key_" + i;
+				to_key_id = to_key_from_key_map[source_id];
+				if(to_key_id)
+				{
+					swap_char(source_id, to_key_id);
+					to_key_from_key_map[source_id] = null;
+					indexDeleted = source_id.replace("#container_key_","");
+					indexDeleted = parseInt(indexDeleted);
+					user_input_array[indexDeleted] = false;
+				}
 			}
 		}
 
@@ -287,50 +371,28 @@
 			//$(toID).button('disable');
 			$(fromID).button('refresh');
 			$(toID).button('refresh');
-			if(valTo != "*")
-			{
-				user_word += valTo;
-			}
-			else if(valFrom != "*")
-			{
-				user_word += valFrom;
-			}
-			if(user_word == random_word_object.word)
-			{
-				PLAYED_COUNT++;
-				$("#words_played").val(PLAYED_COUNT);
-				$("#words_played").button('refresh');
-				alert("Word Successfully Cracked !");
-			}
-			else if(user_word.length == random_word_object.word.length)
-			{
-				$(toID).toggleClass("highlight");
-			}
+
+			return valFrom;
 		}
 
-        function setRandomWord(aWord) {
-            if (typeof (Storage) !== "undefined") {
-                    sessionStorage.random_word = aWord;
-                }
-            else {
-                alert("Browser doesn't support session data ! Crome recomended");
-            }
-        }
-
-		$(document).on("pageshow","#pageone",function(event){
+		$(document).on("pageshow",function(event){
 			var heightOfWindow = $(window).height();
 			var totalHeightOfButtons = $("#button_groups").height();
 			var leftForHint = heightOfWindow - totalHeightOfButtons;
 			$('#hint_content_div').height(leftForHint / 2);
 		});
 
-		$(document).on("pageinit","#pageone",function(event){
+		$(document).on("pageinit","#playground",function(event){
 				$("#total_points").val(TOTAL_POINTS);
 				$("#total_points").button('refresh');
 				$("#words_played").val(PLAYED_COUNT);
 				$("#words_played").button('refresh');
 				$("#words_quited").val(QUIT_COUNT);
 				$("#words_quited").button('refresh');
+		});
+
+		$(document).on("pagebeforehide",function(event){
+			alert("pagebefore hide");
 		});
 
 		function getRandomWordRawData(minLength, maxLength)
@@ -351,31 +413,14 @@
 
 		function getWordDefinition(inputWord)
 		{
-			var queryString = inputWord + "/definitions?limit=5&includeRelated=false&sourceDictionaries=all&useCanonical=false&includeTags=false";
+			var queryString = inputWord + "/definitions?limit=5&includeRelated=false&sourceDictionaries=all&useCanonical=true&includeTags=false";
 			var requestURLString = BASE_API_URL + "word.json/" + queryString + API_KEY;
 
 			$.getJSON(requestURLString,
 						function(data){
 					var wordDefinition = formatWordMeaning(data);
 					random_word_object.meaning = wordDefinition;
-
-					fillKeyBoard();
-					fillKeyBoardWithWord();
-					if(random_word_object.word.length > 2)
-					{
-						var max_reveal = random_word_object.word.length / 2 ;
-						MAX_REVEAL_ALLOWED = parseInt(max_reveal);
-						if(MAX_REVEAL_ALLOWED == 0)
-						{
-							$("#reveal_star").button('disable');
-						}
-						MAX_HINT_ALLOWED = random_word_object.meaning.zip_array.length;
-						if(MAX_HINT_ALLOWED == 0)
-						{
-							$("#display_hint").button('disable');
-						}
-					}
-					sessionStorage.randomWordObject = JSON.stringify(random_word_object);
+					updateUIControls();
 				});
 		}
 
@@ -394,6 +439,26 @@
 					}
 				});
 
+		}
+
+		function updateUIControls()
+		{
+			fillKeyBoard();
+			fillKeyBoardWithWord();
+			if(random_word_object.word.length > 2)
+			{
+				var max_reveal = random_word_object.word.length / 2 ;
+				MAX_REVEAL_ALLOWED = parseInt(max_reveal);
+				if(MAX_REVEAL_ALLOWED == 0)
+				{
+					$("#reveal_star").button('disable');
+				}
+				MAX_HINT_ALLOWED = random_word_object.meaning.zip_array.length;
+				if(MAX_HINT_ALLOWED == 0)
+				{
+					$("#display_hint").button('disable');
+				}
+			}
 		}
     </script>
 </body>
