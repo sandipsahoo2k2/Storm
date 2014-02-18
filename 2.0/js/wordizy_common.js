@@ -22,6 +22,7 @@ var MAX_REVEAL_ALLOWED = 0;
 var to_key_from_key_map = {};
 var random_word_object = new Object();
 var user_input_array = new Array();
+var locked_container_array = new Array();
 var random_word_index_in_keyboard = {};
 
 function formatWordOfTheDay(jsonData)

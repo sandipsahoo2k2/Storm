@@ -53,13 +53,19 @@
 				</div>
 	  		</div>
 
-		<div id="success_dialog" align="center" data-position-to="window" data-role="popup" data-history="false" data-transition="fade">
-			  <h3 class="ui-bar">Wow</h3>
-			  			  <div class="ui-body-e">
-			  						<p>You Made it !
-			  						   </br></br></p>
-			   </div>
+		<div data-role="popup" id="success_dialog" data-history="false" align="center" data-overlay-theme="e" data-dismissible="false">
+			<div data-role="header" data-theme="e">
+				<h1>Wow !</h1>
+			</div>
+			<div data-role="content" data-theme="d">
+				<h3 class="ui-title" id = "header_string">The word was cracked, it is </h3>
+			</div>
+			<div data-role="footer" data-theme="e">
+					<h1>Congratulations !!</h1>
+			</div><!-- /footer -->
 		</div>
+
+
     </div><!-- /content -->
 
 	<div data-role="footer" data-position="fixed" align="center">
@@ -128,6 +134,7 @@
 		function close_success_dialog()
 		{
 			$("#success_dialog").popup('close');
+			 window.location.reload();
 		}
 
 		function on_giveup_clicked(event)
@@ -182,25 +189,6 @@
 			}
 		}
 
-		function on_container_key_clicked(event)
-		{
-			var element = event.srcElement;
-			delete_char = element.value;
-			if(delete_char != '*')
-			{
-				var source_id = "#"+ element.id;
-				to_key_id = to_key_from_key_map[source_id];
-				if(to_key_id)
-				{
-					swap_char(source_id, to_key_id);
-					to_key_from_key_map[source_id] = null;
-					indexDeleted = source_id.replace("#container_key_","");
-					indexDeleted = parseInt(indexDeleted);
-					user_input_array[indexDeleted] = false;
-				}
-			}
-		}
-
 	   function on_hint_clicked(event) {
 			if(MAX_HINT_ALLOWED > 0)
 			{
@@ -219,15 +207,17 @@
 
 		function on_synonym_clicked(event)
 		{
-			LOOSE_SYNONYM_POINTS --;
-			TOTAL_POINTS -= LOOSE_SYNONYM_POINTS;
-
-			var tempWord = random_word_object.word;
-			random_word_object.synonyms.toHTML("synonym_content_div");
-			random_word_object.synonyms.length = 0;
-			if(random_word_object.synonyms.length == 0)
+			if(random_word_object.synonyms.length > 0)
 			{
-				$("#display_synonym").button('disable');
+				TOTAL_POINTS -= LOOSE_SYNONYM_POINTS;
+
+				var tempWord = random_word_object.word;
+				random_word_object.synonyms.toHTML("synonym_content_div");
+				random_word_object.synonyms.length = 0;
+				if(random_word_object.synonyms.length == 0)
+				{
+					$("#display_synonym").button('disable');
+				}
 			}
 		}
 
@@ -235,12 +225,16 @@
 		{
 			if(MAX_REVEAL_ALLOWED > 0)
 			{
+				on_rollback_all_clicked();
 				var tempWord = random_word_object.word;
 				//for(i = 0; i < tempWord.length; i++)
 				{
 					//var i = Math.floor(Math.random() * tempWord.length + 1);
 					rand_index_lessthan12 = random_word_index_in_keyboard[reveal_clicked];
 					rand_index_lessthan12 = parseInt(rand_index_lessthan12);
+
+					locked_container_array[reveal_clicked] = true; //Lock the reveals
+
 					var source_id = "#key_" + rand_index_lessthan12;
 					fill_a_container_key(source_id);
 					MAX_REVEAL_ALLOWED --;
@@ -256,16 +250,55 @@
 			}
 		}
 
-		function on_key_clicked(event)
+		function on_rollback_all_clicked()
+		{
+			var tempWord = random_word_object.word;
+			for(i = 0; i < tempWord.length; i++)
+			{
+				var source_id = "#container_key_" + i;
+				on_rollback_clicked(source_id);
+
+			}
+		}
+
+		function on_rollback_clicked(containerKeyID)
+		{
+			var delete_char = $(containerKeyID).val();
+			var indexToBeDeleted = containerKeyID.replace("#container_key_","");
+			indexToBeDeleted = parseInt(indexToBeDeleted);
+
+			if(delete_char != '*' && !locked_container_array[indexToBeDeleted])
+			{
+				to_key_id = to_key_from_key_map[containerKeyID];
+				if(to_key_id)
 				{
-					var element = event.srcElement;
-					input_char = element.value;
-					if(input_char != '*')
-					{
-						from_id = "#" + element.id;
-						fill_a_container_key(from_id);
-					}
+					swap_char(containerKeyID, to_key_id);
+					to_key_from_key_map[containerKeyID] = null;
+					user_input_array[indexToBeDeleted] = false;
 				}
+			}
+		}
+
+
+
+		function on_container_key_clicked(event)
+		{
+			var element = event.srcElement;
+			var delete_char = element.value;
+			var source_id = "#"+ element.id;
+			on_rollback_clicked(source_id);
+		}
+
+		function on_key_clicked(event)
+		{
+			var element = event.srcElement;
+			input_char = element.value;
+			if(input_char != '*')
+			{
+				from_id = "#" + element.id;
+				fill_a_container_key(from_id);
+			}
+		}
 
 		function fill_a_container_key(fromKeyID)
 		{
@@ -319,12 +352,10 @@
 				TOTAL_POINTS += total;
 				$("#words_played").val(PLAYED_COUNT);
 				$("#words_played").button('refresh');
-				//alert("Word Successfully Cracked !");
-				//$("#success_dialog").popup('open');
-				//setInterval('close_success_dialog()',3000);
 				status = true;
 				saveGameDataToLocalStore();
-				window.location.href = "result.html";
+
+				showSuccessAndRefreshPage();
 			}
 			else if(user_word.length == random_word_object.word.length)
 			{
@@ -333,32 +364,22 @@
 			return status;
 		}
 
-		function refreshPage()
+		function showSuccessAndRefreshPage()
 		{
-			jQuery.mobile.changePage(window.location.href, {
+			var element = document.getElementById("header_string");
+			element.innerHTML += "<b><span style='color:purple'>" + random_word_object.word + "</span></b>";
+
+			$("#success_dialog").popup('open');
+			setTimeout('close_success_dialog()',2000);
+
+			//window.location.href = "result.html";
+			/*jQuery.mobile.changePage(window.location.href, {
 				allowSamePageTransition: true,
 				transition: 'fade',
 				reloadPage: true
-			});
+			});*/
 		}
 
-		function on_delete_clicked(event)
-		{
-			var tempWord = random_word_object.word;
-			for(i = 0; i < tempWord.length; i++)
-			{
-				var source_id = "#container_key_" + i;
-				to_key_id = to_key_from_key_map[source_id];
-				if(to_key_id)
-				{
-					swap_char(source_id, to_key_id);
-					to_key_from_key_map[source_id] = null;
-					indexDeleted = source_id.replace("#container_key_","");
-					indexDeleted = parseInt(indexDeleted);
-					user_input_array[indexDeleted] = false;
-				}
-			}
-		}
 
 		function swap_char(fromID, toID)
 		{
@@ -413,7 +434,7 @@
 
 		function getWordDefinition(inputWord)
 		{
-			var queryString = inputWord + "/definitions?limit=5&includeRelated=false&sourceDictionaries=all&useCanonical=true&includeTags=false";
+			var queryString = inputWord + "/definitions?limit=5&includeRelated=false&sourceDictionaries=all&useCanonical=false&includeTags=false";
 			var requestURLString = BASE_API_URL + "word.json/" + queryString + API_KEY;
 
 			$.getJSON(requestURLString,
