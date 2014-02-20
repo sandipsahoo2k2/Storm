@@ -6,15 +6,15 @@
    	<link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css">
 	<script src="js/jquery-1.8.3.min.js"></script>
 	<script src="js/jquery.mobile-1.3.2.min.js"></script>
-	<script src="js/wordizy_common.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script src="js/wordizy_common.js"></script>
    </head>
 <body>
 
 
-<div id="quitpage" data-close-btn="none" data-history="false" data-transition="flip" align="center">
+<div id="quitpage" data-role="page" data-history="false" data-transition="flip" align="center" data-theme="e">
 
-	<div data-role="header">
+	<div data-role="header" data-theme="e">
 		<h1>The Word was </h1>
 	</div><!-- /header -->
 
@@ -23,8 +23,8 @@
 		<p id="random_word" > </p>
     </div><!-- /content -->
 
-	<div data-role="footer" data-position="fixed">
-		<a href="https://play.google.com/store/apps/details?id=com.zoogaru.games" data-ajax="false" data-transition="slide" data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="d">Want to try a number game</a>
+	<div data-role="footer" data-position="fixed" data-theme="e">
+		<a href="market://details?id=com.zoogaru.games" data-ajax="false" data-transition="slide" data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="d">Want to try a number game</a>
 	</div><!-- /footer -->
 </div><!-- /page -->
 
@@ -62,6 +62,12 @@
 	function onDeviceReady() {
 		//history.replaceState({page: this.href}, '', "home.html");
 		document.addEventListener("backbutton", onBackKeyDown, false);
+		document.addEventListener("offline", onOffline, false);
+	}
+
+	function onOffline()
+	{
+		window.location.href = "internet.html";
 	}
 
 	function onBackKeyDown(event)

@@ -7,20 +7,22 @@
    	<script src="js/jquery-1.8.3.min.js"></script>
    	<script src="js/jquery.mobile-1.3.2.min.js"></script>
 	<script src="js/wordizy_common.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
    </head>
 <body>
 
-<div data-role="page" id="pageone">
+<div data-role="page" id="pageone" data-theme="e">
 
-	<div data-role="header">
-		<h1>Word Of The Day</h1>
+	<div data-role="header" data-theme="e">
+		<h1>Wordizy</h1>
+		<a href="play_randomword.html" data-theme="d" data-ajax="false" data-icon="arrow-r" data-iconpos="right" data-transition="slide" data-role="button" class="ui-btn-right">Play</a>
 	</div><!-- /header -->
 
 	<div data-role="content">
 		<div class="ui-corner-all custom-corners" data-inline="true" align="center">
 		  <div class="ui-bar ui-bar-d">
 		    <h3 id = "header_string">Word Of the Day</h3>
-				<audio id="word_audio" src="" controls>
+				<audio id="audio_link" src="" controls>
 					Your browser does not support the audio element.
 				</audio>
 		  </div>
@@ -30,9 +32,9 @@
 		</div>
     </div><!-- /content -->
 
-	<div data-role="footer" data-position="fixed">
-		<a href="" id="wordnik_button" data-role="button">_______</a>
-		<a href="play_randomword.html" data-theme="d" data-ajax="false" data-icon="arrow-r" data-iconpos="right" data-transition="slide" data-role="button" class="ui-btn-right">Play</a>
+	<div data-role="footer" data-position="fixed" data-theme="e">
+		<a href="" id="wordnik_button" data-role="button" class="ui-btn-left">_______</a>
+		<h1>Word Of The Day</h1>
 	</div><!-- /footer -->
 </div><!-- /page -->
 
@@ -49,6 +51,16 @@
 </style>
 
 <script>
+
+
+    document.addEventListener("deviceready", checkConnection, false);
+
+        function checkConnection() {
+			if(navigator.connection.type == Connection.NONE)
+			{
+				window.location.href = "internet.html";
+			}
+        }
 	getWordOfTheDay();
 
 	function getWordOfTheDay()
@@ -88,7 +100,12 @@
 				if(data.length > 0)
 				{
 					var audioobj = data[0];
-					$("#word_audio").attr('src', audioobj.fileUrl);
+					$("#audio_link").attr('src', audioobj.fileUrl);
+				}
+				else
+				{
+					var element = document.getElementById("audio_link");
+					element.parentNode.removeChild(element);
 				}
 			});
 	}
