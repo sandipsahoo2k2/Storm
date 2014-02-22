@@ -51,7 +51,19 @@
 				for(i = 0; i < random_word_object.meaning.array.length; i++)
 				{
 					var meaning = random_word_object.meaning.array[i];
-					htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text + "</td></tr>" ;
+					var licence = "";
+					if(meaning.attributionText)
+					{
+						licence = meaning.attributionText;
+					}
+					else
+					{
+						licence = "Source:" + meaning.sourceDictionary;
+					}
+					htmlStr += "<tr><td>";
+					htmlStr += "<b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> " + meaning.text ;
+					htmlStr += "</br><font size='1' color='grey'>" + licence + "</font>" ;
+					htmlStr += "</td></tr>";
 				}
 				htmlStr += "</tbody></table>";
 				element.innerHTML = htmlStr;
