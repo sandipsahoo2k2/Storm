@@ -68,9 +68,7 @@ function formatWordOfTheDay(jsonData)
 			htmlStr += "<tr><td><b><sup><em><span style='color:purple'>note</span></em></sup></b> "+ this.parentWord + "</td></tr>" ;
 			htmlStr += "<tr><td><b><sup><em><span style='color:purple'>example</span></em></sup></b> "+ this.exampleUsage + this.exampleLink + "</td></tr>" ;
 			htmlStr += "</tbody></table>";
-
-			htmlStr += "<a href='www.wordnik.com/word/"+ this.word + "'><img style='border:0;' src='js/images/wordnik_gearheart.png' width='24' height='24'></a>";
-
+			htmlStr += "<a href='http://www.wordnik.com/words/"+ this.word + "'><img style='border:0;' src='js/images/wordnik_gearheart.png' width='24' height='24'></a>";
 			element.innerHTML = htmlStr;
 		}
 	};
