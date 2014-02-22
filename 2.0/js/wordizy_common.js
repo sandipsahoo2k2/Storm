@@ -62,7 +62,7 @@ function formatWordOfTheDay(jsonData)
 				}
 				htmlStr += "<tr><td>";
 				htmlStr += "<b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> " + meaning.text ;
-				htmlStr += "</br><font size='1' color='grey'>" + licence + "</font>" ;
+				htmlStr += "</br><font size='1' color='green'>" + licence + "</font>" ;
 				htmlStr += "</td></tr>";
 			}
 			htmlStr += "<tr><td><b><sup><em><span style='color:purple'>note</span></em></sup></b> "+ this.parentWord + "</td></tr>" ;
