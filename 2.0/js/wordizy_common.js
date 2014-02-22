@@ -35,25 +35,31 @@ function formatWordOfTheDay(jsonData)
 	//wordOfTheDay.meaning = wordOfTheDay.definitions[0].text;
 	//wordOfTheDay.word_type = wordOfTheDay.definitions[0].partOfSpeech;
 
-	wordOfTheDay.example = jsonData.examples[0];
-	wordOfTheDay.exampleUsage = wordOfTheDay.example.text;
+	var example = jsonData.examples[0];
+	if(example)
+	{
+		wordOfTheDay.exampleUsage = example.text;
+		wordOfTheDay.exampleLink = "<a href='" + example.url + "'><font size='1' color='grey'>" + example.title + "</font></a>" ;
+	}
 	wordOfTheDay.toHTML = function (divID)
 	{
 		var element = document.getElementById(divID);
 		if(element)
 		{
 			var htmlStr = "<table data-role='table' id='wordoftheday-table' data-mode='reflow' class='ui-responsive table-stroke'>"
-						+ "<thead><tr><th></th></tr></thead>"
 						+ "<tbody>" ;
 				for(i = 0; i < this.definitions.length; i++)
 				{
 					var meaning = this.definitions[i];
-					htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text + "</td></tr>" ;
+					htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" ;
+					htmlStr += meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text ;
+					htmlStr += "</br><font size='2' color='grey'> Source:" + meaning.source + "</font></td></tr>" ;
 				}
-			htmlStr += "<tr><td><b><sup><em><span style='color:purple'>origin</span></em></sup></b> "+ this.parentWord + "</td></tr>" ;
-			htmlStr += "<tr><td><b><sup><em><span style='color:purple'>example</span></em></sup></b> "+ this.exampleUsage + "</td></tr>" ;
+			htmlStr += "<tr><td><b><sup><em><span style='color:purple'>note</span></em></sup></b> "+ this.parentWord + "</td></tr>" ;
+			htmlStr += "<tr><td><b><sup><em><span style='color:purple'>example</span></em></sup></b> "+ this.exampleUsage + this.exampleLink + "</td></tr>" ;
 
 			htmlStr += "</tbody></table>";
+			htmlStr += "<a href='www.wordnik.com/word/"+ this.word + "'><img style='border:0;' src='js/images/wordnik_gearheart.png' width='24' height='24'></a>";
 
 			element.innerHTML = htmlStr;
 		}

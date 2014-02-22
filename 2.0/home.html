@@ -33,7 +33,6 @@
     </div><!-- /content -->
 
 	<div data-role="footer" data-position="fixed" data-theme="e">
-		<a href="" id="wordnik_button" data-role="button" class="ui-btn-left">_______</a>
 		<h1>Word Of The Day</h1>
 	</div><!-- /footer -->
 </div><!-- /page -->
@@ -51,7 +50,6 @@
 </style>
 
 <script>
-
 
     document.addEventListener("deviceready", checkConnection, false);
 
@@ -72,6 +70,7 @@
 			date = "0" + date;
 		}
 		var month = today.getMonth();
+		month += 1;
 		if(month < 10)
 		{
 			month = "0" + month;
@@ -83,7 +82,7 @@
 		$.getJSON(requestURLString,
 			function(data){
 				var element = document.getElementById("header_string");
-				element.innerHTML = data.word;
+				element.innerHTML = data.word ;
 				wordOfTheDay = formatWordOfTheDay(data);
 				wordOfTheDay.toHTML("wordoftheday") ; //JSON.stringify(data);
 				getAudioForWord(data.word);
@@ -109,16 +108,6 @@
 				}
 			});
 	}
-
-
-        function setUserID(aName) {
-            if (typeof (Storage) !== "undefined") {
-                    sessionStorage.user_name = aName;
-                }
-            else {
-                alert("Browser doesn't support session data ! Crome recomended");
-            }
-        }
 
 </script>
 </body>
