@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Wordizy</title>
+   	<meta name="viewport" content="width=device-width, initial-scale=1">
+   	<link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css">
+	<script src="js/jquery-1.8.3.min.js"></script>
+	<script src="js/jquery.mobile-1.3.2.min.js"></script>
+	<script src="js/wordizy_common.js"></script>
+   </head>
+<body>
+
+
+<div id="resultpage" data-role="dialog" data-close-btn="none" data-history="false"  data-theme="e" data-overlay-theme="transparent" data-transition="flip" align="center">
+
+	<div data-role="header" data-theme="e">
+		<h1>That's Great !</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<h2 id = "header_string" ></h2>
+    </div><!-- /content -->
+
+	<div data-role="footer" data-position="fixed" data-theme="e">
+		<h1>Congratulations !!</h1>
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+<style>
+</style>
+
+<script>
+	setTimeout('close_success_dialog()',3000);
+
+	function close_success_dialog()
+	{
+		history.replaceState({page: this.href}, '', "play_randomword.html");
+		window.location.href = "play_randomword.html";
+	}
+
+	if(sessionStorage.randomWordObject)
+	{
+		random_word_object = JSON.parse(sessionStorage.randomWordObject);
+		var element = document.getElementById("header_string");
+		element.innerHTML = "<b><span style='color:purple'>" + random_word_object.word + "</span></b>";
+	}
+</script>
+</body>
+</html>

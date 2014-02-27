@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "_default": {
+            "link": "wordizy"
+        }, 
+        "wordizy": {
+            "applicationId": "FqTN1OHY6sjrn7CxjFPOyxo2nHAIxesmXa5f0J2h", 
+            "masterKey": "sNma05uD7tnRFpbkwHdvGdt0TbQ9tiHm2DJEePCd"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.2.17"
+    }
+}

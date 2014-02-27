@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Wordizy</title>
+   	<meta name="viewport" content="width=device-width, initial-scale=1">
+   	<link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css">
+	<script src="js/jquery-1.8.3.min.js"></script>
+	<script src="js/jquery.mobile-1.3.2.min.js"></script>
+	<script src="js/wordizy_common.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+   </head>
+<body>
+
+
+<div id="quitpage" data-close-btn="none" data-history="false" data-transition="flip" align="center">
+
+	<div data-role="header">
+		<h1>The Word was </h1>
+	</div><!-- /header -->
+
+	<div data-role="content" >
+		<h2 id = "header_string" ></h2>
+		<p id="random_word" > </p>
+    </div><!-- /content -->
+
+	<div data-role="footer" data-position="fixed">
+		<a href="https://play.google.com/store/apps/details?id=com.zoogaru.games" data-ajax="false" data-transition="slide" data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="d">Want to try a number game</a>
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+<style>
+</style>
+
+<script>
+
+	$(document).on("pageinit", function(event){
+		onDeviceReady();
+		if(sessionStorage.randomWordObject)
+		{
+			random_word_object = JSON.parse(sessionStorage.randomWordObject);
+
+			var element = document.getElementById("header_string");
+			element.innerHTML = "<b><span style='color:purple'>" + random_word_object.word + "</span></b>";
+
+			var element = document.getElementById("random_word");
+			if(element)
+			{
+				var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
+							+ "<thead><tr><th></th></tr></thead>"
+							+ "<tbody>" ;
+				for(i = 0; i < random_word_object.meaning.array.length; i++)
+				{
+					var meaning = random_word_object.meaning.array[i];
+					htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text + "</td></tr>" ;
+				}
+				htmlStr += "</tbody></table>";
+				element.innerHTML = htmlStr;
+			}
+		}
+	});
+
+	function onDeviceReady() {
+		//history.replaceState({page: this.href}, '', "home.html");
+		document.addEventListener("backbutton", onBackKeyDown, false);
+	}
+
+	function onBackKeyDown(event)
+	{
+		navigator.app.exitApp();
+	}
+
+</script>
+</body>
+</html>

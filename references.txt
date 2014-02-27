@@ -42,3 +42,8 @@ http://carlo.zottmann.org/2007/09/17/yahoo-pipes-tutorial-how-to-process-html-pa
 http://developer.yahoo.com/yql/guide/yql-select-xpath.html
 http://stackoverflow.com/questions/661256/querying-html-using-yahoo-yql
 http://stackoverflow.com/questions/1223458/smart-way-of-parsing-and-using-website-data
+
+API ..
+--------
+http://www.programmableweb.com/api/the-walters-art-museum-collections
+http://api.beepsend.com/
