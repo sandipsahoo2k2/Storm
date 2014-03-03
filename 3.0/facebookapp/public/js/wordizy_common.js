@@ -35,26 +35,40 @@ function formatWordOfTheDay(jsonData)
 	//wordOfTheDay.meaning = wordOfTheDay.definitions[0].text;
 	//wordOfTheDay.word_type = wordOfTheDay.definitions[0].partOfSpeech;
 
-	wordOfTheDay.example = jsonData.examples[0];
-	wordOfTheDay.exampleUsage = wordOfTheDay.example.text;
+	var example = jsonData.examples[0];
+	if(example)
+	{
+		wordOfTheDay.exampleUsage = example.text;
+		wordOfTheDay.exampleLink = "<a href='" + example.url + "'><font size='1' color='grey'>" + example.title + "</font></a>" ;
+	}
 	wordOfTheDay.toHTML = function (divID)
 	{
 		var element = document.getElementById(divID);
 		if(element)
 		{
 			var htmlStr = "<table data-role='table' id='wordoftheday-table' data-mode='reflow' class='ui-responsive table-stroke'>"
-						+ "<thead><tr><th></th></tr></thead>"
 						+ "<tbody>" ;
-				for(i = 0; i < this.definitions.length; i++)
+			for(i = 0; i < this.definitions.length; i++)
+			{
+				var meaning = this.definitions[i];
+				var licence = "";
+				if(meaning.attributionText)
 				{
-					var meaning = this.definitions[i];
-					htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text + "</td></tr>" ;
+					licence = meaning.attributionText;
 				}
-			htmlStr += "<tr><td><b><sup><em><span style='color:purple'>origin</span></em></sup></b> "+ this.parentWord + "</td></tr>" ;
-			htmlStr += "<tr><td><b><sup><em><span style='color:purple'>example</span></em></sup></b> "+ this.exampleUsage + "</td></tr>" ;
-
+				else
+				{
+					licence = "Source:" + meaning.source;
+				}
+				htmlStr += "<tr><td>";
+				htmlStr += "<b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> " + meaning.text ;
+				htmlStr += "</br><font size='1' color='green'>" + licence + "</font>" ;
+				htmlStr += "</td></tr>";
+			}
+			htmlStr += "<tr><td><b><sup><em><span style='color:purple'>note</span></em></sup></b> "+ this.parentWord + "</td></tr>" ;
+			htmlStr += "<tr><td><b><sup><em><span style='color:purple'>example</span></em></sup></b> "+ this.exampleUsage + this.exampleLink + "</td></tr>" ;
 			htmlStr += "</tbody></table>";
-
+			htmlStr += "<a href='http://www.wordnik.com/words/"+ this.word + "'><img style='border:0;' src='js/images/wordnik_gearheart.png' width='24' height='24'></a>";
 			element.innerHTML = htmlStr;
 		}
 	};
@@ -114,15 +128,23 @@ function formatWordMeaning(jsonData)
 				if(element)
 				{
 					var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
-								+ "<thead><tr><th></th><th></th></tr></thead>"
 								+ "<tbody>" ;
 						for(i = 0; i < this.array.length && wordDefinition.zip_array; i++)
 						{
 							var meaning = this.array[i];
-							if(meaning.partOfSpeech)
+							var licence = "";
+							if(meaning.attributionText)
 							{
-								htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text + "</td></tr>" ;
+								licence = meaning.attributionText;
 							}
+							else
+							{
+								licence = "Source:" + meaning.sourceDictionary;
+							}
+							htmlStr += "<tr><td>";
+							htmlStr += "<b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> " + meaning.text ;
+							htmlStr += "</br><font size='1' color='grey'>" + licence + "</font>" ;
+							htmlStr += "</td></tr>";
 						}
 					htmlStr += "</tbody></table>";
 
@@ -136,7 +158,7 @@ function formatWordMeaning(jsonData)
 				if(element)
 				{
 					var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
-							+ "<thead><tr><th></th></tr></thead><tbody>" ;
+							+ "<tbody>" ;
 					if(index < this.zip_array.length)
 					{
 						for(i = 0 ; i <= index ; i++)
@@ -160,12 +182,23 @@ function formatWordMeaning(jsonData)
 				if(element)
 				{
 					var htmlStr = "<table data-role='table' id='worddefinition-table' data-mode='reflow' class='ui-responsive table-stroke'>"
-								+ "<thead><tr><th></th></tr></thead>"
 								+ "<tbody>" ;
 					for(i = 0; i < this.zip_array.length; i++)
 					{
 						var meaning = this.zip_array[i];
-						htmlStr += "<tr><td><b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> "+ meaning.text + "</td></tr>" ;
+						var licence = "";
+						if(meaning.attributionText)
+						{
+							licence = meaning.attributionText;
+						}
+						else
+						{
+							licence = "Source:" + meaning.sourceDictionary;
+						}
+						htmlStr += "<tr><td>";
+						htmlStr += "<b><sup><em><span style='color:purple'>" + meaning.partOfSpeech + "</span></em></sup></b> " + meaning.text ;
+						htmlStr += "</br><font size='1' color='grey'>" + licence + "</font>" ;
+						htmlStr += "</td></tr>";
 					}
 					htmlStr += "</tbody></table>";
 					element.innerHTML = htmlStr;

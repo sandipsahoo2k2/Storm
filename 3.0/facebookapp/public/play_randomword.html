@@ -7,12 +7,13 @@
 	<script src="js/jquery-1.8.3.min.js"></script>
 	<script src="js/jquery.mobile-1.3.2.min.js"></script>
 	<script src="js/wordizy_common.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 </head>
 <body>
 
-<div data-role="page" id="playground">
+<div data-role="page" id="playground" data-theme="e">
 
-	<div data-role="header" data-position="fixed">
+	<div data-role="header" data-position="fixed" data-theme="e">
 		<div data-role="controlgroup" data-type="horizontal" data-mini="true" class="ui-btn-left">
 			<input type = "button" id="words_quited" data-icon="delete" data-iconpos="left" value= "0">
 			<input type = "button" id="words_played" data-icon="check" data-iconpos="left" value= "0">
@@ -31,7 +32,7 @@
 
 				<div data-role="controlgroup" data-type="horizontal" data-mini="true">
 					<input type="button" id="display_synonym" data-icon="grid" data-iconpos="notext" onclick="on_synonym_clicked(event)">
-					<input type="button" id="display_hint" data-icon="info" data-iconpos="notext" onclick="on_hint_clicked(event)">
+					<input type="button" id="display_hint" data-icon="info" data-iconpos="notext" onclick="on_hint_clicked()">
 					<input type="button" id="reveal_star" data-icon="search" data-iconpos="notext" onclick="on_star_clicked(event)">
 				</div>
 
@@ -68,10 +69,10 @@
 
     </div><!-- /content -->
 
-	<div data-role="footer" data-position="fixed" align="center">
+	<div data-role="footer" data-position="fixed" align="center" data-theme="e">
 		<input type = "button" id="giveup_word" data-ajax="false" data-transition="flip" data-theme="d" class="ui-btn-left" value= "Give Up!" onclick="on_giveup_clicked(event)"/>
 		<h4>Wordizy</h4>
-		<a href="https://play.google.com/store/apps/details?id=com.zoogaru.Wordizy" data-icon="star" data-iconpos="right" data-theme="d" class="ui-btn-right" data-role="button">Like</a>
+		<a href="market://details?id=com.zoogaru.Wordizy" data-icon="star" data-iconpos="right" data-theme="d" class="ui-btn-right" data-role="button">Like</a>
 	</div><!-- /footer -->
 
 </div><!-- /page -->
@@ -88,6 +89,7 @@
 		var	reveal_clicked = 0;
 		var	hint_clicked = 0;
 		var random_word_size = 0;
+		document.addEventListener("offline", onOffline, false);
 
 		var storedData = localStorage["wordizy"];
 		if(storedData)
@@ -119,7 +121,21 @@
 				random_word_size = getRandomNum(1, true);
 			}
 			getRandomWordRawData(random_word_size, random_word_size);
-			user_input_array = getContainerHTML(random_word_size, "randomword_placeholder");
+			getContainerHTML(random_word_size, "randomword_placeholder");
+		}
+
+		if(random_word_size)
+		{
+			for(i = 0; i < random_word_size ; i ++)
+			{
+				user_input_array[i] = false;
+				locked_container_array[i] = false;
+			}
+		}
+
+		function onOffline()
+		{
+			window.location.href = "internet.html";
 		}
 
 		function drawUI_fromlastSession()
@@ -189,13 +205,16 @@
 			}
 		}
 
-	   function on_hint_clicked(event) {
+	   function on_hint_clicked() {
 			if(MAX_HINT_ALLOWED > 0)
 			{
 				random_word_object.meaning.byIndexToHtml(hint_clicked, "hint_content_div");
-				hint_clicked ++ ;
 				MAX_HINT_ALLOWED --;
-				TOTAL_POINTS -= LOOSE_HINT_POINTS;
+				if(hint_clicked != 0)
+				{
+					TOTAL_POINTS -= LOOSE_HINT_POINTS;
+				}
+				hint_clicked ++ ;
 				if(MAX_HINT_ALLOWED == 0)
 				{
 					$("#display_hint").button('disable');
@@ -486,6 +505,10 @@
 				if(MAX_HINT_ALLOWED == 0)
 				{
 					$("#display_hint").button('disable');
+				}
+				else
+				{
+					on_hint_clicked();
 				}
 			}
 		}

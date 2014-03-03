@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Wordizy</title>
+   	<meta name="viewport" content="width=device-width, initial-scale=1">
+   	<link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css">
+   	<script src="js/jquery-1.8.3.min.js"></script>
+   	<script src="js/jquery.mobile-1.3.2.min.js"></script>
+	<script src="js/wordizy_common.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+   </head>
+<body>
+
+<div id="fb-root"></div>
+
+<div data-role="page" id="pageone" data-position="fixed" data-theme="e">
+
+	<div data-role="header" data-theme="e">
+		<h1>Wordizy</h1>
+		<a href="play_randomword.html" data-theme="d" data-ajax="false" data-icon="arrow-r" data-iconpos="right" data-transition="slide" data-role="button" class="ui-btn-right">Play</a>
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<div class="ui-corner-all custom-corners" data-inline="true" align="center">
+		  <div class="ui-bar ui-bar-d">
+		    <h3 id = "header_string">Word Of the Day</h3>
+				<audio id="audio_link" src="" controls>
+					Your browser does not support the audio element.
+				</audio>
+		  </div>
+		  <div class="ui-body ui-body-b">
+		    <p id="wordoftheday">Content</p>
+		  </div>
+		</div>
+		<fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button>
+    </div><!-- /content -->
+
+	<div data-role="footer" data-position="fixed" data-theme="e">
+		<h1>Word Of The Day</h1>
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+<style>
+	#wordnik_button {
+		background-image: url("js/images/wordnik.jpg");
+		background-size:100%;
+	}
+
+.ui-icon-wordnik-logo {
+	background-image: url("js/images/wordnik.jpg");
+	width:40px;
+}
+</style>
+
+<script>
+
+    document.addEventListener("deviceready", checkConnection, false);
+
+        function checkConnection() {
+			if(navigator.connection.type == Connection.NONE)
+			{
+				window.location.href = "internet.html";
+			}
+        }
+	getWordOfTheDay();
+
+	function getWordOfTheDay()
+	{
+		var today = new Date();
+		var date = today.getDate();
+		if(date < 10)
+		{
+			date = "0" + date;
+		}
+		var month = today.getMonth();
+		month += 1;
+		if(month < 10)
+		{
+			month = "0" + month;
+		}
+		var dateString = today.getFullYear() + "-" + month + "-" + date;
+		var queryString = "wordOfTheDay?date=" + dateString;
+		var requestURLString = BASE_API_URL + "words.json/" + queryString + API_KEY;
+
+		$.getJSON(requestURLString,
+			function(data){
+				var element = document.getElementById("header_string");
+				element.innerHTML = data.word ;
+				wordOfTheDay = formatWordOfTheDay(data);
+				wordOfTheDay.toHTML("wordoftheday") ; //JSON.stringify(data);
+				getPronunciationForWord(data.word);
+				getAudioForWord(data.word);
+			});
+	}
+
+	function getAudioForWord(inputWord)
+	{
+		var queryString = inputWord + "/audio?useCanonical=false&limit=2";
+		var requestURLString = BASE_API_URL + "word.json/" + queryString + API_KEY;
+
+		$.getJSON(requestURLString,
+			function(data){
+				if(data.length > 0)
+				{
+					var audioobj = data[0];
+					$("#audio_link").attr('src', audioobj.fileUrl);
+				}
+				else
+				{
+					var element = document.getElementById("audio_link");
+					element.parentNode.removeChild(element);
+				}
+			});
+	}
+
+	function getPronunciationForWord(inputWord)
+	{
+		var queryString = inputWord + "/pronunciations?useCanonical=false&limit=2";
+		var requestURLString = BASE_API_URL + "word.json/" + queryString + API_KEY;
+
+		$.getJSON(requestURLString,
+			function(data){
+				if(data.length > 0)
+				{
+					var pronunciationObj = data[0];
+					var pronun_text = pronunciationObj.raw
+					var element = document.getElementById("header_string");
+					element.innerHTML += pronun_text ;
+				}
+			});
+	}
+
+ $(document).ready(function() {
+   $.ajaxSetup({ cache: true });
+   $.getScript('http://connect.facebook.net/en_UK/all.js', function(){
+     FB.init({
+       appId: '1397965360468164',
+     });
+     $('#loginbutton,#feedbutton').removeAttr('disabled');
+     FB.getLoginStatus(updateStatusCallback);
+   });
+});
+
+
+</script>
+</body>
+</html>

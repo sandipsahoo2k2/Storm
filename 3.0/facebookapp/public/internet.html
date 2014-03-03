@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Wordizy</title>
+   	<meta name="viewport" content="width=device-width, initial-scale=1">
+   	<link rel="stylesheet" href="js/jquery.mobile-1.3.2.min.css">
+	<script src="js/jquery-1.8.3.min.js"></script>
+	<script src="js/jquery.mobile-1.3.2.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script src="js/wordizy_common.js"></script>
+   </head>
+<body>
+
+
+<div id="resultpage" data-role="dialog" data-close-btn="none" data-history="false" data-transition="flip" align="center">
+
+	<div data-role="header" data-theme="e">
+		<h1>Connection Error !</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<h2>Check your internet connection and try again !</h2>
+    </div><!-- /content -->
+
+	<div data-role="footer" data-position="fixed" data-theme="e">
+		<h1>Wordizy</h1>
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+<style>
+</style>
+
+<script>
+$(document).on("pageinit", function(event){
+		onDeviceReady();
+	});
+	function onDeviceReady() {
+			document.addEventListener("backbutton", onBackKeyDown, false);
+		}
+
+		function onBackKeyDown(event)
+		{
+			navigator.app.exitApp();
+		}
+
+</script>
+</body>
+</html>

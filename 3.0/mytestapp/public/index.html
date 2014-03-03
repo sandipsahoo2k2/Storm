@@ -28,7 +28,6 @@
       // login status of the person. In this case, we're handling the situation where they
       // have logged in to the app.
       //testAPI();
-      alert(1);
     } else if (response.status === 'not_authorized') {
       // In this case, the person is logged into Facebook, but not into the app, so we call
       // FB.login() to prompt them to do so.
@@ -40,7 +39,7 @@
       FB.login(function(){
 	   FB.api('/me/feed', 'post', {message: 'this is awesome!'});
 	  }, {scope: 'publish_actions'});
-alert(2);
+
     } else {
       // In this case, the person is not logged into Facebook, so we call the login()
       // function to prompt them to do so. Note that at this stage there is no indication
@@ -50,20 +49,19 @@ alert(2);
        FB.login(function(){
 	  	   FB.api('/me/feed', 'post', {message: 'this is awesome!'});
 	  }, {scope: 'publish_actions'});
-	  alert(3);
     }
   });
   };
 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=1374379526168567";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
+  // Load the SDK asynchronously
+  (function(d){
+   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement('script'); js.id = id; js.async = true;
+   //js.src = "http://connect.facebook.net/en_US/all.js";
+   js.src = "http://connect.facebook.net/en_US/all/debug.js";
+   ref.parentNode.insertBefore(js, ref);
+  }(document));
 
   // Here we run a very simple test of the Graph API after login is successful.
   // This testAPI() function is only called in those cases.

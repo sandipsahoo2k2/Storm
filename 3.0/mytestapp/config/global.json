@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "_default": {
+            "link": "temp"
+        }, 
+        "temp": {
+            "applicationId": "0QuZcL8ABZAr7r8YtdRg9wgfYi4WhnNd7reRxL7x", 
+            "masterKey": "xL91zhoLOarBp7it62KJ7Zt8jXjD7SB8s9jSWeU7"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.2.17"
+    }
+}
