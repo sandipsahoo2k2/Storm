@@ -7,8 +7,11 @@ Certificates
 ====
 
 mkdir temp
+
 cd temp
+
 jar -xvf ../release-app.apk
+
 cd META-INF
 
 keytool -printcert -file CERT.RSA
